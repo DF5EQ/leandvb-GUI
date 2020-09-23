@@ -187,10 +187,10 @@ if os.path.isfile(home+"/logo.png"):
     label.image = photo
     label.grid(row=0, column=3, columnspan=2, rowspan=3,sticky=W+E+N+S, padx=5, pady=5)
 
-def einde():
-   save_parms()
-   master.destroy()
-
+def exit():
+    save_parms()
+    stop()
+    master.destroy()
 
 def preset1():
     top = Toplevel()
@@ -481,7 +481,7 @@ def callback():
     file.close()
     os.system("sh " + home + "/leandvb-run &")
 
-Button(master,font = "Verdana 11 italic", text='EXIT', command=einde).grid(row=7, column=3,sticky=E)
+Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
 Button(master, font = "Verdana 11 italic",text='STOP', command=stop).grid(row=7, column=4,sticky=W)
 Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=preset1).grid(row=5, column=3)
