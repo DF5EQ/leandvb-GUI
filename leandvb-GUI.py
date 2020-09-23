@@ -188,9 +188,9 @@ if os.path.isfile(home+"/logo.png"):
     label.grid(row=0, column=3, columnspan=2, rowspan=3,sticky=W+E+N+S, padx=5, pady=5)
 
 def einde():
-   save_parms()
-   master.destroy()
-
+    save_parms()
+    stop()
+    master.destroy()
 
 def preset1():
     top = Toplevel()
