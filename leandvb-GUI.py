@@ -40,8 +40,8 @@ parameter1_conv1=0
 parameter2_conv2=0
 parameter3_conv3= ""
 print "Home directory = " + home
-if os.path.isfile(home+"/leanlastrun"):
-    file = open(home+"/leanlastrun", "r")
+if os.path.isfile(home + "/leandvb-last"):
+    file = open(home + "/leandvb-last", "r")
     parameter1 = file.readline() #freq
     parameter2 = file.readline() #samplerate
     parameter3 = file.readline() #fec
@@ -322,7 +322,7 @@ def save_parms():
     file.write("#!/bin/sh \n\n")
     file.write(sub)
     file.close()
-    file = open(home+"/leanlastrun", "w")
+    file = open(home+"/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
@@ -452,7 +452,7 @@ def callback():
     file.write("\n\n")
     file.write(sub)
     file.close()
-    file = open(home+"/leanlastrun", "w")
+    file = open(home + "/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
