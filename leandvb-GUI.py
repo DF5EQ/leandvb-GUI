@@ -318,7 +318,7 @@ def save_parms():
     bandbreedte_limewaarde = bandbreedte_lime.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
-    file = open(home+"/runlean", "w")
+    file = open(home+"/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub)
     file.close()
@@ -436,7 +436,7 @@ def callback():
     else:
         sub1 = home+"/LimeSuite/builddir/bin/basicRX -a " + antennewaarde + " -r " + bandbreedte_limewaarde + " -g " + gain_limewaarde + " -f " + freq_lime + " -o 16 -b 3000000 &"
         sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
-    file = open(home+"/runlean", "w")
+    file = open(home+"/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
@@ -469,7 +469,7 @@ def callback():
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
     file.close()
-    os.system("sh " + home + "/runlean &")
+    os.system("sh " + home + "/leandvb-run &")
 
 Button(master,font = "Verdana 11 italic", text='EXIT', command=einde).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
