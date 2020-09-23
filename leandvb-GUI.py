@@ -180,8 +180,8 @@ h.grid(row=3, column=1)
 
 
 e.focus_set()
-if os.path.isfile(home+"/logo.png"):
-    im = Image.open(home+'/logo.png')
+if os.path.isfile("logo.png"):
+    im = Image.open("logo.png")
     photo = ImageTk.PhotoImage(im)
     label = Label(image=photo)
     label.image = photo
