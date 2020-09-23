@@ -40,8 +40,8 @@ parameter1_conv1=0
 parameter2_conv2=0
 parameter3_conv3= ""
 print "Home directory = " + home
-if os.path.isfile(home+"/leanlastrun"):
-    file = open(home+"/leanlastrun", "r")
+if os.path.isfile(home + "/leandvb-last"):
+    file = open(home + "/leandvb-last", "r")
     parameter1 = file.readline() #freq
     parameter2 = file.readline() #samplerate
     parameter3 = file.readline() #fec
@@ -318,11 +318,11 @@ def save_parms():
     bandbreedte_limewaarde = bandbreedte_lime.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
-    file = open(home+"/runlean", "w")
+    file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub)
     file.close()
-    file = open(home+"/leanlastrun", "w")
+    file = open(home+"/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
@@ -351,7 +351,17 @@ def save_parms():
     file.close()
 
 def stop():
-    os.system(home+"/lean_stop")
+    file = open(home + "/leandvb-stop", "w")
+    file.write("#!/bin/sh \n")
+    file.write("\n")
+    file.write("killall rtl_sdr\n")
+    file.write("killall ffplay\n")
+    file.write("killall leandvb\n")
+    file.write("killall basicRX\n")
+    file.write("\n")
+    file.write("exit 0\n")
+    file.close()
+    os.system("sh " + home + "/leandvb-stop")
 
 def callback():
     ppmwaarde = ppm.get()
@@ -436,13 +446,13 @@ def callback():
     else:
         sub1 = home+"/LimeSuite/builddir/bin/basicRX -a " + antennewaarde + " -r " + bandbreedte_limewaarde + " -g " + gain_limewaarde + " -f " + freq_lime + " -o 16 -b 3000000 &"
         sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
-    file = open(home+"/runlean", "w")
+    file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
-    file = open(home+"/leanlastrun", "w")
+    file = open(home + "/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
@@ -469,7 +479,7 @@ def callback():
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
     file.close()
-    os.system("sh " + home + "/runlean &")
+    os.system("sh " + home + "/leandvb-run &")
 
 Button(master,font = "Verdana 11 italic", text='EXIT', command=einde).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
