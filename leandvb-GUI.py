@@ -489,6 +489,8 @@ Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',te
 #Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='UI options', command=preset3).grid(row=2, column=5, ipady=5,sticky=E, ipadx=5)
 #Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='General Options', command=preset4).grid(row=3, column=5, ipady=5,sticky=E,ipadx=5)
 
+master.protocol("WM_DELETE_WINDOW", exit)
+
 tkvar1 = StringVar(master)
  
 # Frequency Dropdown
