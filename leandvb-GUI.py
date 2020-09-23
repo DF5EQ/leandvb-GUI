@@ -145,6 +145,8 @@ rrc_rej_factor = StringVar()
 nhelpers = StringVar()
 inpipe = StringVar()
 bandbreedte_lime = StringVar()
+modcods = StringVar()
+framesizes = StringVar()
 var1.set(int(parameter4))
 var2.set(int(parameter5))
 var3.set(int(parameter7))
@@ -195,7 +197,7 @@ def exit():
 def preset1():
     top = Toplevel()
     top.title("Default Settings")
-    top.geometry("400x400+30+30")    
+    top.geometry("400x500+30+30")    
     top.transient(master)
 #    C1 = Checkbutton(top, font = "Verdana 11 italic", text="RTL=0", variable=rtl0)
 #    C1.pack()
@@ -271,12 +273,21 @@ def preset1():
 #    okll= Entry(top, font = "Verdana 10", width=15, textvariable=viewer)
 #    okll.pack() 
 
+    l = Label(top, font = "Verdana 10", width=50, text="modcods (0 = not send to leansdr)")
+    l.pack() 
+    e = Entry(top, font = "Verdana 10",width=15, textvariable=modcods)
+    e.pack() 
+
+    l = Label(top, font = "Verdana 10", width=50, text="framesizes (0 = not send to leansdr)")
+    l.pack() 
+    e = Entry(top, font = "Verdana 10",width=15, textvariable=framesizes)
+    e.pack() 
 
     kll= Label(top, font = "Verdana 10", text="------------")
     kll.pack()
+
     topButton0 = Button(top, bg="yellow", text="SAVE", command = lambda:[save_parms(),top.destroy()])
     topButton0.pack()
-
 
 #    topButton = Button(top, text="CLOSE", command = top.destroy)
 #    topButton.pack(side = BOTTOM )
