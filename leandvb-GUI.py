@@ -318,7 +318,7 @@ def save_parms():
     bandbreedte_limewaarde = bandbreedte_lime.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
-    file = open(home+"/leandvb-run", "w")
+    file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub)
     file.close()
@@ -351,7 +351,17 @@ def save_parms():
     file.close()
 
 def stop():
-    os.system(home+"/lean_stop")
+    file = open(home + "/leandvb-stop", "w")
+    file.write("#!/bin/sh \n")
+    file.write("\n")
+    file.write("killall rtl_sdr\n")
+    file.write("killall ffplay\n")
+    file.write("killall leandvb\n")
+    file.write("killall basicRX\n")
+    file.write("\n")
+    file.write("exit 0\n")
+    file.close()
+    os.system("sh " + home + "/leandvb-stop")
 
 def callback():
     ppmwaarde = ppm.get()
@@ -436,7 +446,7 @@ def callback():
     else:
         sub1 = home+"/LimeSuite/builddir/bin/basicRX -a " + antennewaarde + " -r " + bandbreedte_limewaarde + " -g " + gain_limewaarde + " -f " + freq_lime + " -o 16 -b 3000000 &"
         sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
-    file = open(home+"/leandvb-run", "w")
+    file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
