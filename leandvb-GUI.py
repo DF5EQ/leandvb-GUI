@@ -6,7 +6,6 @@ from os.path import expanduser
 home = expanduser("~")
 import os
 
-
 # Simple UI voor LEANDVB, DVBS receiver.
 # requires sudo apt-get install python-imaging-tk package
 # keep everything in your home directory
@@ -14,6 +13,23 @@ import os
 # showed in richt corner.
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
+
+# check max pipe size and adjust if needed
+
+max_needed = 32000000
+
+f = open("/proc/sys/fs/pipe-max-size", "r")
+max_current = int(f.readline())
+f.close()
+
+if (max_current < max_needed):
+    print "max pipe size is", max_current, ", will be set to", max_needed
+    cmd = "bash -c 'echo " + str(max_needed) + " > /proc/sys/fs/pipe-max-size'"
+    os.system("pkexec " + cmd)
+else:
+    print "max pipe size is", max_current, ", this is ok"
+
+# start the GUI
 
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
