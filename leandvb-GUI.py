@@ -524,7 +524,14 @@ def callback():
                   str(view) + " -" + \
                   " \n" 
     else:
-        sub1 = home+"/LimeSuite/builddir/bin/basicRX -a " + antennewaarde + " -r " + bandbreedte_limewaarde + " -g " + gain_limewaarde + " -f " + freq_lime + " -o 16 -b 3000000 &"
+        sub1 = home + "/LimeSuite/builddir/bin/basicRX" + \
+               " -a " + antennewaarde + \
+               " -r " + bandbreedte_limewaarde + \
+               " -g " + gain_limewaarde + \
+               " -f " + freq_lime + \
+               " -o 16" + \
+               " -b 3000000" + \
+               " &"
         sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
