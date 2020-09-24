@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# TODO streamline usage of viewer ffplay and mplayer
+
 from Tkinter import *
 from PIL import ImageTk, Image
 from os.path import expanduser
@@ -66,7 +68,9 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter22 = file.readline() #rrc_rej
     parameter23 = file.readline() #nhelpers
     parameter24 = file.readline() #inpipe
-    parameter25 = file.readline() 
+    parameter25 = file.readline()
+    parameter26 = file.readline() #modcods
+    parameter27 = file.readline() #framesizes 
 
     parameter1_conv1 = str(parameter1[:-1])
     parameter2_conv2 = int(parameter2)
@@ -81,6 +85,8 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter22_conv = str(parameter22[:-1])
     parameter23_conv = str(parameter23[:-1])
     parameter24_conv = str(parameter24[:-1])
+    parameter26_conv = str(parameter26[:-1])
+    parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
     parameter1_conv1 = 1252
@@ -111,6 +117,8 @@ else:
     parameter22_conv = "20"
     parameter23_conv = "4"
     parameter24_conv = "1000000"
+    parameter26_conv = "0x0040"
+    parameter27_conv = "0x01"
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
@@ -145,6 +153,8 @@ rrc_rej_factor = StringVar()
 nhelpers = StringVar()
 inpipe = StringVar()
 bandbreedte_lime = StringVar()
+modcods = StringVar()
+framesizes = StringVar()
 var1.set(int(parameter4))
 var2.set(int(parameter5))
 var3.set(int(parameter7))
@@ -165,6 +175,8 @@ rolloff_factor.set(parameter21_conv)
 rrc_rej_factor.set(parameter22_conv)
 nhelpers.set(parameter23_conv)
 inpipe.set(parameter24_conv)
+modcods.set(parameter26_conv)
+framesizes.set(parameter27_conv)
 e = Entry(master, font = "Verdana 15 bold")
 f = Entry(master, font = "Verdana 15 bold")
 g = Entry(master, font = "Verdana 15 bold")
@@ -195,7 +207,7 @@ def exit():
 def preset1():
     top = Toplevel()
     top.title("Default Settings")
-    top.geometry("400x400+30+30")    
+    top.geometry("400x500+30+30")    
     top.transient(master)
 #    C1 = Checkbutton(top, font = "Verdana 11 italic", text="RTL=0", variable=rtl0)
 #    C1.pack()
@@ -271,12 +283,21 @@ def preset1():
 #    okll= Entry(top, font = "Verdana 10", width=15, textvariable=viewer)
 #    okll.pack() 
 
+    label_modcods = Label(top, font = "Verdana 10", width=50, text="modcods (empty entry omits parameter)")
+    label_modcods.pack() 
+    entry_modcods = Entry(top, font = "Verdana 10",width=15, textvariable=modcods)
+    entry_modcods.pack() 
+
+    label_framesizes = Label(top, font = "Verdana 10", width=50, text="framesizes (empty entry omits parameter)")
+    label_framesizes.pack() 
+    entry_framesizes = Entry(top, font = "Verdana 10",width=15, textvariable=framesizes)
+    entry_framesizes.pack() 
 
     kll= Label(top, font = "Verdana 10", text="------------")
     kll.pack()
+
     topButton0 = Button(top, bg="yellow", text="SAVE", command = lambda:[save_parms(),top.destroy()])
     topButton0.pack()
-
 
 #    topButton = Button(top, text="CLOSE", command = top.destroy)
 #    topButton.pack(side = BOTTOM )
@@ -318,6 +339,8 @@ def save_parms():
     bandbreedte_limewaarde = bandbreedte_lime.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
+    modcods_value = modcods.get()
+    framesizes_value = framesizes.get()
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub)
@@ -348,6 +371,8 @@ def save_parms():
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
+    file.write(str(modcods_value) + "\n")
+    file.write(str(framesizes_value) + "\n")
     file.close()
 
 def stop():
@@ -390,25 +415,27 @@ def callback():
     rrc_rej_factorwaarde = rrc_rej_factor.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
+    modcods_value = modcods.get()
+    framesizes_value = framesizes.get()
     bandbreedte_limewaarde = bandbreedte_lime.get()
     if (viewer_waarde == "ffplay"):
-	view = "ffplay -v 0"
+        view = "ffplay -v 0"
     else:
-	view = "mplayer"
+        view = "mplayer"
     if (lowsr == 1):
         bandbreedte = 1800000
     else:
         bandbreedte = 2400000
     if (fastlock == 1):
-        fastlockstring = "--fastlock"
+        fastlockstring = " --fastlock"
     else:
         fastlockstring = ""
     if (viterbi == 1):
-        viterbistring = "--viterbi"
+        viterbistring = " --viterbi"
     else:
         viterbistring = ""
     if (gui == 1):
-        guistring = "--gui"
+        guistring = " --gui"
     else:
         guistring = ""
     if (dvbs2 == 1):
@@ -416,17 +443,25 @@ def callback():
     else:
         dvbs2string = "-S"
     if (maxprocess == 1):
-        maxprocessstring = "--hq"
+        maxprocessstring = " --hq"
     else:
         maxprocessstring = ""
     if (hardmetric == 1):
-        hardmetricstring = "--hard-metric"
+        hardmetricstring = " --hard-metric"
     else:
         hardmetricstring = ""
     if (rtldongle0 == 1):
         rtlstring = "0"
     else:
         rtlstring = "1"
+    if (modcods_value == ""):
+        modcods_string = ""
+    else:
+        modcods_string = " --modcods " + modcods_value
+    if (framesizes_value == ""):
+        framesizes_string = ""
+    else:
+        framesizes_string = " --framesizes " + framesizes_value
     srsubstring = f.get()
     opslaanfreq= e.get()
     fsubstring = float(e.get())
@@ -438,20 +473,93 @@ def callback():
     fec = tkvar3.get()
     tune = h.get( )
     if (rtldongle0 == 1):
-	if (dvbs2 == 1):
-            # TODO move modcods and framesizes to settings to be compatible to all versions of leandvb. A value of 0 shall remove them from the parameterlist in the call
-    		sub = "rtl_sdr -d " + rtlstring + " -f "  + str(freqfinal) + " -g " + gain_rtlwaarde +  " -s " + str(bandbreedte) + " -p " + str(ppmwaarde) + " - | " + str(leanpad) + "leandvb" + " " + guistring + " --modcods 0x0040 --framesizes 0x01 " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --standard DVB" + dvbs2string + " --ldpc-helper " + str(leanpad) + "ldpc_tool  --inpipe " + str(inpipe_waarde) + " --nhelpers " +str(nhelpers_waarde) + " --sampler rrc --rrc-rej " + str(rrc_rej_factorwaarde) + " -v --roll-off " + str(rolloff_factorwaarde) + " --sr " + str(samplerate) + " -f " + str(bandbreedte) + " | ffplay -v 0  - \n" 
-	else:
-		sub = "rtl_sdr -d " + rtlstring + " -f "  + str(freqfinal) + " -g " + gain_rtlwaarde +  " -s " + str(bandbreedte) + " -p " + str(ppmwaarde) + " - | " + str(leanpad) + "leandvb" + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --standard DVB" + dvbs2string + " -v --sr " + str(samplerate) + " -f " + str(bandbreedte) + " | " + str(view) + " - \n" 
+        if (dvbs2 == 1):
+            sub = "rtl_sdr" + \
+                  " -d " + rtlstring + \
+                  " -f "  + str(freqfinal) + \
+                  " -g " + gain_rtlwaarde +  \
+                  " -s " + str(bandbreedte) + \
+                  " -p " + str(ppmwaarde) + \
+                  " -" + \
+                  " | " + \
+                  str(leanpad) + "leandvb" + \
+                  guistring + \
+                  modcods_string + \
+                  framesizes_string + \
+                  maxprocessstring + \
+                  viterbistring + \
+                  hardmetricstring + \
+                  fastlockstring + \
+                  " --tune " + tune + \
+                  " --standard DVB" + dvbs2string + \
+                  " --ldpc-helper " + str(leanpad) + "ldpc_tool" + \
+                  " --inpipe " + str(inpipe_waarde) + \
+                  " --nhelpers " +str(nhelpers_waarde) + \
+                  " --sampler rrc" + \
+                  " --rrc-rej " + str(rrc_rej_factorwaarde) + \
+                  " -v" + \
+                  " --roll-off " + str(rolloff_factorwaarde) + \
+                  " --sr " + str(samplerate) + \
+                  " -f " + str(bandbreedte) + \
+                  " | " + \
+                  "ffplay -v 0 -" + \
+                  " \n" 
+        else:
+            sub = "rtl_sdr" + \
+                  " -d " + rtlstring + \
+                  " -f "  + str(freqfinal) + \
+                  " -g " + gain_rtlwaarde +  \
+                  " -s " + str(bandbreedte) + \
+                  " -p " + str(ppmwaarde) + \
+                  " -" + \
+                  " | " + \
+                  str(leanpad) + "leandvb" + \
+                  guistring + \
+                  maxprocessstring + \
+                  viterbistring + \
+                  hardmetricstring + \
+                  fastlockstring + \
+                  " --tune " + tune + \
+                  " --cr " + str(fec) + \
+                  " --standard DVB" + dvbs2string + \
+                  " -v" + \
+                  " --sr " + str(samplerate) + \
+                  " -f " + str(bandbreedte) + \
+                  " | " + \
+                  str(view) + " -" + \
+                  " \n" 
     else:
-        sub1 = home+"/LimeSuite/builddir/bin/basicRX -a " + antennewaarde + " -r " + bandbreedte_limewaarde + " -g " + gain_limewaarde + " -f " + freq_lime + " -o 16 -b 3000000 &"
-        sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
+        sub1 = home + "/LimeSuite/builddir/bin/basicRX" + \
+               " -a " + antennewaarde + \
+               " -r " + bandbreedte_limewaarde + \
+               " -g " + gain_limewaarde + \
+               " -f " + freq_lime + \
+               " -o 16" + \
+               " -b 3000000" + \
+               " &"
+        sub = "cat ~/experiment" + \
+              " | " + \
+              str(leanpad) + \
+              guistring + \
+              maxprocessstring + \
+              viterbistring + \
+              hardmetricstring + \
+              fastlockstring + \
+              " --tune " + tune + \
+              " --cr " + str(fec) + \
+              " --sr " + str(samplerate) + \
+              " -f " + bandbreedte_limewaarde + \
+              " --s16" + \
+              " | " + \
+              "ffplay -v 0 - &"
+
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
+
     file = open(home + "/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
@@ -478,7 +586,10 @@ def callback():
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
+    file.write(str(modcods_value) + "\n")
+    file.write(str(framesizes_value) + "\n")
     file.close()
+
     os.system("sh " + home + "/leandvb-run &")
 
 Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
