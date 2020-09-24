@@ -283,15 +283,15 @@ def preset1():
 #    okll= Entry(top, font = "Verdana 10", width=15, textvariable=viewer)
 #    okll.pack() 
 
-    l = Label(top, font = "Verdana 10", width=50, text="modcods (0 = not send to leansdr)")
-    l.pack() 
-    e = Entry(top, font = "Verdana 10",width=15, textvariable=modcods)
-    e.pack() 
+    label_modcods = Label(top, font = "Verdana 10", width=50, text="modcods (0 = not send to leansdr)")
+    label_modcods.pack() 
+    entry_modcods = Entry(top, font = "Verdana 10",width=15, textvariable=modcods)
+    entry_modcods.pack() 
 
-    l = Label(top, font = "Verdana 10", width=50, text="framesizes (0 = not send to leansdr)")
-    l.pack() 
-    e = Entry(top, font = "Verdana 10",width=15, textvariable=framesizes)
-    e.pack() 
+    label_framesizes = Label(top, font = "Verdana 10", width=50, text="framesizes (0 = not send to leansdr)")
+    label_framesizes.pack() 
+    entry_framesizes = Entry(top, font = "Verdana 10",width=15, textvariable=framesizes)
+    entry_framesizes.pack() 
 
     kll= Label(top, font = "Verdana 10", text="------------")
     kll.pack()
@@ -419,9 +419,9 @@ def callback():
     framesizes_value = framesizes.get()
     bandbreedte_limewaarde = bandbreedte_lime.get()
     if (viewer_waarde == "ffplay"):
-	view = "ffplay -v 0"
+        view = "ffplay -v 0"
     else:
-	view = "mplayer"
+        view = "mplayer"
     if (lowsr == 1):
         bandbreedte = 1800000
     else:
@@ -547,12 +547,14 @@ def callback():
               " --s16" + \
               " | " + \
               "ffplay -v 0 - &"
+
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
+
     file = open(home + "/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
@@ -582,6 +584,7 @@ def callback():
     file.write(str(modcods_value) + "\n")
     file.write(str(framesizes_value) + "\n")
     file.close()
+
     os.system("sh " + home + "/leandvb-run &")
 
 Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
