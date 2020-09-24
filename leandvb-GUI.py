@@ -532,7 +532,21 @@ def callback():
                " -o 16" + \
                " -b 3000000" + \
                " &"
-        sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
+        sub = "cat ~/experiment" + \
+              " | " + \
+              str(leanpad) + \
+              guistring + \
+              maxprocessstring + \
+              viterbistring + \
+              hardmetricstring + \
+              fastlockstring + \
+              " --tune " + tune + \
+              " --cr " + str(fec) + \
+              " --sr " + str(samplerate) + \
+              " -f " + bandbreedte_limewaarde + \
+              " --s16" + \
+              " | " + \
+              "ffplay -v 0 - &"
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
