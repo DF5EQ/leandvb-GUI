@@ -204,10 +204,15 @@ def exit():
     stop()
     master.destroy()
 
+def settings_window():
+    settings_window = Toplevel()
+    settings_window.title("Settings")
+    # TODO add grid with labels, entries, confirm button and cancle button
+
 def preset1():
     top = Toplevel()
-    top.title("Default Settings")
-    top.geometry("400x500+30+30")    
+    top.title("Parameter Settings")
+    top.geometry("400x500+100+100")    
     top.transient(master)
 #    C1 = Checkbutton(top, font = "Verdana 11 italic", text="RTL=0", variable=rtl0)
 #    C1.pack()
@@ -595,7 +600,8 @@ def callback():
 Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
 Button(master, font = "Verdana 11 italic",text='STOP', command=stop).grid(row=7, column=4,sticky=W)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=preset1).grid(row=5, column=3)
+##Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=preset1).grid(row=5, column=3)
+Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=settings_window).grid(row=5, column=3)
 #Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='  Save Settings ', command=save_parms).grid(row=5, column=3)
 #Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='UI options', command=preset3).grid(row=2, column=5, ipady=5,sticky=E, ipadx=5)
 #Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='General Options', command=preset4).grid(row=3, column=5, ipady=5,sticky=E,ipadx=5)
