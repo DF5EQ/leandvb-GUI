@@ -474,9 +474,6 @@ def callback():
     tune = h.get( )
     if (rtldongle0 == 1):
         if (dvbs2 == 1):
-            # TODO
-            # move modcods and framesizes to settings to be compatible to all versions of leandvb.
-            # An empty string shall remove them from the parameterlist in the call
             sub = "rtl_sdr" + \
                   " -d " + rtlstring + \
                   " -f "  + str(freqfinal) + \
