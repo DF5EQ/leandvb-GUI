@@ -66,7 +66,9 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter22 = file.readline() #rrc_rej
     parameter23 = file.readline() #nhelpers
     parameter24 = file.readline() #inpipe
-    parameter25 = file.readline() 
+    parameter25 = file.readline()
+    parameter26 = file.readline() #modcods
+    parameter27 = file.readline() #framesizes 
 
     parameter1_conv1 = str(parameter1[:-1])
     parameter2_conv2 = int(parameter2)
@@ -81,6 +83,8 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter22_conv = str(parameter22[:-1])
     parameter23_conv = str(parameter23[:-1])
     parameter24_conv = str(parameter24[:-1])
+    parameter26_conv = str(parameter26[:-1])
+    parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
     parameter1_conv1 = 1252
@@ -111,6 +115,8 @@ else:
     parameter22_conv = "20"
     parameter23_conv = "4"
     parameter24_conv = "1000000"
+    parameter26_conv = "0x0040"
+    parameter27_conv = "0x01"
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
@@ -167,6 +173,8 @@ rolloff_factor.set(parameter21_conv)
 rrc_rej_factor.set(parameter22_conv)
 nhelpers.set(parameter23_conv)
 inpipe.set(parameter24_conv)
+modcods.set(parameter26_conv)
+framesizes.set(parameter27_conv)
 e = Entry(master, font = "Verdana 15 bold")
 f = Entry(master, font = "Verdana 15 bold")
 g = Entry(master, font = "Verdana 15 bold")
@@ -329,6 +337,8 @@ def save_parms():
     bandbreedte_limewaarde = bandbreedte_lime.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
+    modcods_value = modcods.get()
+    framesizes_value = framesizes.get()
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub)
@@ -359,6 +369,8 @@ def save_parms():
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
+    file.write(str(modcods_value) + "\n")
+    file.write(str(framesizes_value) + "\n")
     file.close()
 
 def stop():
@@ -401,6 +413,8 @@ def callback():
     rrc_rej_factorwaarde = rrc_rej_factor.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
+    modcods_value = modcods.get()
+    framesizes_value = framesizes.get()
     bandbreedte_limewaarde = bandbreedte_lime.get()
     if (viewer_waarde == "ffplay"):
 	view = "ffplay -v 0"
@@ -489,6 +503,8 @@ def callback():
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
+    file.write(str(modcods_value) + "\n")
+    file.write(str(framesizes_value) + "\n")
     file.close()
     os.system("sh " + home + "/leandvb-run &")
 
