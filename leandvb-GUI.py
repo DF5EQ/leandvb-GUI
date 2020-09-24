@@ -464,7 +464,7 @@ def callback():
     tune = h.get( )
     if (rtldongle0 == 1):
         if (dvbs2 == 1):
-        # TODO move modcods and framesizes to settings to be compatible to all versions of leandvb. A value of 0 shall remove them from the parameterlist in the call
+            # TODO move modcods and framesizes to settings to be compatible to all versions of leandvb. A value of 0 shall remove them from the parameterlist in the call
             sub = "rtl_sdr -d " + rtlstring + " -f "  + str(freqfinal) + " -g " + gain_rtlwaarde +  " -s " + str(bandbreedte) + " -p " + str(ppmwaarde) + " - | " + str(leanpad) + "leandvb" + " " + guistring + " --modcods 0x0040 --framesizes 0x01 " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --standard DVB" + dvbs2string + " --ldpc-helper " + str(leanpad) + "ldpc_tool  --inpipe " + str(inpipe_waarde) + " --nhelpers " +str(nhelpers_waarde) + " --sampler rrc --rrc-rej " + str(rrc_rej_factorwaarde) + " -v --roll-off " + str(rolloff_factorwaarde) + " --sr " + str(samplerate) + " -f " + str(bandbreedte) + " | ffplay -v 0  - \n" 
         else:
             sub = "rtl_sdr -d " + rtlstring + " -f "  + str(freqfinal) + " -g " + gain_rtlwaarde +  " -s " + str(bandbreedte) + " -p " + str(ppmwaarde) + " - | " + str(leanpad) + "leandvb" + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --standard DVB" + dvbs2string + " -v --sr " + str(samplerate) + " -f " + str(bandbreedte) + " | " + str(view) + " - \n" 
