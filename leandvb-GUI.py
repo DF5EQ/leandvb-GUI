@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# TODO streamline usage of viewer ffplay and mplayer
+
 from Tkinter import *
 from PIL import ImageTk, Image
 from os.path import expanduser
@@ -495,12 +497,32 @@ def callback():
                   " --sr " + str(samplerate) + \
                   " -f " + str(bandbreedte) + \
                   " | " + \
-                  "ffplay" + \
-                  " -v 0" + \
-                  " -" + \
+                  "ffplay -v0 -" + \
                   " \n" 
         else:
-            sub = "rtl_sdr -d " + rtlstring + " -f "  + str(freqfinal) + " -g " + gain_rtlwaarde +  " -s " + str(bandbreedte) + " -p " + str(ppmwaarde) + " - | " + str(leanpad) + "leandvb" + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --standard DVB" + dvbs2string + " -v --sr " + str(samplerate) + " -f " + str(bandbreedte) + " | " + str(view) + " - \n" 
+            sub = "rtl_sdr" + \
+                  " -d " + rtlstring + \
+                  " -f "  + str(freqfinal) + \
+                  " -g " + gain_rtlwaarde +  \
+                  " -s " + str(bandbreedte) + \
+                  " -p " + str(ppmwaarde) + \
+                  " - " + \
+                  " | " + \
+                  str(leanpad) + "leandvb" + \
+                  guistring + \
+                  maxprocessstring + \
+                  viterbistring + \
+                  hardmetricstring + \
+                  fastlockstring + \
+                  " --tune " + tune + \
+                  " --cr " + str(fec) + \
+                  " --standard DVB" + dvbs2string + \
+                  " -v" + \
+                  " --sr " + str(samplerate) + \
+                  " -f " + str(bandbreedte) + \
+                  " | " + \
+                  str(view) + " -" + \
+                  " \n" 
     else:
         sub1 = home+"/LimeSuite/builddir/bin/basicRX -a " + antennewaarde + " -r " + bandbreedte_limewaarde + " -g " + gain_limewaarde + " -f " + freq_lime + " -o 16 -b 3000000 &"
         sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
