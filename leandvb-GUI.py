@@ -283,12 +283,12 @@ def preset1():
 #    okll= Entry(top, font = "Verdana 10", width=15, textvariable=viewer)
 #    okll.pack() 
 
-    label_modcods = Label(top, font = "Verdana 10", width=50, text="modcods (0 = not send to leansdr)")
+    label_modcods = Label(top, font = "Verdana 10", width=50, text="modcods (empty entry omits parameter)")
     label_modcods.pack() 
     entry_modcods = Entry(top, font = "Verdana 10",width=15, textvariable=modcods)
     entry_modcods.pack() 
 
-    label_framesizes = Label(top, font = "Verdana 10", width=50, text="framesizes (0 = not send to leansdr)")
+    label_framesizes = Label(top, font = "Verdana 10", width=50, text="framesizes (empty entry omits parameter)")
     label_framesizes.pack() 
     entry_framesizes = Entry(top, font = "Verdana 10",width=15, textvariable=framesizes)
     entry_framesizes.pack() 
@@ -429,15 +429,15 @@ def callback():
     if (fastlock == 1):
         fastlockstring = " --fastlock"
     else:
-        fastlockstring = " "
+        fastlockstring = ""
     if (viterbi == 1):
         viterbistring = " --viterbi"
     else:
-        viterbistring = " "
+        viterbistring = ""
     if (gui == 1):
         guistring = " --gui"
     else:
-        guistring = " "
+        guistring = ""
     if (dvbs2 == 1):
         dvbs2string = "-S2"
     else:
@@ -445,15 +445,23 @@ def callback():
     if (maxprocess == 1):
         maxprocessstring = " --hq"
     else:
-        maxprocessstring = " "
+        maxprocessstring = ""
     if (hardmetric == 1):
         hardmetricstring = " --hard-metric"
     else:
-        hardmetricstring = " "
+        hardmetricstring = ""
     if (rtldongle0 == 1):
         rtlstring = "0"
     else:
         rtlstring = "1"
+    if (modcods_value == ""):
+        modcods_string = ""
+    else:
+        modcods_string = " --modcods " + modcods_value
+    if (framesizes_value == ""):
+        framesizes_string = ""
+    else:
+        framesizes_string = " --framesizes " + framesizes_value
     srsubstring = f.get()
     opslaanfreq= e.get()
     fsubstring = float(e.get())
@@ -475,12 +483,12 @@ def callback():
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandbreedte) + \
                   " -p " + str(ppmwaarde) + \
-                  " - " + \
+                  " -" + \
                   " | " + \
                   str(leanpad) + "leandvb" + \
                   guistring + \
-                  " --modcods 0x0040" + \
-                  " --framesizes 0x01" + \
+                  modcods_string + \
+                  framesizes_string + \
                   maxprocessstring + \
                   viterbistring + \
                   hardmetricstring + \
@@ -497,7 +505,7 @@ def callback():
                   " --sr " + str(samplerate) + \
                   " -f " + str(bandbreedte) + \
                   " | " + \
-                  "ffplay -v0 -" + \
+                  "ffplay -v 0 -" + \
                   " \n" 
         else:
             sub = "rtl_sdr" + \
@@ -506,7 +514,7 @@ def callback():
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandbreedte) + \
                   " -p " + str(ppmwaarde) + \
-                  " - " + \
+                  " -" + \
                   " | " + \
                   str(leanpad) + "leandvb" + \
                   guistring + \
