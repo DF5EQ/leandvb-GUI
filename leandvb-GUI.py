@@ -225,7 +225,7 @@ def settings_window():
     inpipe_label     = Label(settings_window,           text="Inpipe (DVBS2) :")
     inpipe_entry     = Entry(settings_window, width=10, textvariable=inpipe)
     modcods_label    = Label(settings_window,           text="modcods (empty entry omits parameter) :")
-    modcods_entry    = Entry(settings_window, width=15, textvariable=modcods)
+    modcods_entry    = Entry(settings_window, width=10, textvariable=modcods)
     framesizes_label = Label(settings_window,           text="framesizes (empty entry omits parameter) :")
     framesizes_entry = Entry(settings_window, width=10, textvariable=framesizes)
     viewer_label     = Label(settings_window,           text="Viewer :")
@@ -254,106 +254,6 @@ def settings_window():
     viewer_entry.grid     (row=8, column=1, sticky=W)
     save_button.grid      (row=9, column=0)
     cancel_button.grid    (row=9, column=1)
-
-def preset1():
-    # TODO to be replaced by settings_window()
-    top = Toplevel()
-    top.title("Parameter Settings")
-    top.geometry("400x500+100+100")    
-    top.transient(master)
-#    C1 = Checkbutton(top, font = "Verdana 11 italic", text="RTL=0", variable=rtl0)
-#    C1.pack()
-#    C2 = Checkbutton(top, font = "Verdana 11 italic", text="LimeSDR=1", variable=rtl1)
-#    C2.pack()
-    kk= Label(top, font = "Verdana 10", text="Path to Leansdr :")
-    kk.pack()
-    i = Entry(top, font = "Verdana 10", width=35, textvariable=padlean)
-    i.pack()
-
-#    kl= Label(top, font = "Verdana 10", text="------------")
-#    kl.pack()
-
-    kk= Label(top, font = "Verdana 10", text="PPM offset RTL0")
-    kk.pack() 
-
-    j = Entry(top, font = "Verdana 10", width=15, textvariable=ppm)
-    j.pack()
-
-#    kn= Label(top, font = "Verdana 10", text="Antenne Lime")
-#    kn.pack() 
-
-#    k= Entry(top, font = "Verdana 10", width=15, textvariable=ant)
-#    k.pack()
-
-#    km= Label(top, font = "Verdana 10", text="Gain Lime")
-#    km.pack() 
-
-#    l= Entry(top, font = "Verdana 10", width=15, textvariable=gain_lime)
-#    l.pack()
-
-#    lm= Label(top, font = "Verdana 10", text="Bandbreedte Lime")
-#    lm.pack() 
-
-#    kp= Entry(top, font = "Verdana 10", width=15, textvariable=bandbreedte_lime)
-#    kp.pack() 
-
-    noo= Label(top, font = "Verdana 10", text="Gain RTL (0=Auto)")
-    noo.pack() 
-
-    oo= Entry(top, font = "Verdana 10", width=15, textvariable=gain_rtl)
-    oo.pack() 
-
-    qoo= Label(top, font = "Verdana 10", text="Roll Off Factor (DVBS2)")
-    qoo.pack() 
-
-    qp= Entry(top, font = "Verdana 10", width=15, textvariable=rolloff_factor)
-    qp.pack() 
-
-    qooo= Label(top, font = "Verdana 10", text="RRC Rej Factor (DVBS2)")
-    qooo.pack() 
-
-    qpp= Entry(top, font = "Verdana 10", width=15, textvariable=rrc_rej_factor)
-    qpp.pack() 
-
-    qooop= Label(top, font = "Verdana 10", text="Nhelpers (DVBS2)")
-    qooop.pack() 
-
-
-    qppp= Entry(top, font = "Verdana 10", width=15, textvariable=nhelpers)
-    qppp.pack() 
-
-
-    oooop= Label(top, font = "Verdana 10", width=15, text="Inpipe (DVBS2)")
-    oooop.pack() 
-
-    qqppp= Entry(top, font = "Verdana 10",width=15, textvariable=inpipe)
-    qqppp.pack() 
-
-#    okl= Label(top, font = "Verdana 10", text="Viewer")
-#    okl.pack()
-
-#    okll= Entry(top, font = "Verdana 10", width=15, textvariable=viewer)
-#    okll.pack() 
-
-    label_modcods = Label(top, font = "Verdana 10", width=50, text="modcods (empty entry omits parameter)")
-    label_modcods.pack() 
-    entry_modcods = Entry(top, font = "Verdana 10",width=15, textvariable=modcods)
-    entry_modcods.pack() 
-
-    label_framesizes = Label(top, font = "Verdana 10", width=50, text="framesizes (empty entry omits parameter)")
-    label_framesizes.pack() 
-    entry_framesizes = Entry(top, font = "Verdana 10",width=15, textvariable=framesizes)
-    entry_framesizes.pack() 
-
-    kll= Label(top, font = "Verdana 10", text="------------")
-    kll.pack()
-
-    topButton0 = Button(top, bg="yellow", text="SAVE", command = lambda:[save_parms(),top.destroy()])
-    topButton0.pack()
-
-#    topButton = Button(top, text="CLOSE", command = top.destroy)
-#    topButton.pack(side = BOTTOM )
-
 
 def save_parms():
     sub = ""
@@ -647,11 +547,7 @@ def callback():
 Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
 Button(master, font = "Verdana 11 italic",text='STOP', command=stop).grid(row=7, column=4,sticky=W)
-##Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=preset1).grid(row=5, column=3)
 Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=settings_window).grid(row=5, column=3)
-#Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='  Save Settings ', command=save_parms).grid(row=5, column=3)
-#Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='UI options', command=preset3).grid(row=2, column=5, ipady=5,sticky=E, ipadx=5)
-#Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='General Options', command=preset4).grid(row=3, column=5, ipady=5,sticky=E,ipadx=5)
 
 master.protocol("WM_DELETE_WINDOW", exit)
 
