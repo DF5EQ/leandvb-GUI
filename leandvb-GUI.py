@@ -211,9 +211,13 @@ def settings_window():
     # TODO add grid with labels, entries, confirm button and cancle button
     leansdr_label = Label(settings_window, text="Path to Leansdr :")
     leansdr_entry = Entry(settings_window, width=40, textvariable=padlean)
+    ppmrtl_label  = Label(settings_window, text="PPM offset RTL0 :")
+    ppmrtl_entry  = Entry(settings_window, width=20, textvariable=ppm)
 
-    leansdr_label.grid(row=0, column=0)
-    leansdr_entry.grid(row=0, column=1)
+    leansdr_label.grid (row=0, column=0, sticky=E)
+    leansdr_entry.grid (row=0, column=1, sticky=W)
+    ppmrtl_label.grid  (row=1, column=0, sticky=E)
+    ppmrtl_entry.grid  (row=1, column=1, sticky=W)
 
 def preset1():
     # TODO to be replaced by settings_window()
