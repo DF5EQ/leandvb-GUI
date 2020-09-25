@@ -207,9 +207,16 @@ def exit():
 def settings_window():
     settings_window = Toplevel()
     settings_window.title("Settings")
+    settings_window.transient(master)
     # TODO add grid with labels, entries, confirm button and cancle button
+    leansdr_label = Label(settings_window, text="Path to Leansdr :")
+    leansdr_entry = Entry(settings_window, width=40, textvariable=padlean)
+
+    leansdr_label.grid(row=0, column=0)
+    leansdr_entry.grid(row=0, column=1)
 
 def preset1():
+    # TODO to be replaced by settings_window()
     top = Toplevel()
     top.title("Parameter Settings")
     top.geometry("400x500+100+100")    
