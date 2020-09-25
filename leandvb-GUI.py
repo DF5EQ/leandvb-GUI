@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
+# TODO streamline usage of viewer ffplay and mplayer
+
 from Tkinter import *
 from PIL import ImageTk, Image
 from os.path import expanduser
 home = expanduser("~")
 import os
-
 
 # Simple UI voor LEANDVB, DVBS receiver.
 # requires sudo apt-get install python-imaging-tk package
@@ -14,6 +15,23 @@ import os
 # showed in richt corner.
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
+
+# check max pipe size and adjust if needed
+
+max_needed = 32000000
+
+f = open("/proc/sys/fs/pipe-max-size", "r")
+max_current = int(f.readline())
+f.close()
+
+if (max_current < max_needed):
+    print "max pipe size is", max_current, ", will be set to", max_needed
+    cmd = "bash -c 'echo " + str(max_needed) + " > /proc/sys/fs/pipe-max-size'"
+    os.system("pkexec " + cmd)
+else:
+    print "max pipe size is", max_current, ", this is ok"
+
+# start the GUI
 
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
@@ -24,8 +42,8 @@ parameter1_conv1=0
 parameter2_conv2=0
 parameter3_conv3= ""
 print "Home directory = " + home
-if os.path.isfile(home+"/leanlastrun"):
-    file = open(home+"/leanlastrun", "r")
+if os.path.isfile(home + "/leandvb-last"):
+    file = open(home + "/leandvb-last", "r")
     parameter1 = file.readline() #freq
     parameter2 = file.readline() #samplerate
     parameter3 = file.readline() #fec
@@ -50,7 +68,9 @@ if os.path.isfile(home+"/leanlastrun"):
     parameter22 = file.readline() #rrc_rej
     parameter23 = file.readline() #nhelpers
     parameter24 = file.readline() #inpipe
-    parameter25 = file.readline() 
+    parameter25 = file.readline()
+    parameter26 = file.readline() #modcods
+    parameter27 = file.readline() #framesizes 
 
     parameter1_conv1 = str(parameter1[:-1])
     parameter2_conv2 = int(parameter2)
@@ -65,6 +85,8 @@ if os.path.isfile(home+"/leanlastrun"):
     parameter22_conv = str(parameter22[:-1])
     parameter23_conv = str(parameter23[:-1])
     parameter24_conv = str(parameter24[:-1])
+    parameter26_conv = str(parameter26[:-1])
+    parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
     parameter1_conv1 = 1252
@@ -95,6 +117,8 @@ else:
     parameter22_conv = "20"
     parameter23_conv = "4"
     parameter24_conv = "1000000"
+    parameter26_conv = "0x0040"
+    parameter27_conv = "0x01"
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
@@ -129,6 +153,8 @@ rrc_rej_factor = StringVar()
 nhelpers = StringVar()
 inpipe = StringVar()
 bandbreedte_lime = StringVar()
+modcods = StringVar()
+framesizes = StringVar()
 var1.set(int(parameter4))
 var2.set(int(parameter5))
 var3.set(int(parameter7))
@@ -149,6 +175,8 @@ rolloff_factor.set(parameter21_conv)
 rrc_rej_factor.set(parameter22_conv)
 nhelpers.set(parameter23_conv)
 inpipe.set(parameter24_conv)
+modcods.set(parameter26_conv)
+framesizes.set(parameter27_conv)
 e = Entry(master, font = "Verdana 15 bold")
 f = Entry(master, font = "Verdana 15 bold")
 g = Entry(master, font = "Verdana 15 bold")
@@ -164,107 +192,106 @@ h.grid(row=3, column=1)
 
 
 e.focus_set()
-if os.path.isfile(home+"/logo.png"):
-    im = Image.open(home+'/logo.png')
+if os.path.isfile("logo.png"):
+    im = Image.open("logo.png")
     photo = ImageTk.PhotoImage(im)
     label = Label(image=photo)
     label.image = photo
     label.grid(row=0, column=3, columnspan=2, rowspan=3,sticky=W+E+N+S, padx=5, pady=5)
 
-def einde():
-   save_parms()
-   master.destroy()
+def exit():
+    save_parms()
+    stop()
+    master.destroy()
 
 
-def preset1():
-    top = Toplevel()
-    top.title("Default Settings")
-    top.geometry("400x400+30+30")    
-    top.transient(master)
-#    C1 = Checkbutton(top, font = "Verdana 11 italic", text="RTL=0", variable=rtl0)
-#    C1.pack()
-#    C2 = Checkbutton(top, font = "Verdana 11 italic", text="LimeSDR=1", variable=rtl1)
-#    C2.pack()
-    kk= Label(top, font = "Verdana 10", text="Path to Leansdr :")
-    kk.pack()
-    i = Entry(top, font = "Verdana 10", width=35, textvariable=padlean)
-    i.pack()
+def settings_window():
 
-#    kl= Label(top, font = "Verdana 10", text="------------")
-#    kl.pack()
+    def on_settings_save():
+        save_parms()
+        settings_window.destroy()
 
-    kk= Label(top, font = "Verdana 10", text="PPM offset RTL0")
-    kk.pack() 
+    def on_settings_cancel():
+        settings_window.destroy()
 
-    j = Entry(top, font = "Verdana 10", width=15, textvariable=ppm)
-    j.pack()
+    settings_window = Toplevel(master, borderwidth=4)
+    settings_window.title("Settings")
+    settings_window.transient(master)
+    settings_window.resizable(height = False, width = False)
 
-#    kn= Label(top, font = "Verdana 10", text="Antenne Lime")
-#    kn.pack() 
+    leansdr_label    = Label(settings_window,           text="Path to leansdr :")
+    leansdr_entry    = Entry(settings_window, width=40, textvariable=padlean)
 
-#    k= Entry(top, font = "Verdana 10", width=15, textvariable=ant)
-#    k.pack()
+    ppmrtl_label     = Label(settings_window,           text="PPM offset RTL :")
+    ppmrtl_entry     = Entry(settings_window, width=10, textvariable=ppm)
 
-#    km= Label(top, font = "Verdana 10", text="Gain Lime")
-#    km.pack() 
+    gainrtl_label    = Label(settings_window,           text="Gain RTL :")
+    gainrtl_entry    = Entry(settings_window, width=10, textvariable=gain_rtl)
+    gainrtl_extra    = Label(settings_window,           text="0 = Auto")
 
-#    l= Entry(top, font = "Verdana 10", width=15, textvariable=gain_lime)
-#    l.pack()
+    rolloff_label    = Label(settings_window,           text="Roll Off Factor (DVBS2) :")
+    rolloff_entry    = Entry(settings_window, width=10, textvariable=rolloff_factor)
 
-#    lm= Label(top, font = "Verdana 10", text="Bandbreedte Lime")
-#    lm.pack() 
+    rrcrej_label     = Label(settings_window,           text="RRC Rej Factor (DVBS2) :")
+    rrcrej_entry     = Entry(settings_window, width=10, textvariable=rrc_rej_factor)
 
-#    kp= Entry(top, font = "Verdana 10", width=15, textvariable=bandbreedte_lime)
-#    kp.pack() 
+    nhelpers_label   = Label(settings_window,           text="Nhelpers (DVBS2) :")
+    nhelpers_entry   = Entry(settings_window, width=10, textvariable=nhelpers)
 
-    noo= Label(top, font = "Verdana 10", text="Gain RTL (0=Auto)")
-    noo.pack() 
+    inpipe_label     = Label(settings_window,           text="Inpipe (DVBS2) :")
+    inpipe_entry     = Entry(settings_window, width=10, textvariable=inpipe)
 
-    oo= Entry(top, font = "Verdana 10", width=15, textvariable=gain_rtl)
-    oo.pack() 
+    modcods_label    = Label(settings_window,           text="modcods :")
+    modcods_entry    = Entry(settings_window, width=10, textvariable=modcods)
+    modcods_extra    = Label(settings_window,           text="empty entry omits parameter")
 
-    qoo= Label(top, font = "Verdana 10", text="Roll Off Factor (DVBS2)")
-    qoo.pack() 
+    framesizes_label = Label(settings_window,           text="framesizes :")
+    framesizes_entry = Entry(settings_window, width=10, textvariable=framesizes)
+    framesizes_extra = Label(settings_window,           text="empty entry omits parameter")
 
-    qp= Entry(top, font = "Verdana 10", width=15, textvariable=rolloff_factor)
-    qp.pack() 
+    viewer_label     = Label(settings_window,           text="Viewer :")
+    viewer_entry     = Entry(settings_window, width=10, textvariable=viewer)
 
-    qooo= Label(top, font = "Verdana 10", text="RRC Rej Factor (DVBS2)")
-    qooo.pack() 
+    save_button      = Button(settings_window, highlightbackground='green', text="SAVE",   command = on_settings_save)
+    cancel_button    = Button(settings_window, highlightbackground='red',   text="CANCEL", command = on_settings_cancel)
 
-    qpp= Entry(top, font = "Verdana 10", width=15, textvariable=rrc_rej_factor)
-    qpp.pack() 
+    leansdr_label.grid    (row=0, column=0, sticky=E)
+    leansdr_entry.grid    (row=0, column=1, sticky=W, columnspan=3)
 
-    qooop= Label(top, font = "Verdana 10", text="Nhelpers (DVBS2)")
-    qooop.pack() 
+    ppmrtl_label.grid     (row=1, column=0, sticky=E)
+    ppmrtl_entry.grid     (row=1, column=1, sticky=W)
 
+    gainrtl_label.grid    (row=2, column=0, sticky=E)
+    gainrtl_entry.grid    (row=2, column=1, sticky=W)
+    gainrtl_extra.grid    (row=2, column=2, sticky=W, columnspan=2)
 
-    qppp= Entry(top, font = "Verdana 10", width=15, textvariable=nhelpers)
-    qppp.pack() 
+    rolloff_label.grid    (row=3, column=0, sticky=E)
+    rolloff_entry.grid    (row=3, column=1, sticky=W)
 
+    nhelpers_label.grid   (row=4, column=0, sticky=E)
+    nhelpers_entry.grid   (row=4, column=1, sticky=W)
 
-    oooop= Label(top, font = "Verdana 10", width=15, text="Inpipe (DVBS2)")
-    oooop.pack() 
+    inpipe_label.grid     (row=5, column=0, sticky=E)
+    inpipe_entry.grid     (row=5, column=1, sticky=W)
 
-    qqppp= Entry(top, font = "Verdana 10",width=15, textvariable=inpipe)
-    qqppp.pack() 
+    modcods_label.grid    (row=6, column=0, sticky=E)
+    modcods_entry.grid    (row=6, column=1, sticky=W)
+    modcods_extra.grid    (row=6, column=2, sticky=W, columnspan=2)
 
-#    okl= Label(top, font = "Verdana 10", text="Viewer")
-#    okl.pack()
+    framesizes_label.grid (row=7, column=0, sticky=E)
+    framesizes_entry.grid (row=7, column=1, sticky=W)
+    framesizes_extra.grid (row=7, column=2, sticky=W, columnspan=2)
 
-#    okll= Entry(top, font = "Verdana 10", width=15, textvariable=viewer)
-#    okll.pack() 
+    viewer_label.grid     (row=8, column=0, sticky=E)
+    viewer_entry.grid     (row=8, column=1, sticky=W)
 
+    save_button.grid      (row=9, column=2, sticky=EW)
+    cancel_button.grid    (row=9, column=3, sticky=EW)
 
-    kll= Label(top, font = "Verdana 10", text="------------")
-    kll.pack()
-    topButton0 = Button(top, bg="yellow", text="SAVE", command = lambda:[save_parms(),top.destroy()])
-    topButton0.pack()
-
-
-#    topButton = Button(top, text="CLOSE", command = top.destroy)
-#    topButton.pack(side = BOTTOM )
-
+    settings_window.columnconfigure(0, weight=0)
+    settings_window.columnconfigure(1, weight=0)
+    settings_window.columnconfigure(2, weight=1)
+    settings_window.columnconfigure(3, weight=1)
 
 def save_parms():
     sub = ""
@@ -302,11 +329,13 @@ def save_parms():
     bandbreedte_limewaarde = bandbreedte_lime.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
-    file = open(home+"/runlean", "w")
+    modcods_value = modcods.get()
+    framesizes_value = framesizes.get()
+    file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub)
     file.close()
-    file = open(home+"/leanlastrun", "w")
+    file = open(home+"/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
@@ -332,10 +361,22 @@ def save_parms():
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
+    file.write(str(modcods_value) + "\n")
+    file.write(str(framesizes_value) + "\n")
     file.close()
 
 def stop():
-    os.system(home+"/lean_stop")
+    file = open(home + "/leandvb-stop", "w")
+    file.write("#!/bin/sh \n")
+    file.write("\n")
+    file.write("killall rtl_sdr\n")
+    file.write("killall ffplay\n")
+    file.write("killall leandvb\n")
+    file.write("killall basicRX\n")
+    file.write("\n")
+    file.write("exit 0\n")
+    file.close()
+    os.system("sh " + home + "/leandvb-stop")
 
 def callback():
     ppmwaarde = ppm.get()
@@ -364,25 +405,27 @@ def callback():
     rrc_rej_factorwaarde = rrc_rej_factor.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
+    modcods_value = modcods.get()
+    framesizes_value = framesizes.get()
     bandbreedte_limewaarde = bandbreedte_lime.get()
     if (viewer_waarde == "ffplay"):
-	view = "ffplay -v 0"
+        view = "ffplay -v 0"
     else:
-	view = "mplayer"
+        view = "mplayer"
     if (lowsr == 1):
         bandbreedte = 1800000
     else:
         bandbreedte = 2400000
     if (fastlock == 1):
-        fastlockstring = "--fastlock"
+        fastlockstring = " --fastlock"
     else:
         fastlockstring = ""
     if (viterbi == 1):
-        viterbistring = "--viterbi"
+        viterbistring = " --viterbi"
     else:
         viterbistring = ""
     if (gui == 1):
-        guistring = "--gui"
+        guistring = " --gui"
     else:
         guistring = ""
     if (dvbs2 == 1):
@@ -390,17 +433,25 @@ def callback():
     else:
         dvbs2string = "-S"
     if (maxprocess == 1):
-        maxprocessstring = "--hq"
+        maxprocessstring = " --hq"
     else:
         maxprocessstring = ""
     if (hardmetric == 1):
-        hardmetricstring = "--hard-metric"
+        hardmetricstring = " --hard-metric"
     else:
         hardmetricstring = ""
     if (rtldongle0 == 1):
         rtlstring = "0"
     else:
         rtlstring = "1"
+    if (modcods_value == ""):
+        modcods_string = ""
+    else:
+        modcods_string = " --modcods " + modcods_value
+    if (framesizes_value == ""):
+        framesizes_string = ""
+    else:
+        framesizes_string = " --framesizes " + framesizes_value
     srsubstring = f.get()
     opslaanfreq= e.get()
     fsubstring = float(e.get())
@@ -412,20 +463,94 @@ def callback():
     fec = tkvar3.get()
     tune = h.get( )
     if (rtldongle0 == 1):
-	if (dvbs2 == 1):
-    		sub = "rtl_sdr -d " + rtlstring + " -f "  + str(freqfinal) + " -g " + gain_rtlwaarde +  " -s " + str(bandbreedte) + " -p " + str(ppmwaarde) + " - | " + str(leanpad) + "leandvb" + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --standard DVB" + dvbs2string + " --ldpc-helper " + str(leanpad) + "ldpc_tool  --inpipe " + str(inpipe_waarde) + " --nhelpers " +str(nhelpers_waarde) + " --sampler rrc --rrc-rej " + str(rrc_rej_factorwaarde) + " -v --roll-off " + str(rolloff_factorwaarde) + " --sr " + str(samplerate) + " -f " + str(bandbreedte) + " | ffplay -v 0  - \n" 
-	else:
-		sub = "rtl_sdr -d " + rtlstring + " -f "  + str(freqfinal) + " -g " + gain_rtlwaarde +  " -s " + str(bandbreedte) + " -p " + str(ppmwaarde) + " - | " + str(leanpad) + "leandvb" + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --standard DVB" + dvbs2string + " -v --sr " + str(samplerate) + " -f " + str(bandbreedte) + " | " + str(view) + " - \n" 
+        if (dvbs2 == 1):
+            sub = "rtl_sdr" + \
+                  " -d " + rtlstring + \
+                  " -f "  + str(freqfinal) + \
+                  " -g " + gain_rtlwaarde +  \
+                  " -s " + str(bandbreedte) + \
+                  " -p " + str(ppmwaarde) + \
+                  " -" + \
+                  " | " + \
+                  str(leanpad) + "leandvb" + \
+                  guistring + \
+                  modcods_string + \
+                  framesizes_string + \
+                  maxprocessstring + \
+                  viterbistring + \
+                  hardmetricstring + \
+                  fastlockstring + \
+                  " --tune " + tune + \
+                  " --standard DVB" + dvbs2string + \
+                  " --ldpc-helper " + str(leanpad) + "ldpc_tool" + \
+                  " --inpipe " + str(inpipe_waarde) + \
+                  " --nhelpers " +str(nhelpers_waarde) + \
+                  " --sampler rrc" + \
+                  " --rrc-rej " + str(rrc_rej_factorwaarde) + \
+                  " -v" + \
+                  " --roll-off " + str(rolloff_factorwaarde) + \
+                  " --sr " + str(samplerate) + \
+                  " -f " + str(bandbreedte) + \
+                  " | " + \
+                  "ffplay -v 0 -" + \
+                  " \n" 
+        else:
+            sub = "rtl_sdr" + \
+                  " -d " + rtlstring + \
+                  " -f "  + str(freqfinal) + \
+                  " -g " + gain_rtlwaarde +  \
+                  " -s " + str(bandbreedte) + \
+                  " -p " + str(ppmwaarde) + \
+                  " -" + \
+                  " | " + \
+                  str(leanpad) + "leandvb" + \
+                  guistring + \
+                  maxprocessstring + \
+                  viterbistring + \
+                  hardmetricstring + \
+                  fastlockstring + \
+                  " --tune " + tune + \
+                  " --cr " + str(fec) + \
+                  " --standard DVB" + dvbs2string + \
+                  " -v" + \
+                  " --sr " + str(samplerate) + \
+                  " -f " + str(bandbreedte) + \
+                  " | " + \
+                  str(view) + " -" + \
+                  " \n" 
     else:
-        sub1 = home+"/LimeSuite/builddir/bin/basicRX -a " + antennewaarde + " -r " + bandbreedte_limewaarde + " -g " + gain_limewaarde + " -f " + freq_lime + " -o 16 -b 3000000 &"
-        sub = "cat ~/experiment | " + str(leanpad) + " " + guistring + " " + maxprocessstring + " " + viterbistring + " " + hardmetricstring + " " + fastlockstring + " --tune " + tune + " --cr " + str(fec) + " --sr " + str(samplerate) + " -f " +bandbreedte_limewaarde + " --s16 | ffplay -v 0 - &"
-    file = open(home+"/runlean", "w")
+        sub1 = home + "/LimeSuite/builddir/bin/basicRX" + \
+               " -a " + antennewaarde + \
+               " -r " + bandbreedte_limewaarde + \
+               " -g " + gain_limewaarde + \
+               " -f " + freq_lime + \
+               " -o 16" + \
+               " -b 3000000" + \
+               " &"
+        sub = "cat ~/experiment" + \
+              " | " + \
+              str(leanpad) + \
+              guistring + \
+              maxprocessstring + \
+              viterbistring + \
+              hardmetricstring + \
+              fastlockstring + \
+              " --tune " + tune + \
+              " --cr " + str(fec) + \
+              " --sr " + str(samplerate) + \
+              " -f " + bandbreedte_limewaarde + \
+              " --s16" + \
+              " | " + \
+              "ffplay -v 0 - &"
+
+    file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
-    file = open(home+"/leanlastrun", "w")
+
+    file = open(home + "/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
@@ -451,16 +576,18 @@ def callback():
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
     file.write(tunesubstring + "\n")
+    file.write(str(modcods_value) + "\n")
+    file.write(str(framesizes_value) + "\n")
     file.close()
-    os.system("sh " + home + "/runlean &")
 
-Button(master,font = "Verdana 11 italic", text='EXIT', command=einde).grid(row=7, column=3,sticky=E)
+    os.system("sh " + home + "/leandvb-run &")
+
+Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
 Button(master, font = "Verdana 11 italic",text='STOP', command=stop).grid(row=7, column=4,sticky=W)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=preset1).grid(row=5, column=3)
-#Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='  Save Settings ', command=save_parms).grid(row=5, column=3)
-#Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='UI options', command=preset3).grid(row=2, column=5, ipady=5,sticky=E, ipadx=5)
-#Button(master, font = "Verdana 9 italic",fg='red',highlightbackground='blue',text='General Options', command=preset4).grid(row=3, column=5, ipady=5,sticky=E,ipadx=5)
+Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=settings_window).grid(row=5, column=3)
+
+master.protocol("WM_DELETE_WINDOW", exit)
 
 tkvar1 = StringVar(master)
  
