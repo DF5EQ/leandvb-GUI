@@ -227,7 +227,9 @@ def settings_window():
     modcods_label    = Label(settings_window,           text="modcods (empty entry omits parameter) :")
     modcods_entry    = Entry(settings_window, width=15, textvariable=modcods)
     framesizes_label = Label(settings_window,           text="framesizes (empty entry omits parameter) :")
-    framesizes_entry = Entry(settings_window, width=15, textvariable=framesizes)
+    framesizes_entry = Entry(settings_window, width=10, textvariable=framesizes)
+    viewer_label     = Label(settings_window,           text="Viewer :")
+    viewer_entry     = Entry(settings_window, width=10, textvariable=viewer)
     save_button      = Button(settings_window,          text="SAVE",   command = lambda:[save_parms(),settings_window.destroy()])
     cancel_button    = Button(settings_window,          text="CANCEL", command = settings_window.destroy)
 
@@ -248,8 +250,10 @@ def settings_window():
     modcods_entry.grid    (row=6, column=1, sticky=W)
     framesizes_label.grid (row=7, column=0, sticky=E)
     framesizes_entry.grid (row=7, column=1, sticky=W)
-    save_button.grid      (row=8, column=0)
-    cancel_button.grid    (row=8, column=1)
+    viewer_label.grid     (row=8, column=0, sticky=E)
+    viewer_entry.grid     (row=8, column=1, sticky=W)
+    save_button.grid      (row=9, column=0)
+    cancel_button.grid    (row=9, column=1)
 
 def preset1():
     # TODO to be replaced by settings_window()
