@@ -247,14 +247,14 @@ def settings_window():
     cancel_button    = Button(settings_window,          text="CANCEL", command = settings_window.destroy)
 
     leansdr_label.grid    (row=0, column=0, sticky=E)
-    leansdr_entry.grid    (row=0, column=1, sticky=W, columnspan=2)
+    leansdr_entry.grid    (row=0, column=1, sticky=W, columnspan=3)
 
     ppmrtl_label.grid     (row=1, column=0, sticky=E)
     ppmrtl_entry.grid     (row=1, column=1, sticky=W)
 
     gainrtl_label.grid    (row=2, column=0, sticky=E)
     gainrtl_entry.grid    (row=2, column=1, sticky=W)
-    gainrtl_extra.grid    (row=2, column=2, sticky=W)
+    gainrtl_extra.grid    (row=2, column=2, sticky=W, columnspan=2)
 
     rolloff_label.grid    (row=3, column=0, sticky=E)
     rolloff_entry.grid    (row=3, column=1, sticky=W)
@@ -267,21 +267,22 @@ def settings_window():
 
     modcods_label.grid    (row=6, column=0, sticky=E)
     modcods_entry.grid    (row=6, column=1, sticky=W)
-    modcods_extra.grid    (row=6, column=2, sticky=W)
+    modcods_extra.grid    (row=6, column=2, sticky=W, columnspan=2)
 
     framesizes_label.grid (row=7, column=0, sticky=E)
     framesizes_entry.grid (row=7, column=1, sticky=W)
-    framesizes_extra.grid (row=7, column=2, sticky=W)
+    framesizes_extra.grid (row=7, column=2, sticky=W, columnspan=2)
 
     viewer_label.grid     (row=8, column=0, sticky=E)
     viewer_entry.grid     (row=8, column=1, sticky=W)
 
-    save_button.grid      (row=9, column=0)
-    cancel_button.grid    (row=9, column=1)
+    save_button.grid      (row=9, column=2, sticky=EW)
+    cancel_button.grid    (row=9, column=3, sticky=EW)
 
     settings_window.columnconfigure(0, weight=0)
     settings_window.columnconfigure(1, weight=0)
     settings_window.columnconfigure(2, weight=1)
+    settings_window.columnconfigure(3, weight=1)
 
 def save_parms():
     sub = ""
