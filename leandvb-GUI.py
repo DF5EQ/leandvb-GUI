@@ -204,7 +204,16 @@ def exit():
     stop()
     master.destroy()
 
+
 def settings_window():
+
+    def on_settings_save():
+        save_parms()
+        settings_window.destroy()
+
+    def on_settings_cancel():
+        settings_window.destroy()
+
     settings_window = Toplevel(master, borderwidth=4)
     settings_window.title("Settings")
     settings_window.transient(master)
@@ -243,8 +252,8 @@ def settings_window():
     viewer_label     = Label(settings_window,           text="Viewer :")
     viewer_entry     = Entry(settings_window, width=10, textvariable=viewer)
 
-    save_button      = Button(settings_window,          text="SAVE",   command = lambda:[save_parms(),settings_window.destroy()])
-    cancel_button    = Button(settings_window,          text="CANCEL", command = settings_window.destroy)
+    save_button      = Button(settings_window, highlightbackground='green', text="SAVE",   command = on_settings_save)
+    cancel_button    = Button(settings_window, highlightbackground='red',   text="CANCEL", command = on_settings_cancel)
 
     leansdr_label.grid    (row=0, column=0, sticky=E)
     leansdr_entry.grid    (row=0, column=1, sticky=W, columnspan=3)
