@@ -43,7 +43,6 @@ parameters = dict()
 def parameters_save():
     sub = ""
     samplerate = 0
-    freq = 0
     tune = 0
     fastlock = var1.get()
     lowsr = var2.get()
@@ -57,12 +56,7 @@ def parameters_save():
     leanpad = padlean.get()
     srsubstring = f.get()
     tunesubstring = str(1)
-    opslaanfreq= e.get()
-    fsubstring = float(e.get())
     tunesubstring = str(1)
-    freq = fsubstring * 1000000
-    freqfinal=int(freq)
-    freq_lime=str(fsubstring)+"M"
     samplerate = int(srsubstring) * 1000
     fec = tkvar3.get()
     tune = h.get()
@@ -85,7 +79,7 @@ def parameters_save():
     file.close()
 
     file = open(home+"/leandvb-last", "w")
-    file.write(str(opslaanfreq) + "\n")    
+    file.write("freq (leer)\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
     file.write(tune + "\n")
@@ -114,7 +108,7 @@ def parameters_save():
     file.write(str(framesizes_value) + "\n")
     file.close()
 
-    parameters["frequency"       ] = str(opslaanfreq)
+    parameters["frequency"       ] = float(e.get())
     parameters["samplerate"      ] = srsubstring
     parameters["fec"             ] = fec
     parameters["tune"            ] = tune
@@ -143,7 +137,7 @@ def parameters_save():
     parameters["framesizes"      ] = framesizes_value
 
     file = open(home + "/leandvb-last.json", "w")
-    file.write(json.dumps(parameters, indent = 4))
+    file.write(json.dumps(parameters, indent=4, sort_keys=True))
     file.close()
 
 def parameters_load():
@@ -155,7 +149,7 @@ def parameters_load():
 
 def parameters_default():
     print "loading parameters with defaults"
-    parameters["frequency"       ] = "741.500"
+    parameters["frequency"       ] = 741.500
     parameters["samplerate"      ] = "1500"
     parameters["fec"             ] = "1/2"
     parameters["tune"            ] = "0"
@@ -189,7 +183,6 @@ master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
 
 lengte=0
-parameter1_conv1=0
 parameter2_conv2=0
 parameter3_conv3= ""
 print "Home directory = " + home
@@ -199,11 +192,11 @@ if os.path.isfile(home + "/leandvb-last.json"):
 else:
     parameters_default()
 
-print (json.dumps(parameters))
+print (json.dumps(parameters, sort_keys=True))
 
 if os.path.isfile(home + "/leandvb-last"):
     file = open(home + "/leandvb-last", "r")
-    parameter1 = file.readline() #freq
+    parameter1 = file.readline() #freq (leer)
     parameter2 = file.readline() #samplerate
     parameter3 = file.readline() #fec
     parameter6 = file.readline() #tune
@@ -231,7 +224,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter1_conv1 = str(parameter1[:-1])
     parameter2_conv2 = int(parameter2)
     parameter3_conv3 = str(parameter3[:3])
     parameter4_conv4 = int (parameter6)
@@ -248,11 +240,9 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter1_conv1 = 1252
     parameter2_conv2 = 2000
     parameter3_conv3 = "1/2"
     parameter4_conv4 = 0
-    parameter1 = "1252"
     parameter2 = "2000"
     parameter3 = 1
     parameter4 = 1
@@ -340,7 +330,7 @@ e = Entry(master, font = "Verdana 15 bold")
 f = Entry(master, font = "Verdana 15 bold")
 g = Entry(master, font = "Verdana 15 bold")
 h = Entry(master, font = "Verdana 15 bold")
-e.insert(0, parameter1_conv1)
+e.insert(0, parameters["frequency"])
 f.insert(0, parameter2_conv2)
 g.insert(0, parameter3_conv3)
 h.insert(0, parameter4_conv4)
@@ -472,7 +462,6 @@ def callback():
     view = ""
     dvbs2string = ""
     samplerate = 0
-    freq = 0
     tune = 0
     fastlock = var1.get()
     lowsr = var2.get()
@@ -540,12 +529,9 @@ def callback():
     else:
         framesizes_string = " --framesizes " + framesizes_value
     srsubstring = f.get()
-    opslaanfreq= e.get()
     fsubstring = float(e.get())
     tunesubstring = str(1)
-    freq = fsubstring * 1000000
-    freqfinal=int(freq)
-    freq_lime=str(fsubstring)+"M"
+    frequency_rtl = int( float(e.get()) * 1000000 )
     samplerate = int(srsubstring) * 1000
     fec = tkvar3.get()
     tune = h.get( )
@@ -553,7 +539,7 @@ def callback():
         if (dvbs2 == 1):
             sub = "rtl_sdr" + \
                   " -d " + rtlstring + \
-                  " -f "  + str(freqfinal) + \
+                  " -f "  + str(frequency_rtl) + \
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandbreedte) + \
                   " -p " + str(ppmwaarde) + \
@@ -580,11 +566,12 @@ def callback():
                   " -f " + str(bandbreedte) + \
                   " | " + \
                   "ffplay -v 0 -" + \
-                  " \n" 
+                  " \n"
+            print sub
         else:
             sub = "rtl_sdr" + \
                   " -d " + rtlstring + \
-                  " -f "  + str(freqfinal) + \
+                  " -f "  + str(frequency_rtl) + \
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandbreedte) + \
                   " -p " + str(ppmwaarde) + \
@@ -638,7 +625,7 @@ def callback():
     file.close()
 
     file = open(home + "/leandvb-last", "w")
-    file.write(str(opslaanfreq) + "\n")    
+    file.write("freq (leer)\n")    
     file.write(srsubstring + "\n")
     file.write(fec + "\n")
     file.write(tune + "\n")
@@ -681,8 +668,8 @@ tkvar1 = StringVar(master)
 # Frequency Dropdown
 choices1 = { '1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
 
-tkvar1.set(parameter1[:-1]) # set the default option
- 
+tkvar1.set(str(parameters["frequency"])) # set the default option
+
 popupMenu = OptionMenu(master, tkvar1, *choices1)
 Label(master, text=" Frequency ", font = "Verdana 14 italic").grid(row = 0, column = 0)
 Label(master, text="MHz", font = "Verdana 14 italic").grid(row = 0, column = 2,sticky=W)
