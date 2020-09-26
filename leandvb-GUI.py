@@ -46,7 +46,6 @@ parameters = dict()
 
 def parameters_save():
     gain_rtlwaarde = gain_rtl.get()
-    gain_limewaarde = gain_lime.get()
     viewer_waarde = viewer.get()
     rolloff_factorwaarde = rolloff_factor.get()
     rrc_rej_factorwaarde = rrc_rej_factor.get()
@@ -73,7 +72,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(gain_limewaarde) + "\n")
+    file.write("\n")
     file.write(str(bandwidth_limewaarde) + "\n")
     file.write(str(gain_rtlwaarde) + "\n")
     file.write(str(viewer_waarde) + "\n")
@@ -101,7 +100,7 @@ def parameters_save():
     parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = int(ppm.get())
     parameters["antenne"       ] = ant.get()
-    parameters["gain_lime"     ] = gain_limewaarde
+    parameters["gain_lime"     ] = gain_lime.get()
     parameters["bandwidth_lime"] = bandwidth_limewaarde
     parameters["gain_rtl"      ] = gain_rtlwaarde
     parameters["viewer"        ] = viewer_waarde
@@ -186,7 +185,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter17 = file.readline() #gain_lime
+    file.readline()
     parameter18 = file.readline() #gain_lime_bandwidth
     parameter19 = file.readline() #gain_rtl
     parameter20 = file.readline() #viewer
@@ -198,7 +197,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter17_conv = str(parameter17[:-1])
     parameter18_conv = str(parameter18[:-1])
     parameter19_conv = str(parameter19[:-1])
     parameter20_conv = str(parameter20[:-1])
@@ -210,7 +208,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter17_conv = "0.5"
     parameter18_conv = "3500000"
     parameter19_conv = "0"
     parameter20_conv = "ffplay"
@@ -266,7 +263,7 @@ rtl0.set(parameters["rtldongle0"])
 padlean.set(parameters["leanpad"])
 ppm.set(parameters["ppm"])
 ant.set(parameters["antenne"])
-gain_lime.set(parameter17_conv)
+gain_lime.set(parameters["gain_lime"])
 bandwidth_lime.set(parameter18_conv)
 gain_rtl.set(parameter19_conv)
 viewer.set(parameter20_conv)
@@ -412,7 +409,7 @@ def callback():
     view = ""
     leanpad = padlean.get()
     antenne = ant.get()
-    gain_limewaarde = gain_lime.get()
+    gainlime = gain_lime.get()
     gain_rtlwaarde = gain_rtl.get()
     viewer_waarde = viewer.get()
     rolloff_factorwaarde = rolloff_factor.get()
@@ -530,7 +527,7 @@ def callback():
         sub1 = home + "/LimeSuite/builddir/bin/basicRX" + \
                " -a " + antenne + \
                " -r " + bandwidth_limewaarde + \
-               " -g " + gain_limewaarde + \
+               " -g " + gainlime + \
                " -f " + "freq_lime" + \
                " -o 16" + \
                " -b 3000000" + \
