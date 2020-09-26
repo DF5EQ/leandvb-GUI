@@ -19,7 +19,7 @@ from PIL import ImageTk, Image
 from os.path import expanduser
 home = expanduser("~")
 import os
-
+import json
 
 # check max pipe size and adjust if needed
 
@@ -114,8 +114,35 @@ def parameters_save():
     file.write(str(framesizes_value) + "\n")
     file.close()
 
-    parameters["frequency"] = str(opslaanfreq)
-    print parameters
+    parameters["frequency"             ] = str(opslaanfreq)
+    parameters["samplerate"            ] = srsubstring
+    parameters["fec"                   ] = fec
+    parameters["tune"                  ] = tune
+    parameters["fastlock"              ] = str(fastlock)
+    parameters["lowsr"                 ] = str(lowsr)
+    parameters["viterbi"               ] = str(viterbi)
+    parameters["gui"                   ] = str(gui)
+    parameters["dvbs2"                 ] = str(dvbs2)
+    parameters["maxprocess"            ] = str(maxprocess)
+    parameters["hardmetric"            ] = str(hardmetric)
+    parameters["rtldongle0"            ] = str(rtldongle0)
+    parameters["rtldongle1"            ] = str(rtldongle1)
+    parameters["leanpad"               ] = leanpad
+    parameters["ppmwaarde"             ] = str(ppmwaarde)
+    parameters["antennewaarde"         ] = antennewaarde
+    parameters["gain_limewaarde"       ] = gain_limewaarde
+    parameters["bandbreedte_limewaarde"] = bandbreedte_limewaarde
+    parameters["gain_rtlwaarde"        ] = gain_rtlwaarde
+    parameters["viewer_waarde"         ] = viewer_waarde
+    parameters["rolloff_factorwaarde"  ] = rolloff_factorwaarde
+    parameters["rrc_rej_factorwaarde"  ] = rrc_rej_factorwaarde
+    parameters["nhelpers_waarde"       ] = nhelpers_waarde
+    parameters["inpipe_waarde"         ] = inpipe_waarde
+    parameters["tunesubstring"         ] = tunesubstring
+    parameters["modcods_value"         ] = modcods_value
+    parameters["framesizes_value"      ] = framesizes_value
+
+    print(json.dumps(parameters, indent = 4))
 
 #def parameters_load():
 
