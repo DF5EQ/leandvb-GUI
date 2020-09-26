@@ -47,36 +47,7 @@ else:
 parameters = dict()
 
 def parameters_save():
-    file = open(home+"/leandvb-last", "w")
-    file.write("\n")    
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.write("\n")
-    file.close()
-
+    print "save parameters to json file"
     parameters["frequency"     ] = float(e.get())
     parameters["samplerate"    ] = int(f.get())
     parameters["fec"           ] = tkvar3.get()
@@ -109,13 +80,13 @@ def parameters_save():
 
 def parameters_load():
     global parameters
-    print "loading parameters from json file"
+    print "load parameters from json file"
     file = open(home + "/leandvb-last.json", "r")
     parameters = json.load(file)
     file.close()
 
 def parameters_default():
-    print "loading parameters with defaults"
+    print "load parameters with defaults"
     parameters["frequency"     ] = 741.500
     parameters["samplerate"    ] = 1500
     parameters["fec"           ] = "1/2"
@@ -156,37 +127,6 @@ else:
     parameters_default()
 
 print (json.dumps(parameters, sort_keys=True))
-
-if os.path.isfile(home + "/leandvb-last"):
-    file = open(home + "/leandvb-last", "r")
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline()
-    file.readline() 
-    file.close()
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
