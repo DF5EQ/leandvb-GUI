@@ -45,7 +45,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    ppmwaarde = ppm.get()
     antennewaarde = ant.get()
     gain_rtlwaarde = gain_rtl.get()
     gain_limewaarde = gain_lime.get()
@@ -73,7 +72,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(ppmwaarde) + "\n")
+    file.write("\n")
     file.write(str(antennewaarde) + "\n")
     file.write(str(gain_limewaarde) + "\n")
     file.write(str(bandwidth_limewaarde) + "\n")
@@ -101,7 +100,7 @@ def parameters_save():
     parameters["hardmetric"    ] = bool(var4.get())
     parameters["rtldongle0"    ] = bool(rtl0.get())
     parameters["leanpad"       ] = padlean.get()
-    parameters["ppm"           ] = str(ppmwaarde)
+    parameters["ppm"           ] = int(ppm.get())
     parameters["antenne"       ] = antennewaarde
     parameters["gain_lime"     ] = gain_limewaarde
     parameters["bandwidth_lime"] = bandwidth_limewaarde
@@ -140,7 +139,7 @@ def parameters_default():
     parameters["hardmetric"    ] = False
     parameters["rtldongle0"    ] = True
     parameters["leanpad"       ] = home+"/leansdr/src/apps/ "
-    parameters["ppm"           ] = "0"
+    parameters["ppm"           ] = 0
     parameters["antenne"       ] = "1"
     parameters["gain_lime"     ] = "0.5"
     parameters["bandwidth_lime"] = "3500000"
@@ -186,7 +185,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter15 = file.readline() #ppm
+    file.readline()
     parameter16 = file.readline() #ant
     parameter17 = file.readline() #gain_lime
     parameter18 = file.readline() #gain_lime_bandwidth
@@ -213,7 +212,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter15 = 1
     parameter16_conv = 1
     parameter17_conv = "0.5"
     parameter18_conv = "3500000"
@@ -269,7 +267,7 @@ var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
 rtl0.set(parameters["rtldongle0"])
 padlean.set(parameters["leanpad"])
-ppm.set(int(parameter15))
+ppm.set(parameters["ppm"])
 ant.set(parameter16_conv)
 gain_lime.set(parameter17_conv)
 bandwidth_lime.set(parameter18_conv)
@@ -411,7 +409,7 @@ def stop():
     os.system("sh " + home + "/leandvb-stop")
 
 def callback():
-    ppmwaarde = ppm.get()
+    ppmvalue = int(ppm.get())
     sub = ""
     sub1 = ""
     view = ""
@@ -482,7 +480,7 @@ def callback():
                   " -f "  + str(frequency) + \
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandwidth) + \
-                  " -p " + str(ppmwaarde) + \
+                  " -p " + str(ppmvalue) + \
                   " -" + \
                   " | " + \
                   leanpad + "leandvb" + \
@@ -513,7 +511,7 @@ def callback():
                   " -f "  + str(frequency) + \
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandwidth) + \
-                  " -p " + str(ppmwaarde) + \
+                  " -p " + str(ppmvalue) + \
                   " -" + \
                   " | " + \
                   leanpad + "leandvb" + \
