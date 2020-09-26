@@ -114,41 +114,74 @@ def parameters_save():
     file.write(str(framesizes_value) + "\n")
     file.close()
 
-    parameters["frequency"             ] = str(opslaanfreq)
-    parameters["samplerate"            ] = srsubstring
-    parameters["fec"                   ] = fec
-    parameters["tune"                  ] = tune
-    parameters["fastlock"              ] = str(fastlock)
-    parameters["lowsr"                 ] = str(lowsr)
-    parameters["viterbi"               ] = str(viterbi)
-    parameters["gui"                   ] = str(gui)
-    parameters["dvbs2"                 ] = str(dvbs2)
-    parameters["maxprocess"            ] = str(maxprocess)
-    parameters["hardmetric"            ] = str(hardmetric)
-    parameters["rtldongle0"            ] = str(rtldongle0)
-    parameters["rtldongle1"            ] = str(rtldongle1)
-    parameters["leanpad"               ] = leanpad
-    parameters["ppmwaarde"             ] = str(ppmwaarde)
-    parameters["antennewaarde"         ] = antennewaarde
-    parameters["gain_limewaarde"       ] = gain_limewaarde
-    parameters["bandbreedte_limewaarde"] = bandbreedte_limewaarde
-    parameters["gain_rtlwaarde"        ] = gain_rtlwaarde
-    parameters["viewer_waarde"         ] = viewer_waarde
-    parameters["rolloff_factorwaarde"  ] = rolloff_factorwaarde
-    parameters["rrc_rej_factorwaarde"  ] = rrc_rej_factorwaarde
-    parameters["nhelpers_waarde"       ] = nhelpers_waarde
-    parameters["inpipe_waarde"         ] = inpipe_waarde
-    parameters["tunesubstring"         ] = tunesubstring
-    parameters["modcods_value"         ] = modcods_value
-    parameters["framesizes_value"      ] = framesizes_value
+    parameters["frequency"       ] = str(opslaanfreq)
+    parameters["samplerate"      ] = srsubstring
+    parameters["fec"             ] = fec
+    parameters["tune"            ] = tune
+    parameters["fastlock"        ] = str(fastlock)
+    parameters["lowsr"           ] = str(lowsr)
+    parameters["viterbi"         ] = str(viterbi)
+    parameters["gui"             ] = str(gui)
+    parameters["dvbs2"           ] = str(dvbs2)
+    parameters["maxprocess"      ] = str(maxprocess)
+    parameters["hardmetric"      ] = str(hardmetric)
+    parameters["rtldongle0"      ] = str(rtldongle0)
+    parameters["rtldongle1"      ] = str(rtldongle1)
+    parameters["leanpad"         ] = leanpad
+    parameters["ppm"             ] = str(ppmwaarde)
+    parameters["antenne"         ] = antennewaarde
+    parameters["gain_lime"       ] = gain_limewaarde
+    parameters["bandbreedte_lime"] = bandbreedte_limewaarde
+    parameters["gain_rtl"        ] = gain_rtlwaarde
+    parameters["viewer"          ] = viewer_waarde
+    parameters["rolloff_factor"  ] = rolloff_factorwaarde
+    parameters["rrc_rej_factor"  ] = rrc_rej_factorwaarde
+    parameters["nhelpers"        ] = nhelpers_waarde
+    parameters["inpipe"          ] = inpipe_waarde
+    parameters["tunesubstring"   ] = tunesubstring
+    parameters["modcods"         ] = modcods_value
+    parameters["framesizes"      ] = framesizes_value
 
     file = open(home + "/leandvb-last.json", "w")
     file.write(json.dumps(parameters, indent = 4))
     file.close()
 
-#def parameters_load():
+def parameters_load():
+    global parameters
+    print "loading parameters from json file"
+    file = open(home + "/leandvb-last.json", "r")
+    parameters = json.load(file)
+    file.close()
 
-#def parameters_default():
+def parameters_default():
+    print "loading parameters with defaults"
+    parameters["frequency"       ] = "741.500"
+    parameters["samplerate"      ] = "1500"
+    parameters["fec"             ] = "1/2"
+    parameters["tune"            ] = "0"
+    parameters["fastlock"        ] = "0"
+    parameters["lowsr"           ] = "0"
+    parameters["viterbi"         ] = "0"
+    parameters["gui"             ] = "1"
+    parameters["dvbs2"           ] = "1"
+    parameters["maxprocess"      ] = "0"
+    parameters["hardmetric"      ] = "0"
+    parameters["rtldongle0"      ] = "1"
+    parameters["rtldongle1"      ] = "0"
+    parameters["leanpad"         ] = ""
+    parameters["ppm"             ] = "0"
+    parameters["antenne"         ] = "1"
+    parameters["gain_lime"       ] = "0.5"
+    parameters["bandbreedte_lime"] = "3500000"
+    parameters["gain_rtl"        ] = "36"
+    parameters["viewer"          ] = "ffplay"
+    parameters["rolloff_factor"  ] = "0.35"
+    parameters["rrc_rej_factor"  ] = "30"
+    parameters["nhelpers"        ] = "6"
+    parameters["inpipe"          ] = "32000000"
+    parameters["tunesubstring"   ] = "1"
+    parameters["modcods"         ] = "0x0040"
+    parameters["framesizes"      ] = "0x01"
 
 #===== GUI ====================================================================
 
@@ -160,6 +193,14 @@ parameter1_conv1=0
 parameter2_conv2=0
 parameter3_conv3= ""
 print "Home directory = " + home
+
+if os.path.isfile(home + "/leandvb-last.json"):
+    parameters_load()
+else:
+    parameters_default()
+
+print (json.dumps(parameters))
+
 if os.path.isfile(home + "/leandvb-last"):
     file = open(home + "/leandvb-last", "r")
     parameter1 = file.readline() #freq
