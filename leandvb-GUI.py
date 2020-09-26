@@ -8,12 +8,13 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO streamline usage of viewer ffplay and mplayer
 # TODO store parameters in json file instead of simple list
-# TODO change dutch names in english
-# TODO add entry (parameter) for local oscillator frequency
 # TODO change path for parameter file from ~/ to ~/.leandvb-GUI/
+# TODO add entry (parameter) for local oscillator frequency
 # TODO leandvb-run as function like leandvb-stop
+# TODO leandvb: --tune is broken, use --derotate instead
+# TODO change dutch names in english
+# TODO streamline usage of viewer ffplay and mplayer
 
 from Tkinter import *
 from PIL import ImageTk, Image
@@ -42,7 +43,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    tune = 0
     fastlock = var1.get()
     lowsr = var2.get()
     viterbi = var3.get()
@@ -53,9 +53,6 @@ def parameters_save():
     rtldongle0 = rtl0.get()
     rtldongle1 = rtl1.get()
     leanpad = padlean.get()
-    tunesubstring = str(1)
-    tunesubstring = str(1)
-    tune = h.get()
     ppmwaarde = ppm.get()
     antennewaarde = ant.get()
     gain_rtlwaarde = gain_rtl.get()
@@ -73,7 +70,7 @@ def parameters_save():
     file.write("\n")    
     file.write("\n")
     file.write("\n")
-    file.write(tune + "\n")
+    file.write("\n")
     file.write(str(fastlock) + "\n")
     file.write(str(lowsr) + "\n")
     file.write(str(viterbi) + "\n")
@@ -94,7 +91,7 @@ def parameters_save():
     file.write(str(rrc_rej_factorwaarde) + "\n")
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
-    file.write(tunesubstring + "\n")
+    file.write("\n")
     file.write(str(modcods_value) + "\n")
     file.write(str(framesizes_value) + "\n")
     file.close()
@@ -102,7 +99,7 @@ def parameters_save():
     parameters["frequency"       ] = float(e.get())
     parameters["samplerate"      ] = int(f.get())
     parameters["fec"             ] = tkvar3.get()
-    parameters["tune"            ] = tune
+    parameters["tune"            ] = int(h.get())
     parameters["fastlock"        ] = str(fastlock)
     parameters["lowsr"           ] = str(lowsr)
     parameters["viterbi"         ] = str(viterbi)
@@ -123,7 +120,6 @@ def parameters_save():
     parameters["rrc_rej_factor"  ] = rrc_rej_factorwaarde
     parameters["nhelpers"        ] = nhelpers_waarde
     parameters["inpipe"          ] = inpipe_waarde
-    parameters["tunesubstring"   ] = tunesubstring
     parameters["modcods"         ] = modcods_value
     parameters["framesizes"      ] = framesizes_value
 
@@ -143,7 +139,7 @@ def parameters_default():
     parameters["frequency"       ] = 741.500
     parameters["samplerate"      ] = 1500
     parameters["fec"             ] = "1/2"
-    parameters["tune"            ] = "0"
+    parameters["tune"            ] = 0
     parameters["fastlock"        ] = "0"
     parameters["lowsr"           ] = "0"
     parameters["viterbi"         ] = "0"
@@ -164,7 +160,6 @@ def parameters_default():
     parameters["rrc_rej_factor"  ] = "30"
     parameters["nhelpers"        ] = "6"
     parameters["inpipe"          ] = "32000000"
-    parameters["tunesubstring"   ] = "1"
     parameters["modcods"         ] = "0x0040"
     parameters["framesizes"      ] = "0x01"
 
@@ -190,7 +185,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter6 = file.readline() #tune
+    file.readline()
     parameter4 = file.readline() #fastlock
     parameter5 = file.readline() #lowsr
     parameter7 = file.readline() #viterbi
@@ -215,7 +210,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter4_conv4 = int (parameter6)
     parameter16_conv = str(parameter16[:-1])
     parameter17_conv = str(parameter17[:-1])
     parameter18_conv = str(parameter18[:-1])
@@ -229,7 +223,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter4_conv4 = 0
     parameter3 = 1
     parameter4 = 1
     parameter5 = 1
@@ -319,7 +312,7 @@ h = Entry(master, font = "Verdana 15 bold")
 e.insert(0, parameters["frequency"])
 f.insert(0, parameters["samplerate"])
 g.insert(0, parameters["fec"])
-h.insert(0, parameter4_conv4)
+h.insert(0, parameters["tune"])
 e.grid(row=0, column=1)
 f.grid(row=1, column=1)
 g.grid(row=2, column=1)
@@ -447,7 +440,6 @@ def callback():
     sub1 = ""
     view = ""
     dvbs2string = ""
-    tune = 0
     fastlock = var1.get()
     lowsr = var2.get()
     viterbi = var3.get()
@@ -513,11 +505,10 @@ def callback():
         framesizes_string = ""
     else:
         framesizes_string = " --framesizes " + framesizes_value
-    tunesubstring = str(1)
     frequency = int(float(e.get()) * 1000000 )
     samplerate = int(f.get()) * 1000
     fec = tkvar3.get()
-    tune = h.get( )
+    tune = h.get()
     if (rtldongle0 == 1):
         if (dvbs2 == 1):
             sub = "rtl_sdr" + \
@@ -684,7 +675,7 @@ tkvar3.trace('w', change_dropdown3)
 tkvar4 = StringVar(master)
 # Tune
 choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-2000','-5000','-10000'}
-tkvar4.set(parameter4_conv4) # set the default option
+tkvar4.set(parameters["tune"]) # set the default option
  
 popupMenu = OptionMenu(master, tkvar4, *choices4)
 Label(master, text="Tune", font = "Verdana 14 italic").grid(row = 3, column = 0)
