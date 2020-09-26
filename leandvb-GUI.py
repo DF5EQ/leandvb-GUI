@@ -17,6 +17,7 @@
 # TODO change dutch names in english
 # TODO streamline usage of viewer ffplay and mplayer
 # TODO investigate usefullness of rtl0
+# TODO 'cancel' in settings not working propperly
 
 from Tkinter import *
 from PIL import ImageTk, Image
@@ -45,7 +46,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    gain_rtlwaarde = gain_rtl.get()
     viewer_waarde = viewer.get()
     rolloff_factorwaarde = rolloff_factor.get()
     rrc_rej_factorwaarde = rrc_rej_factor.get()
@@ -73,7 +73,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(gain_rtlwaarde) + "\n")
+    file.write("\n")
     file.write(str(viewer_waarde) + "\n")
     file.write(str(rolloff_factorwaarde) + "\n")
     file.write(str(rrc_rej_factorwaarde) + "\n")
@@ -101,7 +101,7 @@ def parameters_save():
     parameters["antenne"       ] = ant.get()
     parameters["gain_lime"     ] = gain_lime.get()
     parameters["bandwidth_lime"] = bandwidth_lime.get()
-    parameters["gain_rtl"      ] = gain_rtlwaarde
+    parameters["gain_rtl"      ] = gain_rtl.get()
     parameters["viewer"        ] = viewer_waarde
     parameters["rolloff_factor"] = rolloff_factorwaarde
     parameters["rrc_rej_factor"] = rrc_rej_factorwaarde
@@ -140,7 +140,7 @@ def parameters_default():
     parameters["antenne"       ] = "1"
     parameters["gain_lime"     ] = "0.5"
     parameters["bandwidth_lime"] = 3500000
-    parameters["gain_rtl"      ] = "36"
+    parameters["gain_rtl"      ] = 36
     parameters["viewer"        ] = "ffplay"
     parameters["rolloff_factor"] = "0.35"
     parameters["rrc_rej_factor"] = "30"
@@ -186,7 +186,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter19 = file.readline() #gain_rtl
+    file.readline()
     parameter20 = file.readline() #viewer
     parameter21 = file.readline() #rolloff_factor
     parameter22 = file.readline() #rrc_rej
@@ -196,7 +196,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter19_conv = str(parameter19[:-1])
     parameter20_conv = str(parameter20[:-1])
     parameter21_conv = str(parameter21[:-1])
     parameter22_conv = str(parameter22[:-1])
@@ -206,7 +205,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter19_conv = "0"
     parameter20_conv = "ffplay"
     parameter21_conv = "0.35"
     parameter22_conv = "20"
@@ -239,7 +237,7 @@ rtl0 = IntVar()
 ppm = IntVar()
 padlean = StringVar()
 ant = StringVar()
-gain_rtl = StringVar()
+gain_rtl = IntVar()
 gain_lime = StringVar()
 viewer = StringVar()
 rolloff_factor = StringVar()
@@ -262,7 +260,7 @@ ppm.set(parameters["ppm"])
 ant.set(parameters["antenne"])
 gain_lime.set(parameters["gain_lime"])
 bandwidth_lime.set(parameters["bandwidth_lime"])
-gain_rtl.set(parameter19_conv)
+gain_rtl.set(parameters["gain_rtl"])
 viewer.set(parameter20_conv)
 rolloff_factor.set(parameter21_conv)
 rrc_rej_factor.set(parameter22_conv)
@@ -407,7 +405,7 @@ def callback():
     leanpad = padlean.get()
     antenne = ant.get()
     gainlime = gain_lime.get()
-    gain_rtlwaarde = gain_rtl.get()
+    gainrtl = gain_rtl.get()
     viewer_waarde = viewer.get()
     rolloff_factorwaarde = rolloff_factor.get()
     rrc_rej_factorwaarde = rrc_rej_factor.get()
@@ -468,8 +466,8 @@ def callback():
         if (var6.get() == True): #dvbs2
             sub = "rtl_sdr" + \
                   " -d " + rtl + \
-                  " -f "  + str(frequency) + \
-                  " -g " + gain_rtlwaarde +  \
+                  " -f " + str(frequency) + \
+                  " -g " + str(gainrtl) +  \
                   " -s " + str(bandwidth) + \
                   " -p " + str(ppmvalue) + \
                   " -" + \
@@ -499,8 +497,8 @@ def callback():
         else:
             sub = "rtl_sdr" + \
                   " -d " + rtl + \
-                  " -f "  + str(frequency) + \
-                  " -g " + gain_rtlwaarde +  \
+                  " -f " + str(frequency) + \
+                  " -g " + str(gainrtl) +  \
                   " -s " + str(bandwidth) + \
                   " -p " + str(ppmvalue) + \
                   " -" + \
