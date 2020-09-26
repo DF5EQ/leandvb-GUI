@@ -8,7 +8,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO store parameters in json file instead of simple list
 # TODO change path for parameter file from ~/ to ~/.leandvb-GUI/
 # TODO add entry (parameter) for local oscillator frequency
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
