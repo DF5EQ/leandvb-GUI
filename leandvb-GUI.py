@@ -41,7 +41,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    sub = ""
     tune = 0
     fastlock = var1.get()
     lowsr = var2.get()
@@ -70,14 +69,9 @@ def parameters_save():
     modcods_value = modcods.get()
     framesizes_value = framesizes.get()
 
-    file = open(home + "/leandvb-run", "w")
-    file.write("#!/bin/sh \n\n")
-    file.write(sub)
-    file.close()
-
     file = open(home+"/leandvb-last", "w")
-    file.write("freq (leer)\n")    
-    file.write("samplerate (leer)\n")
+    file.write("\n")    
+    file.write("\n")
     file.write(fec + "\n")
     file.write(tune + "\n")
     file.write(str(fastlock) + "\n")
@@ -193,8 +187,8 @@ print (json.dumps(parameters, sort_keys=True))
 
 if os.path.isfile(home + "/leandvb-last"):
     file = open(home + "/leandvb-last", "r")
-    parameter1 = file.readline() #freq (leer)
-    parameter2 = file.readline() #samplerate (leer)
+    file.readline()
+    file.readline()
     parameter3 = file.readline() #fec
     parameter6 = file.readline() #tune
     parameter4 = file.readline() #fastlock
@@ -608,45 +602,14 @@ def callback():
               " | " + \
               "ffplay -v 0 - &"
 
+    parameters_save()
+
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
-
-### call save
-
-    file = open(home + "/leandvb-last", "w")
-    file.write("freq (leer)\n")    
-    file.write("samplerate (leer)\n")
-    file.write(fec + "\n")
-    file.write(tune + "\n")
-    file.write(str(fastlock) + "\n")
-    file.write(str(lowsr) + "\n")
-    file.write(str(viterbi) + "\n")
-    file.write(str(gui) + "\n")
-    file.write(str(dvbs2) + "\n")
-    file.write(str(maxprocess) + "\n")
-    file.write(str(hardmetric) + "\n")
-    file.write(str(rtldongle0) + "\n")
-    file.write(str(rtldongle1) + "\n")
-    file.write(str(leanpad) + "\n")
-    file.write(str(ppmwaarde) + "\n")
-    file.write(str(antennewaarde) +"\n")
-    file.write(str(gain_limewaarde) +"\n")
-    file.write(str(bandbreedte_limewaarde) +"\n")
-    file.write(str(gain_rtlwaarde) + "\n")
-    file.write(str(viewer_waarde) + "\n")
-    file.write(str(rolloff_factorwaarde) + "\n")
-    file.write(str(rrc_rej_factorwaarde) + "\n")
-    file.write(str(nhelpers_waarde) + "\n")
-    file.write(str(inpipe_waarde) + "\n")
-    file.write(tunesubstring + "\n")
-    file.write(str(modcods_value) + "\n")
-    file.write(str(framesizes_value) + "\n")
-    file.close()
-
     os.system("sh " + home + "/leandvb-run &")
 
 Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
