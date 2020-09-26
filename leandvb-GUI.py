@@ -44,7 +44,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    viterbi = var3.get()
     gui = var5.get()
     dvbs2 = var6.get()
     maxprocess = var7.get()
@@ -72,7 +71,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(viterbi) + "\n")
+    file.write("\n")
     file.write(str(gui) + "\n")
     file.write(str(dvbs2) + "\n")
     file.write(str(maxprocess) + "\n")
@@ -101,7 +100,7 @@ def parameters_save():
     parameters["tune"          ] = int(h.get())
     parameters["fastlock"      ] = bool(var1.get())
     parameters["lowsr"         ] = bool(var2.get())
-    parameters["viterbi"       ] = str(viterbi)
+    parameters["viterbi"       ] = bool(var3.get())
     parameters["gui"           ] = str(gui)
     parameters["dvbs2"         ] = str(dvbs2)
     parameters["maxprocess"    ] = str(maxprocess)
@@ -141,7 +140,7 @@ def parameters_default():
     parameters["tune"          ] = 0
     parameters["fastlock"      ] = False
     parameters["lowsr"         ] = False
-    parameters["viterbi"       ] = "0"
+    parameters["viterbi"       ] = False
     parameters["gui"           ] = "1"
     parameters["dvbs2"         ] = "1"
     parameters["maxprocess"    ] = "0"
@@ -187,7 +186,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter7 = file.readline() #viterbi
+    file.readline()
     parameter8 = file.readline() #Gui
     parameter9 = file.readline() #dvbs2
     parameter10 = file.readline() #max sensitive
@@ -222,8 +221,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter6 = 0
-    parameter7 = 0
     parameter8 = 1
     parameter9 = 1
     parameter10 = 0
@@ -281,7 +278,7 @@ modcods = StringVar()
 framesizes = StringVar()
 var1.set(parameters["fastlock"])
 var2.set(parameters["lowsr"])
-var3.set(int(parameter7))
+var3.set(parameters["viterbi"])
 var4.set(int(parameter11))
 var5.set(int(parameter8))
 var6.set(int(parameter9))
@@ -436,7 +433,6 @@ def callback():
     sub1 = ""
     view = ""
     dvbs2string = ""
-    viterbi = var3.get()
     gui = var5.get()
     dvbs2 = var6.get()
     maxprocess = var7.get()
@@ -467,10 +463,10 @@ def callback():
         fastlock = " --fastlock"
     else:
         fastlock = ""
-    if (viterbi == 1):
-        viterbistring = " --viterbi"
+    if (var3.get() == True):
+        viterbi = " --viterbi"
     else:
-        viterbistring = ""
+        viterbi = ""
     if (gui == 1):
         guistring = " --gui"
     else:
@@ -518,7 +514,7 @@ def callback():
                   modcods_string + \
                   framesizes_string + \
                   maxprocessstring + \
-                  viterbistring + \
+                  viterbi + \
                   hardmetricstring + \
                   fastlock + \
                   " --tune " + tune + \
@@ -548,7 +544,7 @@ def callback():
                   str(leanpad) + "leandvb" + \
                   guistring + \
                   maxprocessstring + \
-                  viterbistring + \
+                  viterbi + \
                   hardmetricstring + \
                   fastlock + \
                   " --tune " + tune + \
@@ -574,7 +570,7 @@ def callback():
               str(leanpad) + \
               guistring + \
               maxprocessstring + \
-              viterbistring + \
+              viterbi + \
               hardmetricstring + \
               fastlock + \
               " --tune " + tune + \
