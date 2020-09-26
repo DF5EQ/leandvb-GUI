@@ -44,7 +44,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    dvbs2 = var6.get()
     maxprocess = var7.get()
     hardmetric = var4.get()
     rtldongle0 = rtl0.get()
@@ -72,7 +71,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(dvbs2) + "\n")
+    file.write("\n")
     file.write(str(maxprocess) + "\n")
     file.write(str(hardmetric) + "\n")
     file.write(str(rtldongle0) + "\n")
@@ -101,7 +100,7 @@ def parameters_save():
     parameters["lowsr"         ] = bool(var2.get())
     parameters["viterbi"       ] = bool(var3.get())
     parameters["gui"           ] = bool(var5.get())
-    parameters["dvbs2"         ] = str(dvbs2)
+    parameters["dvbs2"         ] = bool(var6.get())
     parameters["maxprocess"    ] = str(maxprocess)
     parameters["hardmetric"    ] = str(hardmetric)
     parameters["rtldongle0"    ] = str(rtldongle0)
@@ -141,7 +140,7 @@ def parameters_default():
     parameters["lowsr"         ] = False
     parameters["viterbi"       ] = False
     parameters["gui"           ] = True
-    parameters["dvbs2"         ] = "1"
+    parameters["dvbs2"         ] = True
     parameters["maxprocess"    ] = "0"
     parameters["hardmetric"    ] = "0"
     parameters["rtldongle0"    ] = "1"
@@ -187,7 +186,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter9 = file.readline() #dvbs2
+    file.readline()
     parameter10 = file.readline() #max sensitive
     parameter11 = file.readline() #hard-metric
     parameter12 = file.readline() #rtl0
@@ -220,7 +219,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter9 = 1
     parameter10 = 0
     parameter11 = 0
     parameter12 = 1
@@ -279,7 +277,7 @@ var2.set(parameters["lowsr"])
 var3.set(parameters["viterbi"])
 var4.set(int(parameter11))
 var5.set(parameters["gui"])
-var6.set(int(parameter9))
+var6.set(parameters["dvbs2"])
 var7.set(int(parameter10))
 rtl0.set(int(parameter12))
 rtl1.set(int(parameter13))
@@ -430,8 +428,6 @@ def callback():
     sub = ""
     sub1 = ""
     view = ""
-    dvbs2string = ""
-    dvbs2 = var6.get()
     maxprocess = var7.get()
     hardmetric = var4.get()
     rtldongle0 = rtl0.get()
@@ -468,10 +464,10 @@ def callback():
         gui = " --gui"
     else:
         gui = ""
-    if (dvbs2 == 1):
-        dvbs2string = "-S2"
+    if (var6.get() == True):
+        dvbs = "DVB-S2"
     else:
-        dvbs2string = "-S"
+        dvbs = "DVB-S"
     if (maxprocess == 1):
         maxprocessstring = " --hq"
     else:
@@ -497,7 +493,7 @@ def callback():
     fec = tkvar3.get()
     tune = h.get()
     if (rtldongle0 == 1):
-        if (dvbs2 == 1):
+        if (var6.get() == True): #dvbs2
             sub = "rtl_sdr" + \
                   " -d " + rtlstring + \
                   " -f "  + str(frequency) + \
@@ -515,7 +511,7 @@ def callback():
                   hardmetricstring + \
                   fastlock + \
                   " --tune " + tune + \
-                  " --standard DVB" + dvbs2string + \
+                  " --standard " + dvbs + \
                   " --ldpc-helper " + str(leanpad) + "ldpc_tool" + \
                   " --inpipe " + str(inpipe_waarde) + \
                   " --nhelpers " +str(nhelpers_waarde) + \
@@ -528,7 +524,6 @@ def callback():
                   " | " + \
                   "ffplay -v 0 -" + \
                   " \n"
-            print sub
         else:
             sub = "rtl_sdr" + \
                   " -d " + rtlstring + \
@@ -546,7 +541,7 @@ def callback():
                   fastlock + \
                   " --tune " + tune + \
                   " --cr " + fec + \
-                  " --standard DVB" + dvbs2string + \
+                  " --standard " + dvbs + \
                   " -v" + \
                   " --sr " + str(samplerate) + \
                   " -f " + str(bandwidth) + \
@@ -577,6 +572,7 @@ def callback():
               " --s16" + \
               " | " + \
               "ffplay -v 0 - &"
+    print "sub:\n",sub
 
     parameters_save()
 
