@@ -18,6 +18,7 @@
 # TODO streamline usage of viewer ffplay and mplayer
 # TODO investigate usefullness of rtl0
 # TODO 'cancel' in settings not working propperly
+# TODO add rrc_rej_factor to settings
 
 from Tkinter import *
 from PIL import ImageTk, Image
@@ -46,7 +47,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    rrc_rej_factorwaarde = rrc_rej_factor.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
     modcods_value = modcods.get()
@@ -74,7 +74,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(rrc_rej_factorwaarde) + "\n")
+    file.write("\n")
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
     file.write("\n")
@@ -102,7 +102,7 @@ def parameters_save():
     parameters["gain_rtl"      ] = gain_rtl.get()
     parameters["viewer"        ] = viewer.get()
     parameters["rolloff_factor"] = rolloff_factor.get()
-    parameters["rrc_rej_factor"] = rrc_rej_factorwaarde
+    parameters["rrc_rej_factor"] = rrc_rej_factor.get()
     parameters["nhelpers"      ] = nhelpers_waarde
     parameters["inpipe"        ] = inpipe_waarde
     parameters["modcods"       ] = modcods_value
@@ -141,7 +141,7 @@ def parameters_default():
     parameters["gain_rtl"      ] = 36
     parameters["viewer"        ] = "ffplay"
     parameters["rolloff_factor"] = "0.35"
-    parameters["rrc_rej_factor"] = "30"
+    parameters["rrc_rej_factor"] = 30
     parameters["nhelpers"      ] = "6"
     parameters["inpipe"        ] = "32000000"
     parameters["modcods"       ] = "0x0040"
@@ -187,21 +187,19 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter22 = file.readline() #rrc_rej
+    file.readline()
     parameter23 = file.readline() #nhelpers
     parameter24 = file.readline() #inpipe
     parameter25 = file.readline()
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter22_conv = str(parameter22[:-1])
     parameter23_conv = str(parameter23[:-1])
     parameter24_conv = str(parameter24[:-1])
     parameter26_conv = str(parameter26[:-1])
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter22_conv = "20"
     parameter23_conv = "4"
     parameter24_conv = "1000000"
     parameter26_conv = "0x0040"
@@ -235,7 +233,7 @@ gain_rtl = IntVar()
 gain_lime = StringVar()
 viewer = StringVar()
 rolloff_factor = StringVar()
-rrc_rej_factor = StringVar()
+rrc_rej_factor = IntVar()
 nhelpers = StringVar()
 inpipe = StringVar()
 bandwidth_lime = IntVar()
@@ -257,7 +255,7 @@ bandwidth_lime.set(parameters["bandwidth_lime"])
 gain_rtl.set(parameters["gain_rtl"])
 viewer.set(parameters["viewer"])
 rolloff_factor.set(parameters["rolloff_factor"])
-rrc_rej_factor.set(parameter22_conv)
+rrc_rej_factor.set(parameters["rrc_rej_factor"])
 nhelpers.set(parameter23_conv)
 inpipe.set(parameter24_conv)
 modcods.set(parameter26_conv)
@@ -401,7 +399,7 @@ def callback():
     gainlime = gain_lime.get()
     gainrtl = gain_rtl.get()
     rolloff = rolloff_factor.get()
-    rrc_rej_factorwaarde = rrc_rej_factor.get()
+    rrcrej = rrc_rej_factor.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
     modcods_value = modcods.get()
@@ -479,7 +477,7 @@ def callback():
                   " --inpipe " + str(inpipe_waarde) + \
                   " --nhelpers " +str(nhelpers_waarde) + \
                   " --sampler rrc" + \
-                  " --rrc-rej " + str(rrc_rej_factorwaarde) + \
+                  " --rrc-rej " + str(rrcrej) + \
                   " -v" + \
                   " --roll-off " + rolloff + \
                   " --sr " + str(samplerate) + \
