@@ -45,7 +45,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    leanpad = padlean.get()
     ppmwaarde = ppm.get()
     antennewaarde = ant.get()
     gain_rtlwaarde = gain_rtl.get()
@@ -73,7 +72,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(leanpad) + "\n")
+    file.write("\n")
     file.write(str(ppmwaarde) + "\n")
     file.write(str(antennewaarde) + "\n")
     file.write(str(gain_limewaarde) + "\n")
@@ -101,7 +100,7 @@ def parameters_save():
     parameters["maxprocess"    ] = bool(var7.get())
     parameters["hardmetric"    ] = bool(var4.get())
     parameters["rtldongle0"    ] = bool(rtl0.get())
-    parameters["leanpad"       ] = leanpad
+    parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = str(ppmwaarde)
     parameters["antenne"       ] = antennewaarde
     parameters["gain_lime"     ] = gain_limewaarde
@@ -140,7 +139,7 @@ def parameters_default():
     parameters["maxprocess"    ] = False
     parameters["hardmetric"    ] = False
     parameters["rtldongle0"    ] = True
-    parameters["leanpad"       ] = ""
+    parameters["leanpad"       ] = home+"/leansdr/src/apps/ "
     parameters["ppm"           ] = "0"
     parameters["antenne"       ] = "1"
     parameters["gain_lime"     ] = "0.5"
@@ -186,7 +185,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter14 = file.readline() #pad leandvb
+    file.readline()
     parameter15 = file.readline() #ppm
     parameter16 = file.readline() #ant
     parameter17 = file.readline() #gain_lime
@@ -214,7 +213,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter14 = home+"/leansdr/src/apps/ "
     parameter15 = 1
     parameter16_conv = 1
     parameter17_conv = "0.5"
@@ -270,7 +268,7 @@ var5.set(parameters["gui"])
 var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
 rtl0.set(parameters["rtldongle0"])
-padlean.set(str(parameter14[:-1]))
+padlean.set(parameters["leanpad"])
 ppm.set(int(parameter15))
 ant.set(parameter16_conv)
 gain_lime.set(parameter17_conv)
@@ -487,7 +485,7 @@ def callback():
                   " -p " + str(ppmwaarde) + \
                   " -" + \
                   " | " + \
-                  str(leanpad) + "leandvb" + \
+                  leanpad + "leandvb" + \
                   gui + \
                   modcods_string + \
                   framesizes_string + \
@@ -497,7 +495,7 @@ def callback():
                   fastlock + \
                   " --tune " + tune + \
                   " --standard " + dvbs + \
-                  " --ldpc-helper " + str(leanpad) + "ldpc_tool" + \
+                  " --ldpc-helper " + leanpad + "ldpc_tool" + \
                   " --inpipe " + str(inpipe_waarde) + \
                   " --nhelpers " +str(nhelpers_waarde) + \
                   " --sampler rrc" + \
@@ -518,7 +516,7 @@ def callback():
                   " -p " + str(ppmwaarde) + \
                   " -" + \
                   " | " + \
-                  str(leanpad) + "leandvb" + \
+                  leanpad + "leandvb" + \
                   gui + \
                   maxprocess + \
                   viterbi + \
@@ -544,7 +542,7 @@ def callback():
                " &"
         sub = "cat ~/experiment" + \
               " | " + \
-              str(leanpad) + \
+              leanpad + \
               gui + \
               maxprocess + \
               viterbi + \
