@@ -16,6 +16,7 @@
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO change dutch names in english
 # TODO streamline usage of viewer ffplay and mplayer
+# TODO investigate usefullness of rtl0
 
 from Tkinter import *
 from PIL import ImageTk, Image
@@ -44,8 +45,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    rtldongle0 = rtl0.get()
-    rtldongle1 = rtl1.get()
     leanpad = padlean.get()
     ppmwaarde = ppm.get()
     antennewaarde = ant.get()
@@ -72,8 +71,8 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(rtldongle0) + "\n")
-    file.write(str(rtldongle1) + "\n")
+    file.write("\n")
+    file.write("\n")
     file.write(str(leanpad) + "\n")
     file.write(str(ppmwaarde) + "\n")
     file.write(str(antennewaarde) + "\n")
@@ -101,8 +100,7 @@ def parameters_save():
     parameters["dvbs2"         ] = bool(var6.get())
     parameters["maxprocess"    ] = bool(var7.get())
     parameters["hardmetric"    ] = bool(var4.get())
-    parameters["rtldongle0"    ] = str(rtldongle0)
-    parameters["rtldongle1"    ] = str(rtldongle1)
+    parameters["rtldongle0"    ] = bool(rtl0.get())
     parameters["leanpad"       ] = leanpad
     parameters["ppm"           ] = str(ppmwaarde)
     parameters["antenne"       ] = antennewaarde
@@ -141,8 +139,7 @@ def parameters_default():
     parameters["dvbs2"         ] = True
     parameters["maxprocess"    ] = False
     parameters["hardmetric"    ] = False
-    parameters["rtldongle0"    ] = "1"
-    parameters["rtldongle1"    ] = "0"
+    parameters["rtldongle0"    ] = True
     parameters["leanpad"       ] = ""
     parameters["ppm"           ] = "0"
     parameters["antenne"       ] = "1"
@@ -187,8 +184,8 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter12 = file.readline() #rtl0
-    parameter13 = file.readline() #rtl1
+    file.readline()
+    file.readline()
     parameter14 = file.readline() #pad leandvb
     parameter15 = file.readline() #ppm
     parameter16 = file.readline() #ant
@@ -217,8 +214,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter12 = 1
-    parameter13 = 0
     parameter14 = home+"/leansdr/src/apps/ "
     parameter15 = 1
     parameter16_conv = 1
@@ -254,7 +249,6 @@ Label(master,font = "Verdana 8 italic", text="").grid(row=6,column=0)
 Label(master,font = "Verdana 8 italic", text="").grid(row=8,column=0)
 
 rtl0 = IntVar()
-rtl1 = IntVar()
 ppm = IntVar()
 padlean = StringVar()
 ant = StringVar()
@@ -275,8 +269,7 @@ var4.set(parameters["hardmetric"])
 var5.set(parameters["gui"])
 var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
-rtl0.set(int(parameter12))
-rtl1.set(int(parameter13))
+rtl0.set(parameters["rtldongle0"])
 padlean.set(str(parameter14[:-1]))
 ppm.set(int(parameter15))
 ant.set(parameter16_conv)
@@ -424,8 +417,6 @@ def callback():
     sub = ""
     sub1 = ""
     view = ""
-    rtldongle0 = rtl0.get()
-    rtldongle1 = rtl1.get()
     leanpad = padlean.get()
     antennewaarde = ant.get()
     gain_limewaarde = gain_lime.get()
@@ -470,10 +461,10 @@ def callback():
         hardmetric = " --hard-metric"
     else:
         hardmetric = ""
-    if (rtldongle0 == 1):
-        rtlstring = "0"
+    if (rtl0.get() == True):
+        rtl = "0"
     else:
-        rtlstring = "1"
+        rtl = "1"
     if (modcods_value == ""):
         modcods_string = ""
     else:
@@ -486,10 +477,10 @@ def callback():
     samplerate = int(f.get()) * 1000
     fec = tkvar3.get()
     tune = h.get()
-    if (rtldongle0 == 1):
+    if (rtl0.get() == True):
         if (var6.get() == True): #dvbs2
             sub = "rtl_sdr" + \
-                  " -d " + rtlstring + \
+                  " -d " + rtl + \
                   " -f "  + str(frequency) + \
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandwidth) + \
@@ -520,7 +511,7 @@ def callback():
                   " \n"
         else:
             sub = "rtl_sdr" + \
-                  " -d " + rtlstring + \
+                  " -d " + rtl + \
                   " -f "  + str(frequency) + \
                   " -g " + gain_rtlwaarde +  \
                   " -s " + str(bandwidth) + \
@@ -547,7 +538,7 @@ def callback():
                " -a " + antennewaarde + \
                " -r " + bandwidth_limewaarde + \
                " -g " + gain_limewaarde + \
-               " -f " + freq_lime + \
+               " -f " + "freq_lime" + \
                " -o 16" + \
                " -b 3000000" + \
                " &"
