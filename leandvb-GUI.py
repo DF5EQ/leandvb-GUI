@@ -44,7 +44,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    hardmetric = var4.get()
     rtldongle0 = rtl0.get()
     rtldongle1 = rtl1.get()
     leanpad = padlean.get()
@@ -72,7 +71,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(hardmetric) + "\n")
+    file.write("\n")
     file.write(str(rtldongle0) + "\n")
     file.write(str(rtldongle1) + "\n")
     file.write(str(leanpad) + "\n")
@@ -101,7 +100,7 @@ def parameters_save():
     parameters["gui"           ] = bool(var5.get())
     parameters["dvbs2"         ] = bool(var6.get())
     parameters["maxprocess"    ] = bool(var7.get())
-    parameters["hardmetric"    ] = str(hardmetric)
+    parameters["hardmetric"    ] = bool(var4.get())
     parameters["rtldongle0"    ] = str(rtldongle0)
     parameters["rtldongle1"    ] = str(rtldongle1)
     parameters["leanpad"       ] = leanpad
@@ -141,7 +140,7 @@ def parameters_default():
     parameters["gui"           ] = True
     parameters["dvbs2"         ] = True
     parameters["maxprocess"    ] = False
-    parameters["hardmetric"    ] = "0"
+    parameters["hardmetric"    ] = False
     parameters["rtldongle0"    ] = "1"
     parameters["rtldongle1"    ] = "0"
     parameters["leanpad"       ] = ""
@@ -187,7 +186,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter11 = file.readline() #hard-metric
+    file.readline()
     parameter12 = file.readline() #rtl0
     parameter13 = file.readline() #rtl1
     parameter14 = file.readline() #pad leandvb
@@ -218,7 +217,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter11 = 0
     parameter12 = 1
     parameter13 = 0
     parameter14 = home+"/leansdr/src/apps/ "
@@ -273,7 +271,7 @@ framesizes = StringVar()
 var1.set(parameters["fastlock"])
 var2.set(parameters["lowsr"])
 var3.set(parameters["viterbi"])
-var4.set(int(parameter11))
+var4.set(parameters["hardmetric"])
 var5.set(parameters["gui"])
 var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
@@ -426,7 +424,6 @@ def callback():
     sub = ""
     sub1 = ""
     view = ""
-    hardmetric = var4.get()
     rtldongle0 = rtl0.get()
     rtldongle1 = rtl1.get()
     leanpad = padlean.get()
@@ -469,10 +466,10 @@ def callback():
         maxprocess = " --hq"
     else:
         maxprocess = ""
-    if (hardmetric == 1):
-        hardmetricstring = " --hard-metric"
+    if (var4.get() == True):
+        hardmetric = " --hard-metric"
     else:
-        hardmetricstring = ""
+        hardmetric = ""
     if (rtldongle0 == 1):
         rtlstring = "0"
     else:
@@ -505,7 +502,7 @@ def callback():
                   framesizes_string + \
                   maxprocess + \
                   viterbi + \
-                  hardmetricstring + \
+                  hardmetric + \
                   fastlock + \
                   " --tune " + tune + \
                   " --standard " + dvbs + \
@@ -534,7 +531,7 @@ def callback():
                   gui + \
                   maxprocess + \
                   viterbi + \
-                  hardmetricstring + \
+                  hardmetric + \
                   fastlock + \
                   " --tune " + tune + \
                   " --cr " + fec + \
@@ -560,7 +557,7 @@ def callback():
               gui + \
               maxprocess + \
               viterbi + \
-              hardmetricstring + \
+              hardmetric + \
               fastlock + \
               " --tune " + tune + \
               " --cr " + fec + \
