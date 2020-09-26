@@ -43,7 +43,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    fastlock = var1.get()
     lowsr = var2.get()
     viterbi = var3.get()
     gui = var5.get()
@@ -71,7 +70,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(fastlock) + "\n")
+    file.write("\n")
     file.write(str(lowsr) + "\n")
     file.write(str(viterbi) + "\n")
     file.write(str(gui) + "\n")
@@ -100,7 +99,7 @@ def parameters_save():
     parameters["samplerate"      ] = int(f.get())
     parameters["fec"             ] = tkvar3.get()
     parameters["tune"            ] = int(h.get())
-    parameters["fastlock"        ] = str(fastlock)
+    parameters["fastlock"        ] = bool(var1.get())
     parameters["lowsr"           ] = str(lowsr)
     parameters["viterbi"         ] = str(viterbi)
     parameters["gui"             ] = str(gui)
@@ -140,7 +139,7 @@ def parameters_default():
     parameters["samplerate"      ] = 1500
     parameters["fec"             ] = "1/2"
     parameters["tune"            ] = 0
-    parameters["fastlock"        ] = "0"
+    parameters["fastlock"        ] = False
     parameters["lowsr"           ] = "0"
     parameters["viterbi"         ] = "0"
     parameters["gui"             ] = "1"
@@ -186,7 +185,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter4 = file.readline() #fastlock
+    file.readline()
     parameter5 = file.readline() #lowsr
     parameter7 = file.readline() #viterbi
     parameter8 = file.readline() #Gui
@@ -223,8 +222,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter3 = 1
-    parameter4 = 1
     parameter5 = 1
     parameter6 = 0
     parameter7 = 0
@@ -283,7 +280,7 @@ inpipe = StringVar()
 bandbreedte_lime = StringVar()
 modcods = StringVar()
 framesizes = StringVar()
-var1.set(int(parameter4))
+var1.set(parameters["fastlock"])
 var2.set(int(parameter5))
 var3.set(int(parameter7))
 var4.set(int(parameter11))
@@ -440,7 +437,6 @@ def callback():
     sub1 = ""
     view = ""
     dvbs2string = ""
-    fastlock = var1.get()
     lowsr = var2.get()
     viterbi = var3.get()
     gui = var5.get()
@@ -469,10 +465,10 @@ def callback():
         bandbreedte = 1800000
     else:
         bandbreedte = 2400000
-    if (fastlock == 1):
-        fastlockstring = " --fastlock"
+    if (var1.get() == True):
+        fastlock = " --fastlock"
     else:
-        fastlockstring = ""
+        fastlock = ""
     if (viterbi == 1):
         viterbistring = " --viterbi"
     else:
@@ -526,7 +522,7 @@ def callback():
                   maxprocessstring + \
                   viterbistring + \
                   hardmetricstring + \
-                  fastlockstring + \
+                  fastlock + \
                   " --tune " + tune + \
                   " --standard DVB" + dvbs2string + \
                   " --ldpc-helper " + str(leanpad) + "ldpc_tool" + \
@@ -556,7 +552,7 @@ def callback():
                   maxprocessstring + \
                   viterbistring + \
                   hardmetricstring + \
-                  fastlockstring + \
+                  fastlock + \
                   " --tune " + tune + \
                   " --cr " + fec + \
                   " --standard DVB" + dvbs2string + \
@@ -582,7 +578,7 @@ def callback():
               maxprocessstring + \
               viterbistring + \
               hardmetricstring + \
-              fastlockstring + \
+              fastlock + \
               " --tune " + tune + \
               " --cr " + fec + \
               " --sr " + str(samplerate) + \
