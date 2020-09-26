@@ -13,6 +13,7 @@
 # TODO change dutch names in english
 # TODO add entry (parameter) for local oscillator frequency
 # TODO change path for parameter file from ~/ to ~/.leandvb-GUI/
+# TODO leandvb-run as function like leandvb-stop
 
 from Tkinter import *
 from PIL import ImageTk, Image
@@ -54,7 +55,6 @@ def parameters_save():
     leanpad = padlean.get()
     tunesubstring = str(1)
     tunesubstring = str(1)
-    fec = tkvar3.get()
     tune = h.get()
     ppmwaarde = ppm.get()
     antennewaarde = ant.get()
@@ -72,7 +72,7 @@ def parameters_save():
     file = open(home+"/leandvb-last", "w")
     file.write("\n")    
     file.write("\n")
-    file.write(fec + "\n")
+    file.write("\n")
     file.write(tune + "\n")
     file.write(str(fastlock) + "\n")
     file.write(str(lowsr) + "\n")
@@ -101,7 +101,7 @@ def parameters_save():
 
     parameters["frequency"       ] = float(e.get())
     parameters["samplerate"      ] = int(f.get())
-    parameters["fec"             ] = fec
+    parameters["fec"             ] = tkvar3.get()
     parameters["tune"            ] = tune
     parameters["fastlock"        ] = str(fastlock)
     parameters["lowsr"           ] = str(lowsr)
@@ -189,7 +189,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file = open(home + "/leandvb-last", "r")
     file.readline()
     file.readline()
-    parameter3 = file.readline() #fec
+    file.readline()
     parameter6 = file.readline() #tune
     parameter4 = file.readline() #fastlock
     parameter5 = file.readline() #lowsr
@@ -215,7 +215,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter3_conv3 = str(parameter3[:3])
     parameter4_conv4 = int (parameter6)
     parameter16_conv = str(parameter16[:-1])
     parameter17_conv = str(parameter17[:-1])
@@ -230,7 +229,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter3_conv3 = "1/2"
     parameter4_conv4 = 0
     parameter3 = 1
     parameter4 = 1
@@ -320,7 +318,7 @@ g = Entry(master, font = "Verdana 15 bold")
 h = Entry(master, font = "Verdana 15 bold")
 e.insert(0, parameters["frequency"])
 f.insert(0, parameters["samplerate"])
-g.insert(0, parameter3_conv3)
+g.insert(0, parameters["fec"])
 h.insert(0, parameter4_conv4)
 e.grid(row=0, column=1)
 f.grid(row=1, column=1)
@@ -569,7 +567,7 @@ def callback():
                   hardmetricstring + \
                   fastlockstring + \
                   " --tune " + tune + \
-                  " --cr " + str(fec) + \
+                  " --cr " + fec + \
                   " --standard DVB" + dvbs2string + \
                   " -v" + \
                   " --sr " + str(samplerate) + \
@@ -595,7 +593,7 @@ def callback():
               hardmetricstring + \
               fastlockstring + \
               " --tune " + tune + \
-              " --cr " + str(fec) + \
+              " --cr " + fec + \
               " --sr " + str(samplerate) + \
               " -f " + bandbreedte_limewaarde + \
               " --s16" + \
@@ -667,7 +665,7 @@ tkvar2.trace('w', change_dropdown2)
 tkvar3 = StringVar(master)
 # Fec
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
-tkvar3.set(parameter3_conv3)
+tkvar3.set(parameters["fec"])
 popupMenu = OptionMenu(master, tkvar3, *choices3)
 Label(master, text="FEC (auto@dvbs2)", font = "Verdana 14 italic").grid(row = 2, column = 0)
 Label(master, text="Div", font = "Verdana 14 italic").grid(row = 2, column = 2,sticky=W)
