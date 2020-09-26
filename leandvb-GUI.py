@@ -47,9 +47,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    modcods_value = modcods.get()
-    framesizes_value = framesizes.get()
-
     file = open(home+"/leandvb-last", "w")
     file.write("\n")    
     file.write("\n")
@@ -76,8 +73,8 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(modcods_value) + "\n")
-    file.write(str(framesizes_value) + "\n")
+    file.write("\n")
+    file.write("\n")
     file.close()
 
     parameters["frequency"     ] = float(e.get())
@@ -103,8 +100,8 @@ def parameters_save():
     parameters["rrc_rej_factor"] = rrc_rej_factor.get()
     parameters["nhelpers"      ] = nhelpers.get()
     parameters["inpipe"        ] = inpipe.get()
-    parameters["modcods"       ] = modcods_value
-    parameters["framesizes"    ] = framesizes_value
+    parameters["modcods"       ] = modcods.get()
+    parameters["framesizes"    ] = framesizes.get()
 
     file = open(home + "/leandvb-last.json", "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -186,16 +183,10 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter25 = file.readline()
-    parameter26 = file.readline() #modcods
-    parameter27 = file.readline() #framesizes 
-
-    parameter26_conv = str(parameter26[:-1])
-    parameter27_conv = str(parameter27[:-1])
+    file.readline()
+    file.readline()
+    file.readline() 
     file.close()
-else:
-    parameter26_conv = "0x0040"
-    parameter27_conv = "0x01"
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
@@ -250,8 +241,8 @@ rolloff_factor.set(parameters["rolloff_factor"])
 rrc_rej_factor.set(parameters["rrc_rej_factor"])
 nhelpers.set(parameters["nhelpers"])
 inpipe.set(parameters["inpipe"])
-modcods.set(parameter26_conv)
-framesizes.set(parameter27_conv)
+modcods.set(parameters["modcods"])
+framesizes.set(parameters["framesizes"])
 e = Entry(master, font = "Verdana 15 bold")
 f = Entry(master, font = "Verdana 15 bold")
 g = Entry(master, font = "Verdana 15 bold")
