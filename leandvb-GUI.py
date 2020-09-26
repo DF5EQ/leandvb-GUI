@@ -46,7 +46,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    rolloff_factorwaarde = rolloff_factor.get()
     rrc_rej_factorwaarde = rrc_rej_factor.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
@@ -74,7 +73,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(rolloff_factorwaarde) + "\n")
+    file.write("\n")
     file.write(str(rrc_rej_factorwaarde) + "\n")
     file.write(str(nhelpers_waarde) + "\n")
     file.write(str(inpipe_waarde) + "\n")
@@ -102,7 +101,7 @@ def parameters_save():
     parameters["bandwidth_lime"] = bandwidth_lime.get()
     parameters["gain_rtl"      ] = gain_rtl.get()
     parameters["viewer"        ] = viewer.get()
-    parameters["rolloff_factor"] = rolloff_factorwaarde
+    parameters["rolloff_factor"] = rolloff_factor.get()
     parameters["rrc_rej_factor"] = rrc_rej_factorwaarde
     parameters["nhelpers"      ] = nhelpers_waarde
     parameters["inpipe"        ] = inpipe_waarde
@@ -187,7 +186,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter21 = file.readline() #rolloff_factor
+    file.readline()
     parameter22 = file.readline() #rrc_rej
     parameter23 = file.readline() #nhelpers
     parameter24 = file.readline() #inpipe
@@ -195,7 +194,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter21_conv = str(parameter21[:-1])
     parameter22_conv = str(parameter22[:-1])
     parameter23_conv = str(parameter23[:-1])
     parameter24_conv = str(parameter24[:-1])
@@ -203,7 +201,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter21_conv = "0.35"
     parameter22_conv = "20"
     parameter23_conv = "4"
     parameter24_conv = "1000000"
@@ -259,7 +256,7 @@ gain_lime.set(parameters["gain_lime"])
 bandwidth_lime.set(parameters["bandwidth_lime"])
 gain_rtl.set(parameters["gain_rtl"])
 viewer.set(parameters["viewer"])
-rolloff_factor.set(parameter21_conv)
+rolloff_factor.set(parameters["rolloff_factor"])
 rrc_rej_factor.set(parameter22_conv)
 nhelpers.set(parameter23_conv)
 inpipe.set(parameter24_conv)
@@ -403,7 +400,7 @@ def callback():
     antenne = ant.get()
     gainlime = gain_lime.get()
     gainrtl = gain_rtl.get()
-    rolloff_factorwaarde = rolloff_factor.get()
+    rolloff = rolloff_factor.get()
     rrc_rej_factorwaarde = rrc_rej_factor.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
@@ -484,7 +481,7 @@ def callback():
                   " --sampler rrc" + \
                   " --rrc-rej " + str(rrc_rej_factorwaarde) + \
                   " -v" + \
-                  " --roll-off " + str(rolloff_factorwaarde) + \
+                  " --roll-off " + rolloff + \
                   " --sr " + str(samplerate) + \
                   " -f " + str(bandwidth) + \
                   " | " + \
