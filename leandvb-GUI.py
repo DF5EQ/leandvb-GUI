@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+# Simple UI voor LEANDVB, DVBS receiver.
+# requires sudo apt-get install python-imaging-tk package
+# keep everything in your home directory
+# if you add a 180x180 pixels file called logo.png it will be
+# showed in right corner.
+# Leandvb by F4DAV (github leansdr)
+# Wrapper by pe2jko@540.org
+
 # TODO streamline usage of viewer ffplay and mplayer
 # TODO store parameters in json file instead of simple list
 # TODO change dutch names in english
@@ -12,13 +20,6 @@ from os.path import expanduser
 home = expanduser("~")
 import os
 
-# Simple UI voor LEANDVB, DVBS receiver.
-# requires sudo apt-get install python-imaging-tk package
-# keep everything in your home directory
-# if you add a 180x180 pixels file called logo.png it will be
-# showed in richt corner.
-# Leandvb by F4DAV (github leansdr)
-# Wrapper by pe2jko@540.org
 
 # check max pipe size and adjust if needed
 
@@ -36,6 +37,8 @@ else:
     print "max pipe size is", max_current, ", this is ok"
 
 #===== handle parameters (save, load, default) ================================
+
+parameters = dict()
 
 def parameters_save():
     sub = ""
@@ -75,10 +78,12 @@ def parameters_save():
     inpipe_waarde = inpipe.get()
     modcods_value = modcods.get()
     framesizes_value = framesizes.get()
+
     file = open(home + "/leandvb-run", "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub)
     file.close()
+
     file = open(home+"/leandvb-last", "w")
     file.write(str(opslaanfreq) + "\n")    
     file.write(srsubstring + "\n")
@@ -109,6 +114,9 @@ def parameters_save():
     file.write(str(framesizes_value) + "\n")
     file.close()
 
+    parameters["frequency"] = str(opslaanfreq)
+    print parameters
+
 #def parameters_load():
 
 #def parameters_default():
@@ -118,7 +126,6 @@ def parameters_save():
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
 
-parameters = ""
 lengte=0
 parameter1_conv1=0
 parameter2_conv2=0
