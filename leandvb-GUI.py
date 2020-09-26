@@ -47,8 +47,6 @@ else:
 parameters = dict()
 
 def parameters_save():
-    nhelpers_waarde = nhelpers.get()
-    inpipe_waarde = inpipe.get()
     modcods_value = modcods.get()
     framesizes_value = framesizes.get()
 
@@ -75,8 +73,8 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(nhelpers_waarde) + "\n")
-    file.write(str(inpipe_waarde) + "\n")
+    file.write("\n")
+    file.write("\n")
     file.write("\n")
     file.write(str(modcods_value) + "\n")
     file.write(str(framesizes_value) + "\n")
@@ -103,8 +101,8 @@ def parameters_save():
     parameters["viewer"        ] = viewer.get()
     parameters["rolloff_factor"] = rolloff_factor.get()
     parameters["rrc_rej_factor"] = rrc_rej_factor.get()
-    parameters["nhelpers"      ] = nhelpers_waarde
-    parameters["inpipe"        ] = inpipe_waarde
+    parameters["nhelpers"      ] = nhelpers.get()
+    parameters["inpipe"        ] = inpipe.get()
     parameters["modcods"       ] = modcods_value
     parameters["framesizes"    ] = framesizes_value
 
@@ -142,8 +140,8 @@ def parameters_default():
     parameters["viewer"        ] = "ffplay"
     parameters["rolloff_factor"] = "0.35"
     parameters["rrc_rej_factor"] = 30
-    parameters["nhelpers"      ] = "6"
-    parameters["inpipe"        ] = "32000000"
+    parameters["nhelpers"      ] = 6
+    parameters["inpipe"        ] = 32000000
     parameters["modcods"       ] = "0x0040"
     parameters["framesizes"    ] = "0x01"
 
@@ -153,8 +151,6 @@ master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
 
 lengte=0
-parameter2_conv2=0
-parameter3_conv3= ""
 print "Home directory = " + home
 
 if os.path.isfile(home + "/leandvb-last.json"):
@@ -188,20 +184,16 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter23 = file.readline() #nhelpers
-    parameter24 = file.readline() #inpipe
+    file.readline()
+    file.readline()
     parameter25 = file.readline()
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter23_conv = str(parameter23[:-1])
-    parameter24_conv = str(parameter24[:-1])
     parameter26_conv = str(parameter26[:-1])
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter23_conv = "4"
-    parameter24_conv = "1000000"
     parameter26_conv = "0x0040"
     parameter27_conv = "0x01"
 
@@ -234,8 +226,8 @@ gain_lime = StringVar()
 viewer = StringVar()
 rolloff_factor = StringVar()
 rrc_rej_factor = IntVar()
-nhelpers = StringVar()
-inpipe = StringVar()
+nhelpers = IntVar()
+inpipe = IntVar()
 bandwidth_lime = IntVar()
 modcods = StringVar()
 framesizes = StringVar()
@@ -256,8 +248,8 @@ gain_rtl.set(parameters["gain_rtl"])
 viewer.set(parameters["viewer"])
 rolloff_factor.set(parameters["rolloff_factor"])
 rrc_rej_factor.set(parameters["rrc_rej_factor"])
-nhelpers.set(parameter23_conv)
-inpipe.set(parameter24_conv)
+nhelpers.set(parameters["nhelpers"])
+inpipe.set(parameters["inpipe"])
 modcods.set(parameter26_conv)
 framesizes.set(parameter27_conv)
 e = Entry(master, font = "Verdana 15 bold")
@@ -400,8 +392,8 @@ def callback():
     gainrtl = gain_rtl.get()
     rolloff = rolloff_factor.get()
     rrcrej = rrc_rej_factor.get()
-    nhelpers_waarde = nhelpers.get()
-    inpipe_waarde = inpipe.get()
+    nhelp = nhelpers.get()
+    inpip = inpipe.get()
     modcods_value = modcods.get()
     framesizes_value = framesizes.get()
     bandwidthlime = bandwidth_lime.get()
@@ -474,8 +466,8 @@ def callback():
                   " --tune " + tune + \
                   " --standard " + dvbs + \
                   " --ldpc-helper " + leanpad + "ldpc_tool" + \
-                  " --inpipe " + str(inpipe_waarde) + \
-                  " --nhelpers " +str(nhelpers_waarde) + \
+                  " --inpipe " + str(inpip) + \
+                  " --nhelpers " + str(nhelp) + \
                   " --sampler rrc" + \
                   " --rrc-rej " + str(rrcrej) + \
                   " -v" + \
