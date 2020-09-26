@@ -142,7 +142,9 @@ def parameters_save():
     parameters["modcods_value"         ] = modcods_value
     parameters["framesizes_value"      ] = framesizes_value
 
-    print(json.dumps(parameters, indent = 4))
+    file = open(home + "/leandvb-last.json", "w")
+    file.write(json.dumps(parameters, indent = 4))
+    file.close()
 
 #def parameters_load():
 
