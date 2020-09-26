@@ -49,7 +49,6 @@ def parameters_save():
     viewer_waarde = viewer.get()
     rolloff_factorwaarde = rolloff_factor.get()
     rrc_rej_factorwaarde = rrc_rej_factor.get()
-    bandwidth_limewaarde = bandwidth_lime.get()
     nhelpers_waarde = nhelpers.get()
     inpipe_waarde = inpipe.get()
     modcods_value = modcods.get()
@@ -73,7 +72,7 @@ def parameters_save():
     file.write("\n")
     file.write("\n")
     file.write("\n")
-    file.write(str(bandwidth_limewaarde) + "\n")
+    file.write("\n")
     file.write(str(gain_rtlwaarde) + "\n")
     file.write(str(viewer_waarde) + "\n")
     file.write(str(rolloff_factorwaarde) + "\n")
@@ -101,7 +100,7 @@ def parameters_save():
     parameters["ppm"           ] = int(ppm.get())
     parameters["antenne"       ] = ant.get()
     parameters["gain_lime"     ] = gain_lime.get()
-    parameters["bandwidth_lime"] = bandwidth_limewaarde
+    parameters["bandwidth_lime"] = bandwidth_lime.get()
     parameters["gain_rtl"      ] = gain_rtlwaarde
     parameters["viewer"        ] = viewer_waarde
     parameters["rolloff_factor"] = rolloff_factorwaarde
@@ -140,7 +139,7 @@ def parameters_default():
     parameters["ppm"           ] = 0
     parameters["antenne"       ] = "1"
     parameters["gain_lime"     ] = "0.5"
-    parameters["bandwidth_lime"] = "3500000"
+    parameters["bandwidth_lime"] = 3500000
     parameters["gain_rtl"      ] = "36"
     parameters["viewer"        ] = "ffplay"
     parameters["rolloff_factor"] = "0.35"
@@ -186,7 +185,7 @@ if os.path.isfile(home + "/leandvb-last"):
     file.readline()
     file.readline()
     file.readline()
-    parameter18 = file.readline() #gain_lime_bandwidth
+    file.readline()
     parameter19 = file.readline() #gain_rtl
     parameter20 = file.readline() #viewer
     parameter21 = file.readline() #rolloff_factor
@@ -197,7 +196,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter26 = file.readline() #modcods
     parameter27 = file.readline() #framesizes 
 
-    parameter18_conv = str(parameter18[:-1])
     parameter19_conv = str(parameter19[:-1])
     parameter20_conv = str(parameter20[:-1])
     parameter21_conv = str(parameter21[:-1])
@@ -208,7 +206,6 @@ if os.path.isfile(home + "/leandvb-last"):
     parameter27_conv = str(parameter27[:-1])
     file.close()
 else:
-    parameter18_conv = "3500000"
     parameter19_conv = "0"
     parameter20_conv = "ffplay"
     parameter21_conv = "0.35"
@@ -249,7 +246,7 @@ rolloff_factor = StringVar()
 rrc_rej_factor = StringVar()
 nhelpers = StringVar()
 inpipe = StringVar()
-bandwidth_lime = StringVar()
+bandwidth_lime = IntVar()
 modcods = StringVar()
 framesizes = StringVar()
 var1.set(parameters["fastlock"])
@@ -264,7 +261,7 @@ padlean.set(parameters["leanpad"])
 ppm.set(parameters["ppm"])
 ant.set(parameters["antenne"])
 gain_lime.set(parameters["gain_lime"])
-bandwidth_lime.set(parameter18_conv)
+bandwidth_lime.set(parameters["bandwidth_lime"])
 gain_rtl.set(parameter19_conv)
 viewer.set(parameter20_conv)
 rolloff_factor.set(parameter21_conv)
@@ -418,7 +415,7 @@ def callback():
     inpipe_waarde = inpipe.get()
     modcods_value = modcods.get()
     framesizes_value = framesizes.get()
-    bandwidth_limewaarde = bandwidth_lime.get()
+    bandwidthlime = bandwidth_lime.get()
     if (viewer_waarde == "ffplay"):
         view = "ffplay -v 0"
     else:
@@ -526,7 +523,7 @@ def callback():
     else:
         sub1 = home + "/LimeSuite/builddir/bin/basicRX" + \
                " -a " + antenne + \
-               " -r " + bandwidth_limewaarde + \
+               " -r " + str(bandwidthlime) + \
                " -g " + gainlime + \
                " -f " + "freq_lime" + \
                " -o 16" + \
@@ -543,7 +540,7 @@ def callback():
               " --tune " + tune + \
               " --cr " + fec + \
               " --sr " + str(samplerate) + \
-              " -f " + bandwidth_limewaarde + \
+              " -f " + str(bandwidthlime) + \
               " --s16" + \
               " | " + \
               "ffplay -v 0 - &"
