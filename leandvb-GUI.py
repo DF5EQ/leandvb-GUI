@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 # TODO streamline usage of viewer ffplay and mplayer
+# TODO store parameters in json file instead of simple list
+# TODO change dutch names in english
+# TODO add entry (parameter) for local oscillator frequency
+# TODO change path for parameter file from ~/ to ~/.leandvb-GUI/
 
 from Tkinter import *
 from PIL import ImageTk, Image
@@ -364,7 +368,7 @@ def save_parms():
     file.write(str(modcods_value) + "\n")
     file.write(str(framesizes_value) + "\n")
     file.close()
-
+git
 def stop():
     file = open(home + "/leandvb-stop", "w")
     file.write("#!/bin/sh \n")
