@@ -35,7 +35,85 @@ if (max_current < max_needed):
 else:
     print "max pipe size is", max_current, ", this is ok"
 
-# start the GUI
+#===== handle parameters (save, load, default) ================================
+
+def parameters_save():
+    sub = ""
+    samplerate = 0
+    freq = 0
+    tune = 0
+    fastlock = var1.get()
+    lowsr = var2.get()
+    viterbi = var3.get()
+    gui = var5.get()
+    dvbs2 = var6.get()
+    maxprocess = var7.get()
+    hardmetric = var4.get()
+    rtldongle0 = rtl0.get()
+    rtldongle1 = rtl1.get()
+    leanpad = padlean.get()
+    srsubstring = f.get()
+    tunesubstring = str(1)
+    opslaanfreq= e.get()
+    fsubstring = float(e.get())
+    tunesubstring = str(1)
+    freq = fsubstring * 1000000
+    freqfinal=int(freq)
+    freq_lime=str(fsubstring)+"M"
+    samplerate = int(srsubstring) * 1000
+    fec = tkvar3.get()
+    tune = h.get()
+    ppmwaarde = ppm.get()
+    antennewaarde = ant.get()
+    gain_rtlwaarde = gain_rtl.get()
+    gain_limewaarde = gain_lime.get()
+    viewer_waarde = viewer.get()
+    rolloff_factorwaarde = rolloff_factor.get()
+    rrc_rej_factorwaarde = rrc_rej_factor.get()
+    bandbreedte_limewaarde = bandbreedte_lime.get()
+    nhelpers_waarde = nhelpers.get()
+    inpipe_waarde = inpipe.get()
+    modcods_value = modcods.get()
+    framesizes_value = framesizes.get()
+    file = open(home + "/leandvb-run", "w")
+    file.write("#!/bin/sh \n\n")
+    file.write(sub)
+    file.close()
+    file = open(home+"/leandvb-last", "w")
+    file.write(str(opslaanfreq) + "\n")    
+    file.write(srsubstring + "\n")
+    file.write(fec + "\n")
+    file.write(tune + "\n")
+    file.write(str(fastlock) + "\n")
+    file.write(str(lowsr) + "\n")
+    file.write(str(viterbi) + "\n")
+    file.write(str(gui) + "\n")
+    file.write(str(dvbs2) + "\n")
+    file.write(str(maxprocess) + "\n")
+    file.write(str(hardmetric) + "\n")
+    file.write(str(rtldongle0) + "\n")
+    file.write(str(rtldongle1) + "\n")
+    file.write(str(leanpad) + "\n")
+    file.write(str(ppmwaarde) + "\n")
+    file.write(str(antennewaarde) + "\n")
+    file.write(str(gain_limewaarde) + "\n")
+    file.write(str(bandbreedte_limewaarde) + "\n")
+    file.write(str(gain_rtlwaarde) + "\n")
+    file.write(str(viewer_waarde) + "\n")
+    file.write(str(rolloff_factorwaarde) + "\n")
+    file.write(str(rrc_rej_factorwaarde) + "\n")
+    file.write(str(nhelpers_waarde) + "\n")
+    file.write(str(inpipe_waarde) + "\n")
+    file.write(tunesubstring + "\n")
+    file.write(str(modcods_value) + "\n")
+    file.write(str(framesizes_value) + "\n")
+    file.close()
+
+#def parameters_load():
+
+#def parameters_default():
+
+#===== GUI ====================================================================
 
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
@@ -204,7 +282,7 @@ if os.path.isfile("logo.png"):
     label.grid(row=0, column=3, columnspan=2, rowspan=3,sticky=W+E+N+S, padx=5, pady=5)
 
 def exit():
-    save_parms()
+    parameters_save()
     stop()
     master.destroy()
 
@@ -212,7 +290,7 @@ def exit():
 def settings_window():
 
     def on_settings_save():
-        save_parms()
+        parameters_save()
         settings_window.destroy()
 
     def on_settings_cancel():
@@ -297,78 +375,6 @@ def settings_window():
     settings_window.columnconfigure(2, weight=1)
     settings_window.columnconfigure(3, weight=1)
 
-def save_parms():
-    sub = ""
-    samplerate = 0
-    freq = 0
-    tune = 0
-    fastlock = var1.get()
-    lowsr = var2.get()
-    viterbi = var3.get()
-    gui = var5.get()
-    dvbs2 = var6.get()
-    maxprocess = var7.get()
-    hardmetric = var4.get()
-    rtldongle0 = rtl0.get()
-    rtldongle1 = rtl1.get()
-    leanpad = padlean.get()
-    srsubstring = f.get()
-    tunesubstring = str(1)
-    opslaanfreq= e.get()
-    fsubstring = float(e.get())
-    tunesubstring = str(1)
-    freq = fsubstring * 1000000
-    freqfinal=int(freq)
-    freq_lime=str(fsubstring)+"M"
-    samplerate = int(srsubstring) * 1000
-    fec = tkvar3.get()
-    tune = h.get()
-    ppmwaarde = ppm.get()
-    antennewaarde = ant.get()
-    gain_rtlwaarde = gain_rtl.get()
-    gain_limewaarde = gain_lime.get()
-    viewer_waarde = viewer.get()
-    rolloff_factorwaarde = rolloff_factor.get()
-    rrc_rej_factorwaarde = rrc_rej_factor.get()
-    bandbreedte_limewaarde = bandbreedte_lime.get()
-    nhelpers_waarde = nhelpers.get()
-    inpipe_waarde = inpipe.get()
-    modcods_value = modcods.get()
-    framesizes_value = framesizes.get()
-    file = open(home + "/leandvb-run", "w")
-    file.write("#!/bin/sh \n\n")
-    file.write(sub)
-    file.close()
-    file = open(home+"/leandvb-last", "w")
-    file.write(str(opslaanfreq) + "\n")    
-    file.write(srsubstring + "\n")
-    file.write(fec + "\n")
-    file.write(tune + "\n")
-    file.write(str(fastlock) + "\n")
-    file.write(str(lowsr) + "\n")
-    file.write(str(viterbi) + "\n")
-    file.write(str(gui) + "\n")
-    file.write(str(dvbs2) + "\n")
-    file.write(str(maxprocess) + "\n")
-    file.write(str(hardmetric) + "\n")
-    file.write(str(rtldongle0) + "\n")
-    file.write(str(rtldongle1) + "\n")
-    file.write(str(leanpad) + "\n")
-    file.write(str(ppmwaarde) + "\n")
-    file.write(str(antennewaarde) + "\n")
-    file.write(str(gain_limewaarde) + "\n")
-    file.write(str(bandbreedte_limewaarde) + "\n")
-    file.write(str(gain_rtlwaarde) + "\n")
-    file.write(str(viewer_waarde) + "\n")
-    file.write(str(rolloff_factorwaarde) + "\n")
-    file.write(str(rrc_rej_factorwaarde) + "\n")
-    file.write(str(nhelpers_waarde) + "\n")
-    file.write(str(inpipe_waarde) + "\n")
-    file.write(tunesubstring + "\n")
-    file.write(str(modcods_value) + "\n")
-    file.write(str(framesizes_value) + "\n")
-    file.close()
-git
 def stop():
     file = open(home + "/leandvb-stop", "w")
     file.write("#!/bin/sh \n")
