@@ -159,9 +159,11 @@ def wnd_settings():
     #----- tab_files -----
     files_label = ttk.Label(tab_files, text="Setting of files and directories")
     
-    leansdr_label = ttk.Label(tab_files,           text="Path to leansdr :")
+    leansdr_label = ttk.Label(tab_files,           text="Path to leansdr : ")
     leansdr_entry = ttk.Entry(tab_files, width=40, textvariable=padlean)
     
+    tab_files.columnconfigure((0,1), pad=4, weight=1)
+    tab_files.rowconfigure   ((0,1), pad=4, weight=1)
     files_label  .grid( row=0, column=0, columnspan=2)
     leansdr_label.grid( row=1, column=0, sticky=E)
     leansdr_entry.grid( row=1, column=1, sticky=W)
