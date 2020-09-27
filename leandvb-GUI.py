@@ -32,6 +32,10 @@ parameters_file = aux_dir + "parameters.json"
 run_script      = aux_dir + "run.sh"
 stop_script     = aux_dir + "stop.sh"
 
+if not os.path.exists(aux_dir):
+    print "create " + aux_dir
+    os.mkdir(aux_dir)
+
 print "Home directory      : " + home
 print "Auxilliary directory: " + aux_dir
 print "run script          : " + run_script
@@ -57,7 +61,7 @@ else:
 parameters = dict()
 
 def parameters_save():
-    print "save parameters to json file"
+    print "save parameters to file"
     parameters["frequency"     ] = float(e.get())
     parameters["samplerate"    ] = int(f.get())
     parameters["fec"           ] = tkvar3.get()
@@ -84,14 +88,14 @@ def parameters_save():
     parameters["modcods"       ] = modcods.get()
     parameters["framesizes"    ] = framesizes.get()
 
-    file = open(home + "/leandvb-last.json", "w")
+    file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
     file.close()
 
 def parameters_load():
     global parameters
-    print "load parameters from json file"
-    file = open(home + "/leandvb-last.json", "r")
+    print "load parameters from file"
+    file = open(parameters_file, "r")
     parameters = json.load(file)
     file.close()
 
@@ -109,7 +113,7 @@ def parameters_default():
     parameters["maxprocess"    ] = False
     parameters["hardmetric"    ] = False
     parameters["rtldongle0"    ] = True
-    parameters["leanpad"       ] = home+"/leansdr/src/apps/ "
+    parameters["leanpad"       ] = home+"leansdr/src/apps/"
     parameters["ppm"           ] = 0
     parameters["antenne"       ] = "1"
     parameters["gain_lime"     ] = "0.5"
@@ -128,14 +132,10 @@ def parameters_default():
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
 
-if os.path.isfile(home + "/leandvb-last.json"):
+if os.path.isfile(parameters_file):
     parameters_load()
 else:
     parameters_default()
-
-print (json.dumps(parameters, sort_keys=True))
-
-exit()
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
