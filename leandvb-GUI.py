@@ -8,23 +8,38 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO change path for parameter file from ~/ to ~/.leandvb-GUI/
-# TODO add entry (parameter) for local oscillator frequency
-# TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb-run as function like leandvb-stop
+# TODO add entry (parameter) for local oscillator frequency
+# TODO investigate usefullness of rtl0, create entry in settings for 'rtldongle...'
+# TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO change dutch names in english
 # TODO streamline usage of viewer ffplay and mplayer
-# TODO investigate usefullness of rtl0
 # TODO 'cancel' in settings not working propperly
 # TODO add rrc_rej_factor to settings
+# TODO add entries for path and filenames in settings
+# TODO introduce tabs in settings for 'general','rtl_sdr','leansdr','files'
 
 from Tkinter import *
 from PIL import ImageTk, Image
-from os.path import expanduser
-home = expanduser("~")
 import os
 import json
+
+# set directory for auxiliary files (settings, run, stop)
+home            = os.path.expanduser("~/")
+aux_dir         = os.path.expanduser("~/") + ".leandvb-GUI/"
+parameters_file = aux_dir + "parameters.json"
+run_script      = aux_dir + "run.sh"
+stop_script     = aux_dir + "stop.sh"
+
+if not os.path.exists(aux_dir):
+    print "create " + aux_dir
+    os.mkdir(aux_dir)
+
+print "Home directory      : " + home
+print "Auxilliary directory: " + aux_dir
+print "run script          : " + run_script
+print "stop script         : " + stop_script
 
 # check max pipe size and adjust if needed
 
@@ -46,7 +61,7 @@ else:
 parameters = dict()
 
 def parameters_save():
-    print "save parameters to json file"
+    print "save parameters to file"
     parameters["frequency"     ] = float(e.get())
     parameters["samplerate"    ] = int(f.get())
     parameters["fec"           ] = tkvar3.get()
@@ -73,14 +88,14 @@ def parameters_save():
     parameters["modcods"       ] = modcods.get()
     parameters["framesizes"    ] = framesizes.get()
 
-    file = open(home + "/leandvb-last.json", "w")
+    file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
     file.close()
 
 def parameters_load():
     global parameters
-    print "load parameters from json file"
-    file = open(home + "/leandvb-last.json", "r")
+    print "load parameters from file"
+    file = open(parameters_file, "r")
     parameters = json.load(file)
     file.close()
 
@@ -98,7 +113,7 @@ def parameters_default():
     parameters["maxprocess"    ] = False
     parameters["hardmetric"    ] = False
     parameters["rtldongle0"    ] = True
-    parameters["leanpad"       ] = home+"/leansdr/src/apps/ "
+    parameters["leanpad"       ] = home+"leansdr/src/apps/"
     parameters["ppm"           ] = 0
     parameters["antenne"       ] = "1"
     parameters["gain_lime"     ] = "0.5"
@@ -117,15 +132,10 @@ def parameters_default():
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
 
-lengte=0
-print "Home directory = " + home
-
-if os.path.isfile(home + "/leandvb-last.json"):
+if os.path.isfile(parameters_file):
     parameters_load()
 else:
     parameters_default()
-
-print (json.dumps(parameters, sort_keys=True))
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
@@ -204,13 +214,13 @@ if os.path.isfile("logo.png"):
     label.image = photo
     label.grid(row=0, column=3, columnspan=2, rowspan=3,sticky=W+E+N+S, padx=5, pady=5)
 
-def exit():
+def on_exit():
     parameters_save()
-    stop()
+    on_stop()
     master.destroy()
 
 
-def settings_window():
+def on_settings():
 
     def on_settings_save():
         parameters_save()
@@ -298,8 +308,8 @@ def settings_window():
     settings_window.columnconfigure(2, weight=1)
     settings_window.columnconfigure(3, weight=1)
 
-def stop():
-    file = open(home + "/leandvb-stop", "w")
+def on_stop():
+    file = open(stop_script, "w")
     file.write("#!/bin/sh \n")
     file.write("\n")
     file.write("killall rtl_sdr\n")
@@ -309,9 +319,9 @@ def stop():
     file.write("\n")
     file.write("exit 0\n")
     file.close()
-    os.system("sh " + home + "/leandvb-stop")
+    os.system("sh " + stop_script)
 
-def callback():
+def on_start():
     ppmvalue = int(ppm.get())
     sub = ""
     sub1 = ""
@@ -455,24 +465,23 @@ def callback():
               " --s16" + \
               " | " + \
               "ffplay -v 0 - &"
-    print "sub:\n",sub
 
     parameters_save()
 
-    file = open(home + "/leandvb-run", "w")
+    file = open(run_script, "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
-    os.system("sh " + home + "/leandvb-run &")
+    os.system("sh " + run_script + " &")
 
-Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
-Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
-Button(master, font = "Verdana 11 italic",text='STOP', command=stop).grid(row=7, column=4,sticky=W)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=settings_window).grid(row=5, column=3)
+Button(master,font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=7, column=3,sticky=E)
+Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=7, column=3,sticky=W)
+Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=7, column=4,sticky=W)
+Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=on_settings).grid(row=5, column=3)
 
-master.protocol("WM_DELETE_WINDOW", exit)
+master.protocol("WM_DELETE_WINDOW", on_exit)
 
 tkvar1 = StringVar(master)
  
