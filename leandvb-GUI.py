@@ -339,8 +339,6 @@ def on_stop():
 
 def on_start():
     ppmvalue = int(ppm.get())
-    sub = ""
-    view = ""
     leanpad = padlean.get()
     antenne = ant.get()
     gainlime = gain_lime.get()
