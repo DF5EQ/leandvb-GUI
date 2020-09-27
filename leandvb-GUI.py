@@ -18,13 +18,24 @@
 # TODO investigate usefullness of rtl0
 # TODO 'cancel' in settings not working propperly
 # TODO add rrc_rej_factor to settings
+# TODO add entries for path and filenames in settings
 
 from Tkinter import *
 from PIL import ImageTk, Image
-from os.path import expanduser
-home = expanduser("~")
 import os
 import json
+
+# set directory for auxiliary files (settings, run, stop)
+home            = os.path.expanduser("~/")
+aux_dir         = os.path.expanduser("~/") + ".leandvb-GUI/"
+parameters_file = aux_dir + "parameters.json"
+run_script      = aux_dir + "run.sh"
+stop_script     = aux_dir + "stop.sh"
+
+print "Home directory      : " + home
+print "Auxilliary directory: " + aux_dir
+print "run script          : " + run_script
+print "stop script         : " + stop_script
 
 # check max pipe size and adjust if needed
 
@@ -117,15 +128,14 @@ def parameters_default():
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
 
-lengte=0
-print "Home directory = " + home
-
 if os.path.isfile(home + "/leandvb-last.json"):
     parameters_load()
 else:
     parameters_default()
 
 print (json.dumps(parameters, sort_keys=True))
+
+exit()
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
