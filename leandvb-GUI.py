@@ -87,6 +87,7 @@ def parameters_save():
     parameters["modcods"                   ] = modcods.get()
     parameters["framesizes"                ] = framesizes.get()
     parameters["local_oscillator_frequency"] = lof.get()
+    parameters["rtldongle"                 ] = rtldongle.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -127,6 +128,7 @@ def parameters_default():
     parameters["modcods"                   ] = "0x0040"
     parameters["framesizes"                ] = "0x01"
     parameters["local_oscillator_frequency"] = 9750
+    parameters["rtldongle"                 ] = 0
 
 #===== GUI ====================================================================
 
@@ -159,6 +161,7 @@ Label(master,font = "Verdana 8 italic", text="").grid(row=6,column=0)
 Label(master,font = "Verdana 8 italic", text="").grid(row=8,column=0)
 
 rtl0 = IntVar()
+rtldongle = IntVar()
 ppm = IntVar()
 padlean = StringVar()
 ant = StringVar()
@@ -181,6 +184,7 @@ var5.set(parameters["gui"])
 var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
 rtl0.set(parameters["rtldongle0"])
+rtldongle.set(parameters["rtldongle"])
 padlean.set(parameters["leanpad"])
 ppm.set(parameters["ppm"])
 ant.set(parameters["antenne"])
@@ -273,6 +277,9 @@ def on_settings():
     lof_label        = Label(settings_window,           text="LO-frequency :")
     lof_entry        = Entry(settings_window, width=10, textvariable=lof)
 
+    rtldongle_label  = Label(settings_window,           text="rtldongle :")
+    rtldongle_entry  = Entry(settings_window, width=10, textvariable=rtldongle)
+
     save_button      = Button(settings_window, highlightbackground='green', text="SAVE",   command = on_settings_save)
     cancel_button    = Button(settings_window, highlightbackground='red',   text="CANCEL", command = on_settings_cancel)
 
@@ -309,8 +316,11 @@ def on_settings():
     lof_label.grid        (row=9, column=0, sticky=E)
     lof_entry.grid        (row=9, column=1, sticky=W)
 
-    save_button.grid      (row=10, column=2, sticky=EW)
-    cancel_button.grid    (row=10, column=3, sticky=EW)
+    rtldongle_label.grid  (row=10, column=0, sticky=E)
+    rtldongle_entry.grid  (row=10, column=1, sticky=W)
+
+    save_button.grid      (row=11, column=2, sticky=EW)
+    cancel_button.grid    (row=11, column=3, sticky=EW)
 
     settings_window.columnconfigure(0, weight=0)
     settings_window.columnconfigure(1, weight=0)
@@ -378,10 +388,6 @@ def on_start():
         hardmetric = " --hard-metric"
     else:
         hardmetric = ""
-    if (rtl0.get() == True):
-        rtl = "0"
-    else:
-        rtl = "1"
     if (modcods_value == ""):
         modcods_string = ""
     else:
@@ -394,10 +400,11 @@ def on_start():
     samplerate = int(f.get()) * 1000
     fec = tkvar3.get()
     tune = h.get()
+    rtl = rtldongle.get()
     if (rtl0.get() == True):
         if (var6.get() == True): #dvbs2
             sub = "rtl_sdr" + \
-                  " -d " + rtl + \
+                  " -d " + str(rtl) + \
                   " -f " + str(frequency) + \
                   " -g " + str(gainrtl) +  \
                   " -s " + str(bandwidth) + \
@@ -428,7 +435,7 @@ def on_start():
                   " \n"
         else:
             sub = "rtl_sdr" + \
-                  " -d " + rtl + \
+                  " -d " + str(rtl) + \
                   " -f " + str(frequency) + \
                   " -g " + str(gainrtl) +  \
                   " -s " + str(bandwidth) + \
