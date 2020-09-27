@@ -8,17 +8,17 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO change path for parameter file from ~/ to ~/.leandvb-GUI/
-# TODO add entry (parameter) for local oscillator frequency
-# TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb-run as function like leandvb-stop
+# TODO add entry (parameter) for local oscillator frequency
+# TODO investigate usefullness of rtl0, create entry in settings for 'rtldongle...'
+# TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO change dutch names in english
 # TODO streamline usage of viewer ffplay and mplayer
-# TODO investigate usefullness of rtl0
 # TODO 'cancel' in settings not working propperly
 # TODO add rrc_rej_factor to settings
 # TODO add entries for path and filenames in settings
+# TODO introduce tabs in settings for 'general','rtl_sdr','leansdr','files'
 
 from Tkinter import *
 from PIL import ImageTk, Image
