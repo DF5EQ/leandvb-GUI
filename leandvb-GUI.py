@@ -8,7 +8,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO add entry (parameter) for local oscillator frequency
 # TODO leandvb-run as function like leandvb-stop
 # TODO investigate usefullness of rtl0, create entry in settings for 'rtldongle...'
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
