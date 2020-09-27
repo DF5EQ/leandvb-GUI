@@ -20,6 +20,7 @@
 
 from Tkinter import *
 from PIL import ImageTk, Image
+import ttk
 import os
 import json
 
@@ -127,6 +128,50 @@ def parameters_default():
     parameters["lnb_lo"        ] = 9750.0
     parameters["rtldongle"     ] = 0
 
+#===== settings window ========================================================
+
+def wnd_settings():
+    #----- window properties -----
+    wnd_settings = Toplevel(master, borderwidth=4)
+    wnd_settings.title("Settings")
+    wnd_settings.transient(master)
+    wnd_settings.resizable(height = False, width = False)
+    wnd_settings.grab_set()
+    
+    #----- tab control -----
+    tab_control = ttk.Notebook(wnd_settings)
+    
+    tab_general = ttk.Frame(tab_control, padding=10)
+    tab_files   = ttk.Frame(tab_control, padding=10)
+    tab_rtlsdr  = ttk.Frame(tab_control, padding=10)
+    tab_leansdr = ttk.Frame(tab_control, padding=10)
+    
+    tab_control.add(tab_general, text="general")
+    tab_control.add(tab_files,   text="files")
+    tab_control.add(tab_rtlsdr,  text="rtl_sdr")
+    tab_control.add(tab_leansdr, text="leansdr")
+    
+    tab_control.grid()
+    
+    #----- tab_general -----
+    ttk.Label(tab_general, text="General settings").grid(row=0, column=0, padx=30, pady=30)
+    
+    #----- tab_files -----
+    files_label = ttk.Label(tab_files, text="Setting of files and directories")
+    
+    leansdr_label = ttk.Label(tab_files,           text="Path to leansdr :")
+    leansdr_entry = ttk.Entry(tab_files, width=40, textvariable=padlean)
+    
+    files_label  .grid( row=0, column=0, columnspan=2)
+    leansdr_label.grid( row=1, column=0, sticky=E)
+    leansdr_entry.grid( row=1, column=1, sticky=W)
+ 
+     #----- tab_rtlsdr -----
+    ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program").grid(row=0, column=0, padx=30, pady=30)
+
+    #----- tab_leansdr -----
+    ttk.Label(tab_leansdr, text="Settings for leansdr program").grid(row=0, column=0, padx=30, pady=30)
+  
 #===== GUI ====================================================================
 
 master = Tk()
@@ -235,6 +280,7 @@ def on_settings():
     settings_window.title("Settings")
     settings_window.transient(master)
     settings_window.resizable(height = False, width = False)
+    settings_window.grab_set()
 
     leansdr_label    = Label(settings_window,           text="Path to leansdr :")
     leansdr_entry    = Entry(settings_window, width=40, textvariable=padlean)
@@ -460,10 +506,11 @@ def on_start():
     file.close()
     os.system("sh " + run_script + " &")
 
-Button(master,font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=7, column=3,sticky=E)
+Button(master, font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=7, column=3,sticky=W)
 Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=7, column=4,sticky=W)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=on_settings).grid(row=5, column=3)
+#Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=on_settings).grid(row=5, column=3)
+Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=wnd_settings).grid(row=5, column=3)
 
 master.protocol("WM_DELETE_WINDOW", on_exit)
 
