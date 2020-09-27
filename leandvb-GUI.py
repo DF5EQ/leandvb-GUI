@@ -71,7 +71,6 @@ def parameters_save():
     parameters["dvbs2"         ] = bool(var6.get())
     parameters["maxprocess"    ] = bool(var7.get())
     parameters["hardmetric"    ] = bool(var4.get())
-    parameters["rtldongle0"    ] = bool(rtl0.get())
     parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = int(ppm.get())
     parameters["antenne"       ] = ant.get()
@@ -112,7 +111,6 @@ def parameters_default():
     parameters["dvbs2"         ] = True
     parameters["maxprocess"    ] = False
     parameters["hardmetric"    ] = False
-    parameters["rtldongle0"    ] = True
     parameters["leanpad"       ] = home+"leansdr/src/apps/"
     parameters["ppm"           ] = 0
     parameters["antenne"       ] = "1"
