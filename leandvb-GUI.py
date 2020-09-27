@@ -340,7 +340,6 @@ def on_stop():
 def on_start():
     ppmvalue = int(ppm.get())
     sub = ""
-    sub1 = ""
     view = ""
     leanpad = padlean.get()
     antenne = ant.get()
@@ -460,7 +459,6 @@ def on_start():
 
     file = open(run_script, "w")
     file.write("#!/bin/sh \n\n")
-    file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
