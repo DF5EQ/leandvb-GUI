@@ -9,7 +9,6 @@
 # Wrapper by pe2jko@540.org
 
 # TODO leandvb-run as function like leandvb-stop
-# TODO add entry (parameter) for local oscillator frequency
 # TODO investigate usefullness of rtl0, create entry in settings for 'rtldongle...'
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb: --tune is broken, use --derotate instead
@@ -62,31 +61,32 @@ parameters = dict()
 
 def parameters_save():
     print "save parameters to file"
-    parameters["frequency"     ] = float(e.get())
-    parameters["samplerate"    ] = int(f.get())
-    parameters["fec"           ] = tkvar3.get()
-    parameters["tune"          ] = int(h.get())
-    parameters["fastlock"      ] = bool(var1.get())
-    parameters["lowsr"         ] = bool(var2.get())
-    parameters["viterbi"       ] = bool(var3.get())
-    parameters["gui"           ] = bool(var5.get())
-    parameters["dvbs2"         ] = bool(var6.get())
-    parameters["maxprocess"    ] = bool(var7.get())
-    parameters["hardmetric"    ] = bool(var4.get())
-    parameters["rtldongle0"    ] = bool(rtl0.get())
-    parameters["leanpad"       ] = padlean.get()
-    parameters["ppm"           ] = int(ppm.get())
-    parameters["antenne"       ] = ant.get()
-    parameters["gain_lime"     ] = gain_lime.get()
-    parameters["bandwidth_lime"] = bandwidth_lime.get()
-    parameters["gain_rtl"      ] = gain_rtl.get()
-    parameters["viewer"        ] = viewer.get()
-    parameters["rolloff_factor"] = rolloff_factor.get()
-    parameters["rrc_rej_factor"] = rrc_rej_factor.get()
-    parameters["nhelpers"      ] = nhelpers.get()
-    parameters["inpipe"        ] = inpipe.get()
-    parameters["modcods"       ] = modcods.get()
-    parameters["framesizes"    ] = framesizes.get()
+    parameters["frequency"                 ] = float(e.get())
+    parameters["samplerate"                ] = int(f.get())
+    parameters["fec"                       ] = tkvar3.get()
+    parameters["tune"                      ] = int(h.get())
+    parameters["fastlock"                  ] = bool(var1.get())
+    parameters["lowsr"                     ] = bool(var2.get())
+    parameters["viterbi"                   ] = bool(var3.get())
+    parameters["gui"                       ] = bool(var5.get())
+    parameters["dvbs2"                     ] = bool(var6.get())
+    parameters["maxprocess"                ] = bool(var7.get())
+    parameters["hardmetric"                ] = bool(var4.get())
+    parameters["rtldongle0"                ] = bool(rtl0.get())
+    parameters["leanpad"                   ] = padlean.get()
+    parameters["ppm"                       ] = int(ppm.get())
+    parameters["antenne"                   ] = ant.get()
+    parameters["gain_lime"                 ] = gain_lime.get()
+    parameters["bandwidth_lime"            ] = bandwidth_lime.get()
+    parameters["gain_rtl"                  ] = gain_rtl.get()
+    parameters["viewer"                    ] = viewer.get()
+    parameters["rolloff_factor"            ] = rolloff_factor.get()
+    parameters["rrc_rej_factor"            ] = rrc_rej_factor.get()
+    parameters["nhelpers"                  ] = nhelpers.get()
+    parameters["inpipe"                    ] = inpipe.get()
+    parameters["modcods"                   ] = modcods.get()
+    parameters["framesizes"                ] = framesizes.get()
+    parameters["local_oscillator_frequency"] = lof.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -101,31 +101,32 @@ def parameters_load():
 
 def parameters_default():
     print "load parameters with defaults"
-    parameters["frequency"     ] = 741.500
-    parameters["samplerate"    ] = 1500
-    parameters["fec"           ] = "1/2"
-    parameters["tune"          ] = 0
-    parameters["fastlock"      ] = False
-    parameters["lowsr"         ] = False
-    parameters["viterbi"       ] = False
-    parameters["gui"           ] = True
-    parameters["dvbs2"         ] = True
-    parameters["maxprocess"    ] = False
-    parameters["hardmetric"    ] = False
-    parameters["rtldongle0"    ] = True
-    parameters["leanpad"       ] = home+"leansdr/src/apps/"
-    parameters["ppm"           ] = 0
-    parameters["antenne"       ] = "1"
-    parameters["gain_lime"     ] = "0.5"
-    parameters["bandwidth_lime"] = 3500000
-    parameters["gain_rtl"      ] = 36
-    parameters["viewer"        ] = "ffplay"
-    parameters["rolloff_factor"] = "0.35"
-    parameters["rrc_rej_factor"] = 30
-    parameters["nhelpers"      ] = 6
-    parameters["inpipe"        ] = 32000000
-    parameters["modcods"       ] = "0x0040"
-    parameters["framesizes"    ] = "0x01"
+    parameters["frequency"                 ] = 10491.500
+    parameters["samplerate"                ] = 1500
+    parameters["fec"                       ] = "1/2"
+    parameters["tune"                      ] = 0
+    parameters["fastlock"                  ] = False
+    parameters["lowsr"                     ] = False
+    parameters["viterbi"                   ] = False
+    parameters["gui"                       ] = True
+    parameters["dvbs2"                     ] = True
+    parameters["maxprocess"                ] = False
+    parameters["hardmetric"                ] = False
+    parameters["rtldongle0"                ] = True
+    parameters["leanpad"                   ] = home+"leansdr/src/apps/"
+    parameters["ppm"                       ] = 0
+    parameters["antenne"                   ] = "1"
+    parameters["gain_lime"                 ] = "0.5"
+    parameters["bandwidth_lime"            ] = 3500000
+    parameters["gain_rtl"                  ] = 36
+    parameters["viewer"                    ] = "ffplay"
+    parameters["rolloff_factor"            ] = "0.35"
+    parameters["rrc_rej_factor"            ] = 30
+    parameters["nhelpers"                  ] = 6
+    parameters["inpipe"                    ] = 32000000
+    parameters["modcods"                   ] = "0x0040"
+    parameters["framesizes"                ] = "0x01"
+    parameters["local_oscillator_frequency"] = 9750
 
 #===== GUI ====================================================================
 
@@ -171,6 +172,7 @@ inpipe = IntVar()
 bandwidth_lime = IntVar()
 modcods = StringVar()
 framesizes = StringVar()
+lof = IntVar()
 var1.set(parameters["fastlock"])
 var2.set(parameters["lowsr"])
 var3.set(parameters["viterbi"])
@@ -192,6 +194,7 @@ nhelpers.set(parameters["nhelpers"])
 inpipe.set(parameters["inpipe"])
 modcods.set(parameters["modcods"])
 framesizes.set(parameters["framesizes"])
+lof.set(parameters["local_oscillator_frequency"])
 e = Entry(master, font = "Verdana 15 bold")
 f = Entry(master, font = "Verdana 15 bold")
 g = Entry(master, font = "Verdana 15 bold")
@@ -267,6 +270,9 @@ def on_settings():
     viewer_label     = Label(settings_window,           text="Viewer :")
     viewer_entry     = Entry(settings_window, width=10, textvariable=viewer)
 
+    lof_label        = Label(settings_window,           text="LO-frequency :")
+    lof_entry        = Entry(settings_window, width=10, textvariable=lof)
+
     save_button      = Button(settings_window, highlightbackground='green', text="SAVE",   command = on_settings_save)
     cancel_button    = Button(settings_window, highlightbackground='red',   text="CANCEL", command = on_settings_cancel)
 
@@ -300,8 +306,11 @@ def on_settings():
     viewer_label.grid     (row=8, column=0, sticky=E)
     viewer_entry.grid     (row=8, column=1, sticky=W)
 
-    save_button.grid      (row=9, column=2, sticky=EW)
-    cancel_button.grid    (row=9, column=3, sticky=EW)
+    lof_label.grid        (row=9, column=0, sticky=E)
+    lof_entry.grid        (row=9, column=1, sticky=W)
+
+    save_button.grid      (row=10, column=2, sticky=EW)
+    cancel_button.grid    (row=10, column=3, sticky=EW)
 
     settings_window.columnconfigure(0, weight=0)
     settings_window.columnconfigure(1, weight=0)
@@ -381,7 +390,7 @@ def on_start():
         framesizes_string = ""
     else:
         framesizes_string = " --framesizes " + framesizes_value
-    frequency = int(float(e.get()) * 1000000 )
+    frequency = int(float(e.get()) * 1000000 ) - lof.get() * 1000000
     samplerate = int(f.get()) * 1000
     fec = tkvar3.get()
     tune = h.get()
@@ -465,6 +474,8 @@ def on_start():
               " --s16" + \
               " | " + \
               "ffplay -v 0 - &"
+
+    print sub
 
     parameters_save()
 
