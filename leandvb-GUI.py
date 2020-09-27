@@ -214,13 +214,13 @@ if os.path.isfile("logo.png"):
     label.image = photo
     label.grid(row=0, column=3, columnspan=2, rowspan=3,sticky=W+E+N+S, padx=5, pady=5)
 
-def exit():
+def on_exit():
     parameters_save()
-    stop()
+    on_stop()
     master.destroy()
 
 
-def settings_window():
+def on_settings():
 
     def on_settings_save():
         parameters_save()
@@ -308,8 +308,8 @@ def settings_window():
     settings_window.columnconfigure(2, weight=1)
     settings_window.columnconfigure(3, weight=1)
 
-def stop():
-    file = open(home + "/leandvb-stop", "w")
+def on_stop():
+    file = open(stop_script, "w")
     file.write("#!/bin/sh \n")
     file.write("\n")
     file.write("killall rtl_sdr\n")
@@ -319,9 +319,9 @@ def stop():
     file.write("\n")
     file.write("exit 0\n")
     file.close()
-    os.system("sh " + home + "/leandvb-stop")
+    os.system("sh " + stop_script)
 
-def callback():
+def on_start():
     ppmvalue = int(ppm.get())
     sub = ""
     sub1 = ""
@@ -465,24 +465,23 @@ def callback():
               " --s16" + \
               " | " + \
               "ffplay -v 0 - &"
-    print "sub:\n",sub
 
     parameters_save()
 
-    file = open(home + "/leandvb-run", "w")
+    file = open(run_script, "w")
     file.write("#!/bin/sh \n\n")
     file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
-    os.system("sh " + home + "/leandvb-run &")
+    os.system("sh " + run_script + " &")
 
-Button(master,font = "Verdana 11 italic", text='EXIT', command=exit).grid(row=7, column=3,sticky=E)
-Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=callback).grid(row=7, column=3,sticky=W)
-Button(master, font = "Verdana 11 italic",text='STOP', command=stop).grid(row=7, column=4,sticky=W)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=settings_window).grid(row=5, column=3)
+Button(master,font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=7, column=3,sticky=E)
+Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=7, column=3,sticky=W)
+Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=7, column=4,sticky=W)
+Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=on_settings).grid(row=5, column=3)
 
-master.protocol("WM_DELETE_WINDOW", exit)
+master.protocol("WM_DELETE_WINDOW", on_exit)
 
 tkvar1 = StringVar(master)
  
