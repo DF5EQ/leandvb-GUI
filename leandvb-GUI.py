@@ -9,7 +9,6 @@
 # Wrapper by pe2jko@540.org
 
 # TODO leandvb-run as function like leandvb-stop
-# TODO investigate usefullness of rtl0, create entry in settings for 'rtldongle...'
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO change dutch names in english
@@ -72,7 +71,6 @@ def parameters_save():
     parameters["dvbs2"                     ] = bool(var6.get())
     parameters["maxprocess"                ] = bool(var7.get())
     parameters["hardmetric"                ] = bool(var4.get())
-    parameters["rtldongle0"                ] = bool(rtl0.get())
     parameters["leanpad"                   ] = padlean.get()
     parameters["ppm"                       ] = int(ppm.get())
     parameters["antenne"                   ] = ant.get()
@@ -87,6 +85,7 @@ def parameters_save():
     parameters["modcods"                   ] = modcods.get()
     parameters["framesizes"                ] = framesizes.get()
     parameters["local_oscillator_frequency"] = lof.get()
+    parameters["rtldongle"                 ] = rtldongle.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -127,6 +126,7 @@ def parameters_default():
     parameters["modcods"                   ] = "0x0040"
     parameters["framesizes"                ] = "0x01"
     parameters["local_oscillator_frequency"] = 9750
+    parameters["rtldongle"                 ] = 0
 
 #===== GUI ====================================================================
 
@@ -158,7 +158,7 @@ Checkbutton(master, font = "Verdana 13 italic" ,text="Max sensitive", variable=v
 Label(master,font = "Verdana 8 italic", text="").grid(row=6,column=0)
 Label(master,font = "Verdana 8 italic", text="").grid(row=8,column=0)
 
-rtl0 = IntVar()
+rtldongle = IntVar()
 ppm = IntVar()
 padlean = StringVar()
 ant = StringVar()
@@ -180,7 +180,7 @@ var4.set(parameters["hardmetric"])
 var5.set(parameters["gui"])
 var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
-rtl0.set(parameters["rtldongle0"])
+rtldongle.set(parameters["rtldongle"])
 padlean.set(parameters["leanpad"])
 ppm.set(parameters["ppm"])
 ant.set(parameters["antenne"])
@@ -273,6 +273,9 @@ def on_settings():
     lof_label        = Label(settings_window,           text="LO-frequency :")
     lof_entry        = Entry(settings_window, width=10, textvariable=lof)
 
+    rtldongle_label  = Label(settings_window,           text="rtldongle :")
+    rtldongle_entry  = Entry(settings_window, width=10, textvariable=rtldongle)
+
     save_button      = Button(settings_window, highlightbackground='green', text="SAVE",   command = on_settings_save)
     cancel_button    = Button(settings_window, highlightbackground='red',   text="CANCEL", command = on_settings_cancel)
 
@@ -309,8 +312,11 @@ def on_settings():
     lof_label.grid        (row=9, column=0, sticky=E)
     lof_entry.grid        (row=9, column=1, sticky=W)
 
-    save_button.grid      (row=10, column=2, sticky=EW)
-    cancel_button.grid    (row=10, column=3, sticky=EW)
+    rtldongle_label.grid  (row=10, column=0, sticky=E)
+    rtldongle_entry.grid  (row=10, column=1, sticky=W)
+
+    save_button.grid      (row=11, column=2, sticky=EW)
+    cancel_button.grid    (row=11, column=3, sticky=EW)
 
     settings_window.columnconfigure(0, weight=0)
     settings_window.columnconfigure(1, weight=0)
@@ -332,9 +338,6 @@ def on_stop():
 
 def on_start():
     ppmvalue = int(ppm.get())
-    sub = ""
-    sub1 = ""
-    view = ""
     leanpad = padlean.get()
     antenne = ant.get()
     gainlime = gain_lime.get()
@@ -378,10 +381,6 @@ def on_start():
         hardmetric = " --hard-metric"
     else:
         hardmetric = ""
-    if (rtl0.get() == True):
-        rtl = "0"
-    else:
-        rtl = "1"
     if (modcods_value == ""):
         modcods_string = ""
     else:
@@ -394,74 +393,48 @@ def on_start():
     samplerate = int(f.get()) * 1000
     fec = tkvar3.get()
     tune = h.get()
-    if (rtl0.get() == True):
-        if (var6.get() == True): #dvbs2
-            sub = "rtl_sdr" + \
-                  " -d " + rtl + \
-                  " -f " + str(frequency) + \
-                  " -g " + str(gainrtl) +  \
-                  " -s " + str(bandwidth) + \
-                  " -p " + str(ppmvalue) + \
-                  " -" + \
-                  " | " + \
-                  leanpad + "leandvb" + \
-                  gui + \
-                  modcods_string + \
-                  framesizes_string + \
-                  maxprocess + \
-                  viterbi + \
-                  hardmetric + \
-                  fastlock + \
-                  " --tune " + tune + \
-                  " --standard " + dvbs + \
-                  " --ldpc-helper " + leanpad + "ldpc_tool" + \
-                  " --inpipe " + str(inpip) + \
-                  " --nhelpers " + str(nhelp) + \
-                  " --sampler rrc" + \
-                  " --rrc-rej " + str(rrcrej) + \
-                  " -v" + \
-                  " --roll-off " + rolloff + \
-                  " --sr " + str(samplerate) + \
-                  " -f " + str(bandwidth) + \
-                  " | " + \
-                  "ffplay -v 0 -" + \
-                  " \n"
-        else:
-            sub = "rtl_sdr" + \
-                  " -d " + rtl + \
-                  " -f " + str(frequency) + \
-                  " -g " + str(gainrtl) +  \
-                  " -s " + str(bandwidth) + \
-                  " -p " + str(ppmvalue) + \
-                  " -" + \
-                  " | " + \
-                  leanpad + "leandvb" + \
-                  gui + \
-                  maxprocess + \
-                  viterbi + \
-                  hardmetric + \
-                  fastlock + \
-                  " --tune " + tune + \
-                  " --cr " + fec + \
-                  " --standard " + dvbs + \
-                  " -v" + \
-                  " --sr " + str(samplerate) + \
-                  " -f " + str(bandwidth) + \
-                  " | " + \
-                  view + " -" + \
-                  " \n" 
-    else:
-        sub1 = home + "/LimeSuite/builddir/bin/basicRX" + \
-               " -a " + antenne + \
-               " -r " + str(bandwidthlime) + \
-               " -g " + gainlime + \
-               " -f " + "freq_lime" + \
-               " -o 16" + \
-               " -b 3000000" + \
-               " &"
-        sub = "cat ~/experiment" + \
+    rtl = rtldongle.get()
+    if (var6.get() == True): #dvbs2
+        sub = "rtl_sdr" + \
+              " -d " + str(rtl) + \
+              " -f " + str(frequency) + \
+              " -g " + str(gainrtl) +  \
+              " -s " + str(bandwidth) + \
+              " -p " + str(ppmvalue) + \
+              " -" + \
               " | " + \
-              leanpad + \
+              leanpad + "leandvb" + \
+              gui + \
+              modcods_string + \
+              framesizes_string + \
+              maxprocess + \
+              viterbi + \
+              hardmetric + \
+              fastlock + \
+              " --tune " + tune + \
+              " --standard " + dvbs + \
+              " --ldpc-helper " + leanpad + "ldpc_tool" + \
+              " --inpipe " + str(inpip) + \
+              " --nhelpers " + str(nhelp) + \
+              " --sampler rrc" + \
+              " --rrc-rej " + str(rrcrej) + \
+              " -v" + \
+              " --roll-off " + rolloff + \
+              " --sr " + str(samplerate) + \
+              " -f " + str(bandwidth) + \
+              " | " + \
+              "ffplay -v 0 -" + \
+              " \n"
+    else:
+        sub = "rtl_sdr" + \
+              " -d " + str(rtl) + \
+              " -f " + str(frequency) + \
+              " -g " + str(gainrtl) +  \
+              " -s " + str(bandwidth) + \
+              " -p " + str(ppmvalue) + \
+              " -" + \
+              " | " + \
+              leanpad + "leandvb" + \
               gui + \
               maxprocess + \
               viterbi + \
@@ -469,11 +442,13 @@ def on_start():
               fastlock + \
               " --tune " + tune + \
               " --cr " + fec + \
+              " --standard " + dvbs + \
+              " -v" + \
               " --sr " + str(samplerate) + \
-              " -f " + str(bandwidthlime) + \
-              " --s16" + \
+              " -f " + str(bandwidth) + \
               " | " + \
-              "ffplay -v 0 - &"
+              view + " -" + \
+              " \n" 
 
     print sub
 
@@ -481,7 +456,6 @@ def on_start():
 
     file = open(run_script, "w")
     file.write("#!/bin/sh \n\n")
-    file.write(sub1)
     file.write("\n\n")
     file.write(sub)
     file.close()
