@@ -8,7 +8,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO investigate usefullness of rtl0, create entry in settings for 'rtldongle...'
 # TODO leandvb-run as function like leandvb-stop
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb: --tune is broken, use --derotate instead
