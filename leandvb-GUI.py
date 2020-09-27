@@ -75,9 +75,8 @@ def parameters_save():
     parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = int(ppm.get())
     parameters["antenne"       ] = ant.get()
-    parameters["gain_lime"     ] = gain_lime.get()
     parameters["bandwidth_lime"] = bandwidth_lime.get()
-    parameters["gain_rtl"      ] = gain_rtl.get()
+    parameters["gain"          ] = gain.get()
     parameters["viewer"        ] = viewer.get()
     parameters["rolloff_factor"] = rolloff_factor.get()
     parameters["rrc_rej_factor"] = rrc_rej_factor.get()
@@ -115,9 +114,8 @@ def parameters_default():
     parameters["leanpad"       ] = home+"leansdr/src/apps/"
     parameters["ppm"           ] = 0
     parameters["antenne"       ] = "1"
-    parameters["gain_lime"     ] = "0.5"
     parameters["bandwidth_lime"] = 3500000
-    parameters["gain_rtl"      ] = 36
+    parameters["gain"          ] = 36
     parameters["viewer"        ] = "ffplay"
     parameters["rolloff_factor"] = "0.35"
     parameters["rrc_rej_factor"] = 30
@@ -154,7 +152,11 @@ def wnd_settings():
     tab_control.grid()
     
     #----- tab_general -----
-    ttk.Label(tab_general, text="General settings").grid(row=0, column=0, padx=30, pady=30)
+    general_label = ttk.Label(tab_general, text="General settings")
+    
+    tab_general.columnconfigure((0,1), pad=4, weight=1)
+    tab_general.rowconfigure   ((0,1), pad=4, weight=1)
+    general_label.grid(row=0, column=0, columnspan=2)
     
     #----- tab_files -----
     files_label = ttk.Label(tab_files, text="Setting of files and directories")
@@ -164,17 +166,44 @@ def wnd_settings():
     
     tab_files.columnconfigure((0,1), pad=4, weight=1)
     tab_files.rowconfigure   ((0,1), pad=4, weight=1)
-    files_label  .grid( row=0, column=0, columnspan=2)
-    leansdr_label.grid( row=1, column=0, sticky=E)
-    leansdr_entry.grid( row=1, column=1, sticky=W)
+    files_label  .grid (row=0, column=0, columnspan=2)
+    leansdr_label.grid (row=1, column=0, sticky=E)
+    leansdr_entry.grid (row=1, column=1, sticky=W)
  
      #----- tab_rtlsdr -----
-    ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program").grid(row=0, column=0, padx=30, pady=30)
+    rtlsdr_label = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
+    
+    ppm_label       = ttk.Label(tab_rtlsdr,           text="ppm-error (-p) : ")
+    ppm_entry       = ttk.Entry(tab_rtlsdr, width=10, textvariable=ppm)
+    ppm_extra       = ttk.Label(tab_rtlsdr,           text="default 0")
+    gain_label      = ttk.Label(tab_rtlsdr,           text="gain (-g) : ")
+    gain_entry      = ttk.Entry(tab_rtlsdr, width=10, textvariable=gain)
+    gain_extra      = ttk.Label(tab_rtlsdr,           text="default 0 = Auto")
+    rtldongle_label = ttk.Label(tab_rtlsdr,           text="rtldongle (-d) : ")
+    rtldongle_entry = ttk.Entry(tab_rtlsdr, width=10, textvariable=rtldongle)
+    rtldongle_extra = ttk.Label(tab_rtlsdr,           text="default 0")
+
+    tab_rtlsdr.columnconfigure((0,1,2), pad=4, weight=1)
+    tab_rtlsdr.rowconfigure   ((0,1,2), pad=4, weight=1)
+    rtlsdr_label   .grid (row=0, column=0, columnspan=3)
+    ppm_label      .grid (row=1, column=0, sticky=E)
+    ppm_entry      .grid (row=1, column=1, sticky=W)
+    ppm_extra      .grid (row=1, column=2, sticky=W)
+    gain_label     .grid (row=2, column=0, sticky=E)
+    gain_entry     .grid (row=2, column=1, sticky=W)
+    gain_extra     .grid (row=2, column=2, sticky=W)
+    rtldongle_label.grid (row=3, column=0, sticky=E)
+    rtldongle_entry.grid (row=3, column=1, sticky=W)
+    rtldongle_extra.grid (row=3, column=2, sticky=W)
 
     #----- tab_leansdr -----
-    ttk.Label(tab_leansdr, text="Settings for leansdr program").grid(row=0, column=0, padx=30, pady=30)
+    leansdr_label = ttk.Label(tab_leansdr, text="Settings for leansdr program")
+
+    tab_leansdr.columnconfigure((0,1), pad=4, weight=1)
+    tab_leansdr.rowconfigure   ((0,1), pad=4, weight=1)
+    leansdr_label.grid( row=0, column=0, columnspan=2)
   
-#===== GUI ====================================================================
+#===== master window ==========================================================
 
 master = Tk()
 master.title('LeanDVB DVBS + DVBS2 interface')
@@ -183,6 +212,18 @@ if os.path.isfile(parameters_file):
     parameters_load()
 else:
     parameters_default()
+
+ppm = IntVar()
+ppm.set(parameters["ppm"])
+
+padlean = StringVar()
+padlean.set(parameters["leanpad"])
+
+gain = IntVar()
+gain.set(parameters["gain"])
+
+rtldongle = IntVar()
+rtldongle.set(parameters["rtldongle"])
 
 var1 = IntVar()
 Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
@@ -204,12 +245,7 @@ Checkbutton(master, font = "Verdana 13 italic" ,text="Max sensitive", variable=v
 Label(master,font = "Verdana 8 italic", text="").grid(row=6,column=0)
 Label(master,font = "Verdana 8 italic", text="").grid(row=8,column=0)
 
-rtldongle = IntVar()
-ppm = IntVar()
-padlean = StringVar()
 ant = StringVar()
-gain_rtl = IntVar()
-gain_lime = StringVar()
 viewer = StringVar()
 rolloff_factor = StringVar()
 rrc_rej_factor = IntVar()
@@ -226,13 +262,8 @@ var4.set(parameters["hardmetric"])
 var5.set(parameters["gui"])
 var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
-rtldongle.set(parameters["rtldongle"])
-padlean.set(parameters["leanpad"])
-ppm.set(parameters["ppm"])
 ant.set(parameters["antenne"])
-gain_lime.set(parameters["gain_lime"])
 bandwidth_lime.set(parameters["bandwidth_lime"])
-gain_rtl.set(parameters["gain_rtl"])
 viewer.set(parameters["viewer"])
 rolloff_factor.set(parameters["rolloff_factor"])
 rrc_rej_factor.set(parameters["rrc_rej_factor"])
@@ -291,7 +322,7 @@ def on_settings():
     ppmrtl_entry     = Entry(settings_window, width=10, textvariable=ppm)
 
     gainrtl_label    = Label(settings_window,           text="Gain RTL :")
-    gainrtl_entry    = Entry(settings_window, width=10, textvariable=gain_rtl)
+    gainrtl_entry    = Entry(settings_window, width=10, textvariable=gain)
     gainrtl_extra    = Label(settings_window,           text="0 = Auto")
 
     rolloff_label    = Label(settings_window,           text="Roll Off Factor (DVBS2) :")
@@ -387,8 +418,7 @@ def on_start():
     ppmvalue = int(ppm.get())
     leanpad = padlean.get()
     antenne = ant.get()
-    gainlime = gain_lime.get()
-    gainrtl = gain_rtl.get()
+    gain_value = gain.get()
     rolloff = rolloff_factor.get()
     rrcrej = rrc_rej_factor.get()
     nhelp = nhelpers.get()
@@ -445,7 +475,7 @@ def on_start():
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
               " -f " + str(frequency) + \
-              " -g " + str(gainrtl) +  \
+              " -g " + str(gain_value) +  \
               " -s " + str(bandwidth) + \
               " -p " + str(ppmvalue) + \
               " -" + \
@@ -476,7 +506,7 @@ def on_start():
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
               " -f " + str(frequency) + \
-              " -g " + str(gainrtl) +  \
+              " -g " + str(gain_value) +  \
               " -s " + str(bandwidth) + \
               " -p " + str(ppmvalue) + \
               " -" + \
