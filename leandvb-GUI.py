@@ -126,83 +126,90 @@ def parameters_default():
     parameters["lnb_lo"        ] = 9750.0
     parameters["rtldongle"     ] = 0
 
-#===== settings window ========================================================
+#===== settings dialog ========================================================
 
-def wnd_settings():
-    #----- window properties -----
-    wnd_settings = Toplevel(master, borderwidth=4)
-    wnd_settings.title("Settings")
-    wnd_settings.transient(master)
-    wnd_settings.resizable(height = False, width = False)
-    wnd_settings.grab_set()
-    
-    #----- tab control -----
-    tab_control = ttk.Notebook(wnd_settings)
-    
-    tab_general = ttk.Frame(tab_control, padding=10)
-    tab_files   = ttk.Frame(tab_control, padding=10)
-    tab_rtlsdr  = ttk.Frame(tab_control, padding=10)
-    tab_leansdr = ttk.Frame(tab_control, padding=10)
-    
-    tab_control.add(tab_general, text="general")
-    tab_control.add(tab_files,   text="files")
-    tab_control.add(tab_rtlsdr,  text="rtl_sdr")
-    tab_control.add(tab_leansdr, text="leansdr")
-    
-    tab_control.grid()
-    
+def dlg_settings():
+    #----- dialog properties -----
+    dlg = Toplevel(master, borderwidth=4)
+    dlg.title("Settings")
+    dlg.transient(master)
+    dlg.resizable(height = False, width = False)
+    dlg.grab_set()
+
+    #----- tabs container -----
+    ntb = ttk.Notebook (dlg)
+
+    tab_general = ttk.Frame (ntb, padding=10)
+    tab_files   = ttk.Frame (ntb, padding=10)
+    tab_rtlsdr  = ttk.Frame (ntb, padding=10)
+    tab_leansdr = ttk.Frame (ntb, padding=10)
+
+    ntb.add(tab_general, text="general")
+    ntb.add(tab_files,   text="files")
+    ntb.add(tab_rtlsdr,  text="rtl_sdr")
+    ntb.add(tab_leansdr, text="leansdr")
+
     #----- tab_general -----
-    general_label = ttk.Label(tab_general, text="General settings")
-    
+    lbl_general = ttk.Label(tab_general, text="General settings")
+
+    #----- tab_files -----
+    lbl_files        = ttk.Label(tab_files, text="Setting of files and directories")
+    lbl_leansdr_file = ttk.Label(tab_files,           text="Path to leansdr : ")
+    ent_leansdr_file = ttk.Entry(tab_files, width=40, textvariable=padlean)
+
+     #----- tab_rtlsdr -----
+    lbl_rtlsdr = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
+    lbl_ppm       = ttk.Label(tab_rtlsdr,           text="ppm-error (-p) : ")
+    ent_ppm       = ttk.Entry(tab_rtlsdr, width=10, textvariable=ppm)
+    aux_ppm       = ttk.Label(tab_rtlsdr,           text="default 0")
+    lbl_gain      = ttk.Label(tab_rtlsdr,           text="gain (-g) : ")
+    ent_gain      = ttk.Entry(tab_rtlsdr, width=10, textvariable=gain)
+    aux_gain      = ttk.Label(tab_rtlsdr,           text="default 0 = Auto")
+    lbl_rtldongle = ttk.Label(tab_rtlsdr,           text="rtldongle (-d) : ")
+    ent_rtldongle = ttk.Entry(tab_rtlsdr, width=10, textvariable=rtldongle)
+    aux_rtldongle = ttk.Label(tab_rtlsdr,           text="default 0")
+
+    #----- tab_leansdr -----
+    lbl_leansdr = ttk.Label(tab_leansdr, text="Settings for leansdr program")
+
+    #----- buttons -----
+    btn_save    = ttk.Button   (dlg, text="save",   command=None)
+    btn_cancel  = ttk.Button   (dlg, text="cancel", command=None)
+
+    #----- packing of widgets -----
+    dlg.columnconfigure((0,1), pad=4, weight=1)
+    dlg.rowconfigure   ((0,1), pad=4, weight=1)
+    ntb       .grid (row=0, column=0, columnspan=2)
+    btn_save  .grid (row=1, column=0)
+    btn_cancel.grid (row=1, column=1)
+
     tab_general.columnconfigure((0,1), pad=4, weight=1)
     tab_general.rowconfigure   ((0,1), pad=4, weight=1)
-    general_label.grid(row=0, column=0, columnspan=2)
-    
-    #----- tab_files -----
-    files_label = ttk.Label(tab_files, text="Setting of files and directories")
-    
-    leansdr_label = ttk.Label(tab_files,           text="Path to leansdr : ")
-    leansdr_entry = ttk.Entry(tab_files, width=40, textvariable=padlean)
-    
+    lbl_general.grid(row=0, column=0, columnspan=2)
+
     tab_files.columnconfigure((0,1), pad=4, weight=1)
     tab_files.rowconfigure   ((0,1), pad=4, weight=1)
-    files_label  .grid (row=0, column=0, columnspan=2)
-    leansdr_label.grid (row=1, column=0, sticky=E)
-    leansdr_entry.grid (row=1, column=1, sticky=W)
- 
-     #----- tab_rtlsdr -----
-    rtlsdr_label = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
-    
-    ppm_label       = ttk.Label(tab_rtlsdr,           text="ppm-error (-p) : ")
-    ppm_entry       = ttk.Entry(tab_rtlsdr, width=10, textvariable=ppm)
-    ppm_extra       = ttk.Label(tab_rtlsdr,           text="default 0")
-    gain_label      = ttk.Label(tab_rtlsdr,           text="gain (-g) : ")
-    gain_entry      = ttk.Entry(tab_rtlsdr, width=10, textvariable=gain)
-    gain_extra      = ttk.Label(tab_rtlsdr,           text="default 0 = Auto")
-    rtldongle_label = ttk.Label(tab_rtlsdr,           text="rtldongle (-d) : ")
-    rtldongle_entry = ttk.Entry(tab_rtlsdr, width=10, textvariable=rtldongle)
-    rtldongle_extra = ttk.Label(tab_rtlsdr,           text="default 0")
+    lbl_files       .grid (row=0, column=0, columnspan=2)
+    lbl_leansdr_file.grid (row=1, column=0, sticky=E)
+    ent_leansdr_file.grid (row=1, column=1, sticky=W)
 
     tab_rtlsdr.columnconfigure((0,1,2), pad=4, weight=1)
     tab_rtlsdr.rowconfigure   ((0,1,2), pad=4, weight=1)
-    rtlsdr_label   .grid (row=0, column=0, columnspan=3)
-    ppm_label      .grid (row=1, column=0, sticky=E)
-    ppm_entry      .grid (row=1, column=1, sticky=W)
-    ppm_extra      .grid (row=1, column=2, sticky=W)
-    gain_label     .grid (row=2, column=0, sticky=E)
-    gain_entry     .grid (row=2, column=1, sticky=W)
-    gain_extra     .grid (row=2, column=2, sticky=W)
-    rtldongle_label.grid (row=3, column=0, sticky=E)
-    rtldongle_entry.grid (row=3, column=1, sticky=W)
-    rtldongle_extra.grid (row=3, column=2, sticky=W)
-
-    #----- tab_leansdr -----
-    leansdr_label = ttk.Label(tab_leansdr, text="Settings for leansdr program")
+    lbl_rtlsdr   .grid (row=0, column=0, columnspan=3)
+    lbl_ppm      .grid (row=1, column=0, sticky=E)
+    ent_ppm      .grid (row=1, column=1, sticky=W)
+    aux_ppm      .grid (row=1, column=2, sticky=W)
+    lbl_gain     .grid (row=2, column=0, sticky=E)
+    ent_gain     .grid (row=2, column=1, sticky=W)
+    aux_gain     .grid (row=2, column=2, sticky=W)
+    lbl_rtldongle.grid (row=3, column=0, sticky=E)
+    ent_rtldongle.grid (row=3, column=1, sticky=W)
+    aux_rtldongle.grid (row=3, column=2, sticky=W)
 
     tab_leansdr.columnconfigure((0,1), pad=4, weight=1)
     tab_leansdr.rowconfigure   ((0,1), pad=4, weight=1)
-    leansdr_label.grid( row=0, column=0, columnspan=2)
-  
+    lbl_leansdr.grid( row=0, column=0, columnspan=2)
+
 #===== master window ==========================================================
 
 master = Tk()
@@ -525,7 +532,7 @@ def on_start():
               " -f " + str(bandwidth) + \
               " | " + \
               view + " -" + \
-              " \n" 
+              " \n"
 
     print sub
 
@@ -542,12 +549,12 @@ Button(master, font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(ro
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=7, column=3,sticky=W)
 Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=7, column=4,sticky=W)
 #Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=on_settings).grid(row=5, column=3)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=wnd_settings).grid(row=5, column=3)
+Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=dlg_settings).grid(row=5, column=3)
 
 master.protocol("WM_DELETE_WINDOW", on_exit)
 
 tkvar1 = StringVar(master)
- 
+
 # Frequency Dropdown
 choices1 = { '1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
 
@@ -557,36 +564,36 @@ popupMenu = OptionMenu(master, tkvar1, *choices1)
 Label(master, text=" Frequency ", font = "Verdana 14 italic").grid(row = 0, column = 0)
 Label(master, text="MHz", font = "Verdana 14 italic").grid(row = 0, column = 2,sticky=W)
 popupMenu.grid(row = 0, column =1, sticky=E)
- 
+
 # on change dropdown value
 def change_dropdown1(*args):
     print( tkvar1.get() )
     e.delete(0, END)
     e.insert(0, tkvar1.get())
-    
- 
+
+
 # link function to change dropdown
 tkvar1.trace('w', change_dropdown1)
 
 tkvar2 = StringVar(master)
- 
+
 # SampleRate
 choices2 = { '33', '66','125','150','250','333','400','500','600','750','1000','1500','2000','2083','3000','4000','4340','5000'}
 
 tkvar2.set(str(parameters["samplerate"])) # set the default option
- 
+
 popupMenu = OptionMenu(master, tkvar2, *choices2)
 Label(master, text=" Samplerate ", font = "Verdana 14 italic").grid(row = 1, column = 0)
 Label(master, text="S/R", font = "Verdana 14 italic").grid(row = 1, column = 2,sticky=W)
 popupMenu.grid(row = 1, column =1, sticky=E)
- 
+
 # on change dropdown value
 def change_dropdown2(*args):
     print( tkvar2.get() )
     f.delete(0, END)
     f.insert(0, tkvar2.get())
-    
- 
+
+
 # link function to change dropdown
 tkvar2.trace('w', change_dropdown2)
 
@@ -599,14 +606,14 @@ popupMenu = OptionMenu(master, tkvar3, *choices3)
 Label(master, text="FEC (auto@dvbs2)", font = "Verdana 14 italic").grid(row = 2, column = 0)
 Label(master, text="Div", font = "Verdana 14 italic").grid(row = 2, column = 2,sticky=W)
 popupMenu.grid(row = 2, column =1, sticky=E)
- 
+
 # on change dropdown value
 def change_dropdown3(*args):
     print( tkvar3.get() )
     g.delete(0, END)
     g.insert(0, tkvar3.get())
-    
- 
+
+
 # link function to change dropdown
 tkvar3.trace('w', change_dropdown3)
 
@@ -614,19 +621,19 @@ tkvar4 = StringVar(master)
 # Tune
 choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-2000','-5000','-10000'}
 tkvar4.set(parameters["tune"]) # set the default option
- 
+
 popupMenu = OptionMenu(master, tkvar4, *choices4)
 Label(master, text="Tune", font = "Verdana 14 italic").grid(row = 3, column = 0)
 Label(master, text="Hz", font = "Verdana 14 italic").grid(row = 3, column = 2,sticky=W)
 popupMenu.grid(row = 3, column =1, sticky=E)
- 
+
 # on change dropdown value
 def change_dropdown4(*args):
     print(  )
     h.delete(0, END)
     h.insert(0, tkvar4.get())
-    
- 
+
+
 # link function to change dropdown
 tkvar4.trace('w', change_dropdown4)
 
