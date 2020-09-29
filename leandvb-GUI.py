@@ -159,6 +159,9 @@ def dlg_settings():
 
     #----- tab_general -----
     lbl_general = ttk.Label(tab_general, text="General settings")
+    lbl_viewer = ttk.Label(tab_general,           text="Viewer : ")
+    ent_viewer = ttk.Entry(tab_general, width=10, textvariable=viewer)
+
 
     #----- tab_files -----
     lbl_files        = ttk.Label(tab_files, text="Setting of files and directories")
@@ -194,6 +197,8 @@ def dlg_settings():
     tab_general.columnconfigure((0,1), pad=4, weight=1)
     tab_general.rowconfigure   ((0,1), pad=4, weight=1)
     lbl_general.grid(row=0, column=0, columnspan=2)
+    lbl_viewer .grid (row=1, column=0, sticky=E)
+    ent_viewer .grid (row=1, column=1, sticky=W)
 
     tab_files.columnconfigure((0,1), pad=4, weight=1)
     tab_files.rowconfigure   ((0,1), pad=4, weight=1)
