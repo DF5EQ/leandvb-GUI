@@ -130,11 +130,11 @@ def parameters_default():
 def dlg_settings():
 
     #----- action functions -----
-    def on_settings_save():
+    def on_save():
         print "please call parameters_save() instead of printing"
         dlg.destroy()
 
-    def on_settings_cancel():
+    def on_cancel():
         dlg.destroy()
 
     #----- dialog properties -----
@@ -181,8 +181,8 @@ def dlg_settings():
     lbl_leansdr = ttk.Label(tab_leansdr, text="Settings for leansdr program")
 
     #----- buttons -----
-    btn_save    = ttk.Button (dlg, text="save",   command=on_settings_save)
-    btn_cancel  = ttk.Button (dlg, text="cancel", command=on_settings_cancel)
+    btn_save    = ttk.Button (dlg, text="save",   command=on_save)
+    btn_cancel  = ttk.Button (dlg, text="cancel", command=on_cancel)
 
     #----- packing of widgets -----
     dlg.columnconfigure((0,1), pad=4, weight=1)
