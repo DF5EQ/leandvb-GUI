@@ -8,8 +8,8 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO leandvb-run as function like leandvb-stop
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
+# TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO change dutch names in english
 # TODO streamline usage of viewer ffplay and mplayer
