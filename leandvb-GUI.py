@@ -159,9 +159,10 @@ def dlg_settings():
 
     #----- tab_general -----
     lbl_general = ttk.Label(tab_general, text="General settings")
-    lbl_viewer = ttk.Label(tab_general,           text="Viewer : ")
-    ent_viewer = ttk.Entry(tab_general, width=10, textvariable=viewer)
-
+    lbl_viewer  = ttk.Label(tab_general,           text="Viewer : ")
+    ent_viewer  = ttk.Entry(tab_general, width=10, textvariable=viewer)
+    lbl_lnblo   = ttk.Label(tab_general,           text="LNB LO : ")
+    ent_lnblo   = ttk.Entry(tab_general, width=10, textvariable=lnblo)
 
     #----- tab_files -----
     lbl_files        = ttk.Label(tab_files, text="Setting of files and directories")
@@ -169,7 +170,7 @@ def dlg_settings():
     ent_leansdr_file = ttk.Entry(tab_files, width=40, textvariable=padlean)
 
      #----- tab_rtlsdr -----
-    lbl_rtlsdr = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
+    lbl_rtlsdr    = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
     lbl_ppm       = ttk.Label(tab_rtlsdr,           text="ppm-error (-p) : ")
     ent_ppm       = ttk.Entry(tab_rtlsdr, width=10, textvariable=ppm)
     aux_ppm       = ttk.Label(tab_rtlsdr,           text="default 0")
@@ -182,22 +183,22 @@ def dlg_settings():
 
     #----- tab_leansdr -----
     lbl_leansdr    = ttk.Label(tab_leansdr, text="Settings for leansdr program")
-    lbl_rolloff    = ttk.Label(tab_leansdr,           text="Roll Off Factor : ")
+    lbl_rolloff    = ttk.Label(tab_leansdr,           text="Roll Off Factor (--roll-off) : ")
     ent_rolloff    = ttk.Entry(tab_leansdr, width=10, textvariable=rolloff_factor)
     aux_rolloff    = ttk.Label(tab_leansdr,           text="DVBS2")
-    lbl_rrcrej     = ttk.Label(tab_leansdr,           text="RRC Rej Factor : ")
+    lbl_rrcrej     = ttk.Label(tab_leansdr,           text="RRC Rej Factor (--rrc-rej) : ")
     ent_rrcrej     = ttk.Entry(tab_leansdr, width=10, textvariable=rrc_rej_factor)
     aux_rrcrej     = ttk.Label(tab_leansdr,           text="DVBS2")
-    lbl_nhelpers   = ttk.Label(tab_leansdr,           text="Nhelpers : ")
+    lbl_nhelpers   = ttk.Label(tab_leansdr,           text="Nhelpers (--nhelpers): ")
     ent_nhelpers   = ttk.Entry(tab_leansdr, width=10, textvariable=nhelpers)
     aux_nhelpers   = ttk.Label(tab_leansdr,           text="DVBS2")
-    lbl_inpipe     = ttk.Label(tab_leansdr,           text="Inpipe : ")
+    lbl_inpipe     = ttk.Label(tab_leansdr,           text="Inpipe (--inpipe): ")
     ent_inpipe     = ttk.Entry(tab_leansdr, width=10, textvariable=inpipe)
     aux_inpipe     = ttk.Label(tab_leansdr,           text="DVBS2")
-    lbl_modcods    = ttk.Label(tab_leansdr,           text="modcods : ")
+    lbl_modcods    = ttk.Label(tab_leansdr,           text="modcods (--modcods) : ")
     ent_modcods    = ttk.Entry(tab_leansdr, width=10, textvariable=modcods)
     aux_modcods    = ttk.Label(tab_leansdr,           text="empty entry omits parameter")
-    lbl_framesizes = ttk.Label(tab_leansdr,           text="framesizes : ")
+    lbl_framesizes = ttk.Label(tab_leansdr,           text="framesizes (--framesizes) : ")
     ent_framesizes = ttk.Entry(tab_leansdr, width=10, textvariable=framesizes)
     aux_framesizes = ttk.Label(tab_leansdr,           text="empty entry omits parameter")
 
@@ -217,6 +218,8 @@ def dlg_settings():
     lbl_general.grid(row=0, column=0, columnspan=2)
     lbl_viewer .grid (row=1, column=0, sticky=E)
     ent_viewer .grid (row=1, column=1, sticky=W)
+    lbl_lnblo  .grid (row=2, column=0, sticky=E)
+    ent_lnblo  .grid (row=2, column=1, sticky=W)
 
     tab_files.columnconfigure((0,1), pad=4, weight=1)
     tab_files.rowconfigure   ((0,1), pad=4, weight=0)
