@@ -185,6 +185,9 @@ def dlg_settings():
     lbl_rolloff = ttk.Label(tab_leansdr,           text="Roll Off Factor : ")
     ent_rolloff = ttk.Entry(tab_leansdr, width=10, textvariable=rolloff_factor)
     aux_rolloff = ttk.Label(tab_leansdr,           text="DVBS2")
+    lbl_rrcrej  = ttk.Label(tab_leansdr,           text="RRC Rej Factor : ")
+    ent_rrcrej  = ttk.Entry(tab_leansdr, width=10, textvariable=rrc_rej_factor)
+    aux_rrcrej  = ttk.Label(tab_leansdr,           text="DVBS2")
 
     #----- buttons -----
     btn_save    = ttk.Button (dlg, text="save",   command=on_save)
@@ -192,25 +195,25 @@ def dlg_settings():
 
     #----- packing of widgets -----
     dlg.columnconfigure((0,1), pad=4, weight=1)
-    dlg.rowconfigure   ((0,1), pad=4, weight=1)
+    dlg.rowconfigure   ((0,1), pad=4, weight=0)
     ntb       .grid (row=0, column=0, columnspan=2)
     btn_save  .grid (row=1, column=0)
     btn_cancel.grid (row=1, column=1)
 
     tab_general.columnconfigure((0,1), pad=4, weight=1)
-    tab_general.rowconfigure   ((0,1), pad=4, weight=1)
+    tab_general.rowconfigure   ((0,1), pad=4, weight=0)
     lbl_general.grid(row=0, column=0, columnspan=2)
     lbl_viewer .grid (row=1, column=0, sticky=E)
     ent_viewer .grid (row=1, column=1, sticky=W)
 
     tab_files.columnconfigure((0,1), pad=4, weight=1)
-    tab_files.rowconfigure   ((0,1), pad=4, weight=1)
+    tab_files.rowconfigure   ((0,1), pad=4, weight=0)
     lbl_files       .grid (row=0, column=0, columnspan=2)
     lbl_leansdr_file.grid (row=1, column=0, sticky=E)
     ent_leansdr_file.grid (row=1, column=1, sticky=W)
 
     tab_rtlsdr.columnconfigure((0,1,2), pad=4, weight=1)
-    tab_rtlsdr.rowconfigure   ((0,1,2), pad=4, weight=1)
+    tab_rtlsdr.rowconfigure   ((0,1,2), pad=4, weight=0)
     lbl_rtlsdr   .grid (row=0, column=0, columnspan=3)
     lbl_ppm      .grid (row=1, column=0, sticky=E)
     ent_ppm      .grid (row=1, column=1, sticky=W)
@@ -223,11 +226,14 @@ def dlg_settings():
     aux_rtldongle.grid (row=3, column=2, sticky=W)
 
     tab_leansdr.columnconfigure((0,1,2), pad=4, weight=1)
-    tab_leansdr.rowconfigure   ((0,1,2), pad=4, weight=1)
+    tab_leansdr.rowconfigure   ((0,1,2), pad=4, weight=0)
     lbl_leansdr.grid (row=0, column=0, columnspan=3)
     lbl_rolloff.grid (row=1, column=0, sticky=E)
     ent_rolloff.grid (row=1, column=1, sticky=W)
     aux_rolloff.grid (row=1, column=2, sticky=W)
+    lbl_rrcrej .grid (row=2, column=0, sticky=E)
+    ent_rrcrej .grid (row=2, column=1, sticky=W)
+    aux_rrcrej .grid (row=2, column=2, sticky=W)
 
 #===== master window ==========================================================
 
