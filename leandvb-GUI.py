@@ -191,6 +191,9 @@ def dlg_settings():
     lbl_nhelpers = ttk.Label(tab_leansdr,           text="Nhelpers : ")
     ent_nhelpers = ttk.Entry(tab_leansdr, width=10, textvariable=nhelpers)
     aux_nhelpers = ttk.Label(tab_leansdr,           text="DVBS2")
+    lbl_inpipe   = ttk.Label(tab_leansdr,           text="Inpipe : ")
+    ent_inpipe   = ttk.Entry(tab_leansdr, width=10, textvariable=inpipe)
+    aux_inpipe   = ttk.Label(tab_leansdr,           text="DVBS2")
 
     #----- buttons -----
     btn_save    = ttk.Button (dlg, text="save",   command=on_save)
@@ -227,6 +230,9 @@ def dlg_settings():
     lbl_rtldongle.grid (row=3, column=0, sticky=E)
     ent_rtldongle.grid (row=3, column=1, sticky=W)
     aux_rtldongle.grid (row=3, column=2, sticky=W)
+    lbl_inpipe   .grid (row=4, column=0, sticky=E)
+    ent_inpipe   .grid (row=4, column=1, sticky=W)
+    aux_inpipe   .grid (row=4, column=2, sticky=W)
 
     tab_leansdr.columnconfigure((0,1,2), pad=4, weight=1)
     tab_leansdr.rowconfigure   ((0,1,2), pad=4, weight=0)
