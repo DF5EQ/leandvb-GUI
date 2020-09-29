@@ -8,7 +8,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO delete lime-sdr related stuff
 # TODO leandvb-run as function like leandvb-stop
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb: --tune is broken, use --derotate instead
@@ -73,8 +72,6 @@ def parameters_save():
     parameters["hardmetric"    ] = bool(var4.get())
     parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = int(ppm.get())
-    parameters["antenne"       ] = ant.get()
-    parameters["bandwidth_lime"] = bandwidth_lime.get()
     parameters["gain"          ] = gain.get()
     parameters["viewer"        ] = viewer.get()
     parameters["rolloff_factor"] = rolloff_factor.get()
@@ -112,8 +109,6 @@ def parameters_default():
     parameters["hardmetric"    ] = False
     parameters["leanpad"       ] = home+"leansdr/src/apps/"
     parameters["ppm"           ] = 0
-    parameters["antenne"       ] = "1"
-    parameters["bandwidth_lime"] = 3500000
     parameters["gain"          ] = 36
     parameters["viewer"        ] = "ffplay"
     parameters["rolloff_factor"] = "0.35"
@@ -322,13 +317,11 @@ Checkbutton(master, font = "Verdana 13 italic" ,text="Max sensitive", variable=v
 Label(master,font = "Verdana 8 italic", text="").grid(row=6,column=0)
 Label(master,font = "Verdana 8 italic", text="").grid(row=8,column=0)
 
-ant = StringVar()
 viewer = StringVar()
 rolloff_factor = StringVar()
 rrc_rej_factor = IntVar()
 nhelpers = IntVar()
 inpipe = IntVar()
-bandwidth_lime = IntVar()
 modcods = StringVar()
 framesizes = StringVar()
 lnblo = DoubleVar()
@@ -339,8 +332,6 @@ var4.set(parameters["hardmetric"])
 var5.set(parameters["gui"])
 var6.set(parameters["dvbs2"])
 var7.set(parameters["maxprocess"])
-ant.set(parameters["antenne"])
-bandwidth_lime.set(parameters["bandwidth_lime"])
 viewer.set(parameters["viewer"])
 rolloff_factor.set(parameters["rolloff_factor"])
 rrc_rej_factor.set(parameters["rrc_rej_factor"])
@@ -392,7 +383,6 @@ def on_stop():
 def on_start():
     ppmvalue = int(ppm.get())
     leanpad = padlean.get()
-    antenne = ant.get()
     gain_value = gain.get()
     rolloff = rolloff_factor.get()
     rrcrej = rrc_rej_factor.get()
@@ -400,7 +390,6 @@ def on_start():
     inpip = inpipe.get()
     modcods_value = modcods.get()
     framesizes_value = framesizes.get()
-    bandwidthlime = bandwidth_lime.get()
     if (viewer.get() == "ffplay"):
         view = "ffplay -v 0"
     else:
