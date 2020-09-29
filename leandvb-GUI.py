@@ -132,7 +132,7 @@ def dlg_settings():
 
     #----- action functions -----
     def on_save():
-        print "please call parameters_save() instead of printing"
+        parameters_save()
         dlg.destroy()
 
     def on_cancel():
