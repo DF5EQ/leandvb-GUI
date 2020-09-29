@@ -8,14 +8,13 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO introduce tabs in settings for 'general','rtl_sdr','leansdr','files'
+# TODO delete lime-sdr related stuff
 # TODO leandvb-run as function like leandvb-stop
 # TODO change checkbutton for LowSR(bandwith) in entry or list-entry
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO change dutch names in english
 # TODO streamline usage of viewer ffplay and mplayer
 # TODO 'cancel' in settings not working propperly
-# TODO add rrc_rej_factor to settings
 # TODO add entries for path and filenames in settings
 
 from Tkinter import *
