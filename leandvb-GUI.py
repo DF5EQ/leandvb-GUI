@@ -127,8 +127,16 @@ def parameters_default():
     parameters["rtldongle"     ] = 0
 
 #===== settings dialog ========================================================
-
 def dlg_settings():
+
+    #----- action functions -----
+    def on_settings_save():
+        print "please call parameters_save() instead of printing"
+        dlg.destroy()
+
+    def on_settings_cancel():
+        dlg.destroy()
+
     #----- dialog properties -----
     dlg = Toplevel(master, borderwidth=4)
     dlg.title("Settings")
@@ -173,8 +181,8 @@ def dlg_settings():
     lbl_leansdr = ttk.Label(tab_leansdr, text="Settings for leansdr program")
 
     #----- buttons -----
-    btn_save    = ttk.Button   (dlg, text="save",   command=None)
-    btn_cancel  = ttk.Button   (dlg, text="cancel", command=None)
+    btn_save    = ttk.Button (dlg, text="save",   command=on_settings_save)
+    btn_cancel  = ttk.Button (dlg, text="cancel", command=on_settings_cancel)
 
     #----- packing of widgets -----
     dlg.columnconfigure((0,1), pad=4, weight=1)
