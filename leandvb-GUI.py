@@ -194,6 +194,9 @@ def dlg_settings():
     lbl_inpipe   = ttk.Label(tab_leansdr,           text="Inpipe : ")
     ent_inpipe   = ttk.Entry(tab_leansdr, width=10, textvariable=inpipe)
     aux_inpipe   = ttk.Label(tab_leansdr,           text="DVBS2")
+    lbl_modcods  = ttk.Label(tab_leansdr,           text="modcods :")
+    ent_modcods  = ttk.Entry(tab_leansdr, width=10, textvariable=modcods)
+    aux_modcods  = ttk.Label(tab_leansdr,           text="empty entry omits parameter")
 
     #----- buttons -----
     btn_save    = ttk.Button (dlg, text="save",   command=on_save)
@@ -246,6 +249,9 @@ def dlg_settings():
     lbl_nhelpers.grid (row=3, column=0, sticky=E)
     ent_nhelpers.grid (row=3, column=1, sticky=W)
     aux_nhelpers.grid (row=3, column=2, sticky=W)
+    lbl_modcods .grid (row=4, column=0, sticky=E)
+    ent_modcods .grid (row=4, column=1, sticky=W)
+    aux_modcods .grid (row=4, column=2, sticky=W)
 
 #===== master window ==========================================================
 
