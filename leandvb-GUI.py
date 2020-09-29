@@ -182,6 +182,9 @@ def dlg_settings():
 
     #----- tab_leansdr -----
     lbl_leansdr = ttk.Label(tab_leansdr, text="Settings for leansdr program")
+    lbl_rolloff = ttk.Label(tab_leansdr,           text="Roll Off Factor : ")
+    ent_rolloff = ttk.Entry(tab_leansdr, width=10, textvariable=rolloff_factor)
+    aux_rolloff = ttk.Label(tab_leansdr,           text="DVBS2")
 
     #----- buttons -----
     btn_save    = ttk.Button (dlg, text="save",   command=on_save)
@@ -219,9 +222,12 @@ def dlg_settings():
     ent_rtldongle.grid (row=3, column=1, sticky=W)
     aux_rtldongle.grid (row=3, column=2, sticky=W)
 
-    tab_leansdr.columnconfigure((0,1), pad=4, weight=1)
-    tab_leansdr.rowconfigure   ((0,1), pad=4, weight=1)
-    lbl_leansdr.grid( row=0, column=0, columnspan=2)
+    tab_leansdr.columnconfigure((0,1,2), pad=4, weight=1)
+    tab_leansdr.rowconfigure   ((0,1,2), pad=4, weight=1)
+    lbl_leansdr.grid (row=0, column=0, columnspan=3)
+    lbl_rolloff.grid (row=1, column=0, sticky=E)
+    ent_rolloff.grid (row=1, column=1, sticky=W)
+    aux_rolloff.grid (row=1, column=2, sticky=W)
 
 #===== master window ==========================================================
 
