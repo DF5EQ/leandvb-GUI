@@ -127,6 +127,7 @@ def parameters_default():
     parameters["rtldongle"     ] = 0
 
 #===== settings dialog ========================================================
+
 def dlg_settings():
 
     #----- action functions -----
@@ -376,108 +377,6 @@ def on_exit():
     on_stop()
     master.destroy()
 
-
-def on_settings():
-
-    def on_settings_save():
-        parameters_save()
-        settings_window.destroy()
-
-    def on_settings_cancel():
-        settings_window.destroy()
-
-    settings_window = Toplevel(master, borderwidth=4)
-    settings_window.title("Settings")
-    settings_window.transient(master)
-    settings_window.resizable(height = False, width = False)
-    settings_window.grab_set()
-
-    leansdr_label    = Label(settings_window,           text="Path to leansdr :")
-    leansdr_entry    = Entry(settings_window, width=40, textvariable=padlean)
-
-    ppmrtl_label     = Label(settings_window,           text="PPM offset RTL :")
-    ppmrtl_entry     = Entry(settings_window, width=10, textvariable=ppm)
-
-    gainrtl_label    = Label(settings_window,           text="Gain RTL :")
-    gainrtl_entry    = Entry(settings_window, width=10, textvariable=gain)
-    gainrtl_extra    = Label(settings_window,           text="0 = Auto")
-
-    rolloff_label    = Label(settings_window,           text="Roll Off Factor (DVBS2) :")
-    rolloff_entry    = Entry(settings_window, width=10, textvariable=rolloff_factor)
-
-    rrcrej_label     = Label(settings_window,           text="RRC Rej Factor (DVBS2) :")
-    rrcrej_entry     = Entry(settings_window, width=10, textvariable=rrc_rej_factor)
-
-    nhelpers_label   = Label(settings_window,           text="Nhelpers (DVBS2) :")
-    nhelpers_entry   = Entry(settings_window, width=10, textvariable=nhelpers)
-
-    inpipe_label     = Label(settings_window,           text="Inpipe (DVBS2) :")
-    inpipe_entry     = Entry(settings_window, width=10, textvariable=inpipe)
-
-    modcods_label    = Label(settings_window,           text="modcods :")
-    modcods_entry    = Entry(settings_window, width=10, textvariable=modcods)
-    modcods_extra    = Label(settings_window,           text="empty entry omits parameter")
-
-    framesizes_label = Label(settings_window,           text="framesizes :")
-    framesizes_entry = Entry(settings_window, width=10, textvariable=framesizes)
-    framesizes_extra = Label(settings_window,           text="empty entry omits parameter")
-
-    viewer_label     = Label(settings_window,           text="Viewer :")
-    viewer_entry     = Entry(settings_window, width=10, textvariable=viewer)
-
-    lnblo_label      = Label(settings_window,           text="LNB LO :")
-    lnblo_entry      = Entry(settings_window, width=10, textvariable=lnblo)
-
-    rtldongle_label  = Label(settings_window,           text="rtldongle :")
-    rtldongle_entry  = Entry(settings_window, width=10, textvariable=rtldongle)
-
-    save_button      = Button(settings_window, highlightbackground='green', text="SAVE",   command = on_settings_save)
-    cancel_button    = Button(settings_window, highlightbackground='red',   text="CANCEL", command = on_settings_cancel)
-
-    leansdr_label.grid    (row=0, column=0, sticky=E)
-    leansdr_entry.grid    (row=0, column=1, sticky=W, columnspan=3)
-
-    ppmrtl_label.grid     (row=1, column=0, sticky=E)
-    ppmrtl_entry.grid     (row=1, column=1, sticky=W)
-
-    gainrtl_label.grid    (row=2, column=0, sticky=E)
-    gainrtl_entry.grid    (row=2, column=1, sticky=W)
-    gainrtl_extra.grid    (row=2, column=2, sticky=W, columnspan=2)
-
-    rolloff_label.grid    (row=3, column=0, sticky=E)
-    rolloff_entry.grid    (row=3, column=1, sticky=W)
-
-    nhelpers_label.grid   (row=4, column=0, sticky=E)
-    nhelpers_entry.grid   (row=4, column=1, sticky=W)
-
-    inpipe_label.grid     (row=5, column=0, sticky=E)
-    inpipe_entry.grid     (row=5, column=1, sticky=W)
-
-    modcods_label.grid    (row=6, column=0, sticky=E)
-    modcods_entry.grid    (row=6, column=1, sticky=W)
-    modcods_extra.grid    (row=6, column=2, sticky=W, columnspan=2)
-
-    framesizes_label.grid (row=7, column=0, sticky=E)
-    framesizes_entry.grid (row=7, column=1, sticky=W)
-    framesizes_extra.grid (row=7, column=2, sticky=W, columnspan=2)
-
-    viewer_label.grid     (row=8, column=0, sticky=E)
-    viewer_entry.grid     (row=8, column=1, sticky=W)
-
-    lnblo_label.grid      (row=9, column=0, sticky=E)
-    lnblo_entry.grid      (row=9, column=1, sticky=W)
-
-    rtldongle_label.grid  (row=10, column=0, sticky=E)
-    rtldongle_entry.grid  (row=10, column=1, sticky=W)
-
-    save_button.grid      (row=11, column=2, sticky=EW)
-    cancel_button.grid    (row=11, column=3, sticky=EW)
-
-    settings_window.columnconfigure(0, weight=0)
-    settings_window.columnconfigure(1, weight=0)
-    settings_window.columnconfigure(2, weight=1)
-    settings_window.columnconfigure(3, weight=1)
-
 def on_stop():
     file = open(stop_script, "w")
     file.write("#!/bin/sh \n")
@@ -604,8 +503,6 @@ def on_start():
               view + " -" + \
               " \n"
 
-    print sub
-
     parameters_save()
 
     file = open(run_script, "w")
@@ -618,7 +515,6 @@ def on_start():
 Button(master, font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=7, column=3,sticky=E)
 Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=7, column=3,sticky=W)
 Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=7, column=4,sticky=W)
-#Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=on_settings).grid(row=5, column=3)
 Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=dlg_settings).grid(row=5, column=3)
 
 master.protocol("WM_DELETE_WINDOW", on_exit)
@@ -641,7 +537,6 @@ def change_dropdown1(*args):
     e.delete(0, END)
     e.insert(0, tkvar1.get())
 
-
 # link function to change dropdown
 tkvar1.trace('w', change_dropdown1)
 
@@ -663,10 +558,8 @@ def change_dropdown2(*args):
     f.delete(0, END)
     f.insert(0, tkvar2.get())
 
-
 # link function to change dropdown
 tkvar2.trace('w', change_dropdown2)
-
 
 tkvar3 = StringVar(master)
 # Fec
@@ -682,7 +575,6 @@ def change_dropdown3(*args):
     print( tkvar3.get() )
     g.delete(0, END)
     g.insert(0, tkvar3.get())
-
 
 # link function to change dropdown
 tkvar3.trace('w', change_dropdown3)
@@ -702,7 +594,6 @@ def change_dropdown4(*args):
     print(  )
     h.delete(0, END)
     h.insert(0, tkvar4.get())
-
 
 # link function to change dropdown
 tkvar4.trace('w', change_dropdown4)
