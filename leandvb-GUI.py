@@ -288,30 +288,35 @@ if os.path.isfile(parameters_file):
 else:
     parameters_default()
 
-#----- user interface -----
+#----- user interface content -----
 lbl_frequency  = ttk.Label(master, text="Frequency")
 ent_frequency  = ttk.Entry(master)
 lb2_frequency  = ttk.Label(master, text="MHz")
 lbl_samplerate = ttk.Label(master, text="Samplerate")
 ent_samplerate = ttk.Entry(master)
 lb2_samplerate = ttk.Label(master, text="S/R")
+lbl_fec        = ttk.Label(master, text="FEC")
+ent_fec        = ttk.Entry(master)
+lb2_fec        = ttk.Label(master, text="Div")
 
+#----- user interface packing -----
 lbl_frequency .grid (row=0, column=0)
 ent_frequency .grid (row=0, column=1)
 lb2_frequency .grid (row=0, column=2, sticky=W)
 lbl_samplerate.grid (row=1, column=0)
 ent_samplerate.grid (row=1, column=1)
 lb2_samplerate.grid (row=1, column=2, sticky=W)
+lbl_fec       .grid (row=2, column=0)
+ent_fec       .grid (row=2, column=1)
+lb2_fec       .grid (row=2, column=2, sticky=W)
 
 ent_frequency.focus_set()
 
-g = Entry(master, font = "Verdana 15 bold")
 h = Entry(master, font = "Verdana 15 bold")
 ent_frequency .insert(0, parameters["frequency"])
 ent_samplerate.insert(0, parameters["samplerate"])
-g.insert(0, parameters["fec"])
+ent_fec       .insert(0, parameters["fec"])
 h.insert(0, parameters["tune"])
-g.grid(row=2, column=1)
 h.grid(row=3, column=1)
 
 ppm = IntVar()
@@ -565,15 +570,13 @@ tkvar3 = StringVar(master)
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
 tkvar3.set(parameters["fec"])
 popupMenu = OptionMenu(master, tkvar3, *choices3)
-Label(master, text="FEC (auto@dvbs2)", font = "Verdana 14 italic").grid(row = 2, column = 0)
-Label(master, text="Div", font = "Verdana 14 italic").grid(row = 2, column = 2,sticky=W)
 popupMenu.grid(row = 2, column =1, sticky=E)
 
 # on change dropdown value
 def change_dropdown3(*args):
     print( tkvar3.get() )
-    g.delete(0, END)
-    g.insert(0, tkvar3.get())
+    ent_fec.delete(0, END)
+    ent_fec.insert(0, tkvar3.get())
 
 # link function to change dropdown
 tkvar3.trace('w', change_dropdown3)
