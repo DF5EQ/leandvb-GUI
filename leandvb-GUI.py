@@ -62,9 +62,9 @@ def parameters_save():
     parameters["frequency"     ] = float(ent_frequency.get())
     parameters["samplerate"    ] = int(ent_samplerate.get())
     parameters["fec"           ] = tkvar3.get()
-    parameters["tune"          ] = int(h.get())
+    parameters["tune"          ] = int(ent_tune.get())
     parameters["fastlock"      ] = bool(var1.get())
-    parameters["lowsr"         ] = bool(var2.get())
+    parameters["bandwidth"     ] = int(ent_bandwidth.get())
     parameters["viterbi"       ] = bool(var3.get())
     parameters["gui"           ] = bool(var5.get())
     parameters["dvbs2"         ] = bool(var6.get())
@@ -101,7 +101,7 @@ def parameters_default():
     parameters["fec"           ] = "1/2"
     parameters["tune"          ] = 0
     parameters["fastlock"      ] = False
-    parameters["lowsr"         ] = False
+    parameters["bandwidth"     ] = 2400
     parameters["viterbi"       ] = False
     parameters["gui"           ] = True
     parameters["dvbs2"         ] = True
@@ -299,8 +299,14 @@ lbl_fec        = ttk.Label(master, text="FEC")
 ent_fec        = ttk.Entry(master)
 lb2_fec        = ttk.Label(master, text="Div")
 lbl_tune       = ttk.Label(master, text="Tune")
-h              = ttk.Entry(master)
+ent_tune       = ttk.Entry(master)
 lb2_tune       = ttk.Label(master, text="Hz")
+lbl_bandwidth  = ttk.Label(master, text="Bandwidth")
+ent_bandwidth  = ttk.Entry(master)
+lb2_bandwidth  = ttk.Label(master, text="kHz")
+
+Label(master,font = "Verdana 10 italic", text="-----------------------").grid(row=5,column=0)
+Label(master,font = "Verdana 10 italic", text="---------------------------------------------------------").grid(row=5,column=1)
 
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0)
@@ -313,15 +319,19 @@ lbl_fec       .grid (row=2, column=0)
 ent_fec       .grid (row=2, column=1)
 lb2_fec       .grid (row=2, column=2, sticky=W)
 lbl_tune      .grid (row=3, column=0)
-h             .grid (row=3, column=1)
+ent_tune      .grid (row=3, column=1)
 lb2_tune      .grid (row=3, column=2, sticky=W)
+lbl_bandwidth .grid (row=4, column=0)
+ent_bandwidth .grid (row=4, column=1)
+lb2_bandwidth .grid (row=4, column=2, sticky=W)
 
 ent_frequency.focus_set()
 
 ent_frequency .insert(0, parameters["frequency"])
 ent_samplerate.insert(0, parameters["samplerate"])
 ent_fec       .insert(0, parameters["fec"])
-h.insert(0, parameters["tune"])
+ent_tune      .insert(0, parameters["tune"])
+ent_bandwidth .insert(0, parameters["bandwidth"])
 
 ppm = IntVar()
 ppm.set(parameters["ppm"])
@@ -336,24 +346,20 @@ rtldongle = IntVar()
 rtldongle.set(parameters["rtldongle"])
 
 var1 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic", text="Fastlock", variable=var1).grid(row=5, sticky=W)
-var2 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="Low SR", variable=var2).grid(row=5, column=1, sticky=W)
+Checkbutton(master, font = "Verdana 13 italic", text="Fastlock",      variable=var1).grid(row=6, column=0, sticky=W)
 var3 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="Viterbi", variable=var3).grid(row=5, column=1, sticky=E)
+Checkbutton(master, font = "Verdana 13 italic" ,text="Viterbi",       variable=var3).grid(row=6, column=1, sticky=W)
 var4 = IntVar()
-#Checkbutton(master, font = "Verdana 13 italic" ,text="Hard-Metric", variable=var4).grid(row=5, column=1)
-
-Label(master,font = "Verdana 10 italic", text="-----------------------").grid(row=4,column=0)
-Label(master,font = "Verdana 10 italic", text="---------------------------------------------------------").grid(row=4,column=1)
+Checkbutton(master, font = "Verdana 13 italic" ,text="Hard-Metric",   variable=var4).grid(row=6, column=1, sticky=E)
 var5 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic", text="Gui", variable=var5).grid(row=7, sticky=W)
+Checkbutton(master, font = "Verdana 13 italic", text="Gui",           variable=var5).grid(row=8, column=0, sticky=W)
 var6 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="DVBS-2", variable=var6).grid(row=7, column=1, sticky=W)
+Checkbutton(master, font = "Verdana 13 italic" ,text="DVBS-2",        variable=var6).grid(row=8, column=1, sticky=W)
 var7 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="Max sensitive", variable=var7).grid(row=7, column=1, sticky=E)
-Label(master,font = "Verdana 8 italic", text="").grid(row=6,column=0)
-Label(master,font = "Verdana 8 italic", text="").grid(row=8,column=0)
+Checkbutton(master, font = "Verdana 13 italic" ,text="Max sensitive", variable=var7).grid(row=8, column=1, sticky=E)
+
+Label(master,font = "Verdana 8 italic", text="").grid(row=7,column=0)
+Label(master,font = "Verdana 8 italic", text="").grid(row=9,column=0)
 
 viewer = StringVar()
 rolloff_factor = StringVar()
@@ -364,7 +370,6 @@ modcods = StringVar()
 framesizes = StringVar()
 lnblo = DoubleVar()
 var1.set(parameters["fastlock"])
-var2.set(parameters["lowsr"])
 var3.set(parameters["viterbi"])
 var4.set(parameters["hardmetric"])
 var5.set(parameters["gui"])
@@ -384,7 +389,7 @@ if os.path.isfile("logo.png"):
     photo = ImageTk.PhotoImage(im)
     label = Label(image=photo)
     label.image = photo
-    label.grid(row=0, column=3, columnspan=2, rowspan=3,sticky=W+E+N+S, padx=5, pady=5)
+    label.grid(row=0, column=3, columnspan=2, rowspan=5, sticky=W+E+N+S, padx=5, pady=5)
 
 def on_exit():
     parameters_save()
@@ -405,23 +410,20 @@ def on_stop():
     os.system("sh " + stop_script)
 
 def on_start():
-    ppmvalue = int(ppm.get())
-    leanpad = padlean.get()
-    gain_value = gain.get()
-    rolloff = rolloff_factor.get()
-    rrcrej = rrc_rej_factor.get()
-    nhelp = nhelpers.get()
-    inpip = inpipe.get()
-    modcods_value = modcods.get()
+    ppmvalue         = int(ppm.get())
+    leanpad          = padlean.get()
+    gain_value       = gain.get()
+    rolloff          = rolloff_factor.get()
+    rrcrej           = rrc_rej_factor.get()
+    nhelp            = nhelpers.get()
+    inpip            = inpipe.get()
+    modcods_value    = modcods.get()
     framesizes_value = framesizes.get()
+    bandwidth        = int(ent_bandwidth.get()) * 1000
     if (viewer.get() == "ffplay"):
         view = "ffplay -v 0"
     else:
         view = "mplayer"
-    if (var2.get() == True):
-        bandwidth = 1800000
-    else:
-        bandwidth = 2400000
     if (var1.get() == True):
         fastlock = " --fastlock"
     else:
@@ -454,11 +456,11 @@ def on_start():
         framesizes_string = ""
     else:
         framesizes_string = " --framesizes " + framesizes_value
-    frequency = int( ( float(ent_frequency.get()) - float(lnblo.get()) ) * 1000000 )
+    frequency  = int( ( float(ent_frequency.get()) - float(lnblo.get()) ) * 1000000 )
     samplerate = int(ent_samplerate.get()) * 1000
-    fec = tkvar3.get()
-    tune = h.get()
-    rtl = rtldongle.get()
+    fec        = tkvar3.get()
+    tune       = ent_tune.get()
+    rtl        = rtldongle.get()
     if (var6.get() == True): #dvbs2
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
@@ -524,10 +526,10 @@ def on_start():
     file.close()
     os.system("sh " + run_script + " &")
 
-Button(master, font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=7, column=3,sticky=E)
-Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=7, column=3,sticky=W)
-Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=7, column=4,sticky=W)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=dlg_settings).grid(row=5, column=3)
+Button(master, font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=8, column=3,sticky=E)
+Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=8, column=3,sticky=W)
+Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=8, column=4,sticky=W)
+Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=dlg_settings).grid(row=6, column=3)
 
 master.protocol("WM_DELETE_WINDOW", on_exit)
 
@@ -596,8 +598,8 @@ popupMenu.grid(row = 3, column =1, sticky=E)
 # on change dropdown value
 def change_dropdown4(*args):
     print(  )
-    h.delete(0, END)
-    h.insert(0, tkvar4.get())
+    ent_tune.delete(0, END)
+    ent_tune.insert(0, tkvar4.get())
 
 # link function to change dropdown
 tkvar4.trace('w', change_dropdown4)
