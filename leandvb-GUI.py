@@ -59,7 +59,7 @@ parameters = dict()
 
 def parameters_save():
     print "save parameters to file"
-    parameters["frequency"     ] = float(e.get())
+    parameters["frequency"     ] = float(ent_frequency.get())
     parameters["samplerate"    ] = int(f.get())
     parameters["fec"           ] = tkvar3.get()
     parameters["tune"          ] = int(h.get())
@@ -278,12 +278,37 @@ def dlg_settings():
 #===== master window ==========================================================
 
 master = Tk()
+
+#----- window properties -----
 master.title('LeanDVB DVBS + DVBS2 interface')
 
+#----- initialize variables -----
 if os.path.isfile(parameters_file):
     parameters_load()
 else:
     parameters_default()
+
+#----- user interface -----
+lbl_frequency = ttk.Label(master, text="Frequency")
+ent_frequency = ttk.Entry(master)
+lb2_frequency = ttk.Label(master, text="MHz")
+
+lbl_frequency.grid (row=0, column=0)
+ent_frequency.grid (row=0, column=1)
+lb2_frequency.grid (row=0, column=2, sticky=W)
+
+ent_frequency.focus_set()
+
+f = Entry(master, font = "Verdana 15 bold")
+g = Entry(master, font = "Verdana 15 bold")
+h = Entry(master, font = "Verdana 15 bold")
+ent_frequency.insert(0, parameters["frequency"])
+f.insert(0, parameters["samplerate"])
+g.insert(0, parameters["fec"])
+h.insert(0, parameters["tune"])
+f.grid(row=1, column=1)
+g.grid(row=2, column=1)
+h.grid(row=3, column=1)
 
 ppm = IntVar()
 ppm.set(parameters["ppm"])
@@ -340,21 +365,7 @@ inpipe.set(parameters["inpipe"])
 modcods.set(parameters["modcods"])
 framesizes.set(parameters["framesizes"])
 lnblo.set(parameters["lnb_lo"])
-e = Entry(master, font = "Verdana 15 bold")
-f = Entry(master, font = "Verdana 15 bold")
-g = Entry(master, font = "Verdana 15 bold")
-h = Entry(master, font = "Verdana 15 bold")
-e.insert(0, parameters["frequency"])
-f.insert(0, parameters["samplerate"])
-g.insert(0, parameters["fec"])
-h.insert(0, parameters["tune"])
-e.grid(row=0, column=1)
-f.grid(row=1, column=1)
-g.grid(row=2, column=1)
-h.grid(row=3, column=1)
 
-
-e.focus_set()
 if os.path.isfile("logo.png"):
     im = Image.open("logo.png")
     photo = ImageTk.PhotoImage(im)
@@ -430,7 +441,7 @@ def on_start():
         framesizes_string = ""
     else:
         framesizes_string = " --framesizes " + framesizes_value
-    frequency = int( ( float(e.get()) - float(lnblo.get()) ) * 1000000 )
+    frequency = int( ( float(ent_frequency.get()) - float(lnblo.get()) ) * 1000000 )
     samplerate = int(f.get()) * 1000
     fec = tkvar3.get()
     tune = h.get()
@@ -515,8 +526,6 @@ choices1 = { '1252','1257','1260','436','437','1255','1252.600','1280','1250','1
 tkvar1.set(str(parameters["frequency"])) # set the default option
 
 popupMenu = OptionMenu(master, tkvar1, *choices1)
-Label(master, text=" Frequency ", font = "Verdana 14 italic").grid(row = 0, column = 0)
-Label(master, text="MHz", font = "Verdana 14 italic").grid(row = 0, column = 2,sticky=W)
 popupMenu.grid(row = 0, column =1, sticky=E)
 
 # on change dropdown value
