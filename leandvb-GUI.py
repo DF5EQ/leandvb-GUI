@@ -298,6 +298,9 @@ lb2_samplerate = ttk.Label(master, text="S/R")
 lbl_fec        = ttk.Label(master, text="FEC")
 ent_fec        = ttk.Entry(master)
 lb2_fec        = ttk.Label(master, text="Div")
+lbl_tune       = ttk.Label(master, text="Tune")
+h              = ttk.Entry(master)
+lb2_tune       = ttk.Label(master, text="Hz")
 
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0)
@@ -309,15 +312,16 @@ lb2_samplerate.grid (row=1, column=2, sticky=W)
 lbl_fec       .grid (row=2, column=0)
 ent_fec       .grid (row=2, column=1)
 lb2_fec       .grid (row=2, column=2, sticky=W)
+lbl_tune      .grid (row=3, column=0)
+h             .grid (row=3, column=1)
+lb2_tune      .grid (row=3, column=2, sticky=W)
 
 ent_frequency.focus_set()
 
-h = Entry(master, font = "Verdana 15 bold")
 ent_frequency .insert(0, parameters["frequency"])
 ent_samplerate.insert(0, parameters["samplerate"])
 ent_fec       .insert(0, parameters["fec"])
 h.insert(0, parameters["tune"])
-h.grid(row=3, column=1)
 
 ppm = IntVar()
 ppm.set(parameters["ppm"])
@@ -587,8 +591,6 @@ choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-20
 tkvar4.set(parameters["tune"]) # set the default option
 
 popupMenu = OptionMenu(master, tkvar4, *choices4)
-Label(master, text="Tune", font = "Verdana 14 italic").grid(row = 3, column = 0)
-Label(master, text="Hz", font = "Verdana 14 italic").grid(row = 3, column = 2,sticky=W)
 popupMenu.grid(row = 3, column =1, sticky=E)
 
 # on change dropdown value
