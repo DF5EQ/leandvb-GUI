@@ -22,19 +22,19 @@ import ttk
 import os
 import json
 
-# set directory for auxiliary files (settings, run, stop)
+# set directory for lb3iliary files (settings, run, stop)
 home            = os.path.expanduser("~/")
-aux_dir         = os.path.expanduser("~/") + ".leandvb-GUI/"
-parameters_file = aux_dir + "parameters.json"
-run_script      = aux_dir + "run.sh"
-stop_script     = aux_dir + "stop.sh"
+lb3_dir         = os.path.expanduser("~/") + ".leandvb-GUI/"
+parameters_file = lb3_dir + "parameters.json"
+run_script      = lb3_dir + "run.sh"
+stop_script     = lb3_dir + "stop.sh"
 
-if not os.path.exists(aux_dir):
-    print "create " + aux_dir
-    os.mkdir(aux_dir)
+if not os.path.exists(lb3_dir):
+    print "create " + lb3_dir
+    os.mkdir(lb3_dir)
 
 print "Home directory      : " + home
-print "Auxilliary directory: " + aux_dir
+print "lb3illiary directory: " + lb3_dir
 print "run script          : " + run_script
 print "stop script         : " + stop_script
 
@@ -169,42 +169,42 @@ def dlg_settings():
     lbl_ppm       = ttk.Label(tab_rtlsdr,           text="ppm-error")
     lb2_ppm       = ttk.Label(tab_rtlsdr,           text=" (-p) : ")
     ent_ppm       = ttk.Entry(tab_rtlsdr, width=10, textvariable=ppm)
-    aux_ppm       = ttk.Label(tab_rtlsdr,           text="default 0")
+    lb3_ppm       = ttk.Label(tab_rtlsdr,           text="default 0")
     lbl_gain      = ttk.Label(tab_rtlsdr,           text="gain")
     lb2_gain      = ttk.Label(tab_rtlsdr,           text=" (-g) : ")
     ent_gain      = ttk.Entry(tab_rtlsdr, width=10, textvariable=gain)
-    aux_gain      = ttk.Label(tab_rtlsdr,           text="default 0 = Auto")
+    lb3_gain      = ttk.Label(tab_rtlsdr,           text="default 0 = Auto")
     lbl_rtldongle = ttk.Label(tab_rtlsdr,           text="rtldongle")
     lb2_rtldongle = ttk.Label(tab_rtlsdr,           text=" (-d) : ")
     ent_rtldongle = ttk.Entry(tab_rtlsdr, width=10, textvariable=rtldongle)
-    aux_rtldongle = ttk.Label(tab_rtlsdr,           text="default 0")
+    lb3_rtldongle = ttk.Label(tab_rtlsdr,           text="default 0")
 
     #----- tab_leansdr -----
     lbl_leansdr    = ttk.Label(tab_leansdr, text="Settings for leansdr program")
     lbl_inpipe     = ttk.Label(tab_leansdr,           text="Inpipe")
     lb2_inpipe     = ttk.Label(tab_leansdr,           text=" (--inpipe) : ")
     ent_inpipe     = ttk.Entry(tab_leansdr, width=10, textvariable=inpipe)
-    aux_inpipe     = ttk.Label(tab_leansdr,           text="DVBS2")
+    lb3_inpipe     = ttk.Label(tab_leansdr,           text="DVBS2")
     lbl_rolloff    = ttk.Label(tab_leansdr,           text="Roll Off Factor")
     lb2_rolloff    = ttk.Label(tab_leansdr,           text=" (--roll-off) : ")
     ent_rolloff    = ttk.Entry(tab_leansdr, width=10, textvariable=rolloff_factor)
-    aux_rolloff    = ttk.Label(tab_leansdr,           text="DVBS2")
+    lb3_rolloff    = ttk.Label(tab_leansdr,           text="DVBS2")
     lbl_rrcrej     = ttk.Label(tab_leansdr,           text="RRC Rej Factor")
     lb2_rrcrej     = ttk.Label(tab_leansdr,           text=" (--rrc-rej) : ")
     ent_rrcrej     = ttk.Entry(tab_leansdr, width=10, textvariable=rrc_rej_factor)
-    aux_rrcrej     = ttk.Label(tab_leansdr,           text="DVBS2")
+    lb3_rrcrej     = ttk.Label(tab_leansdr,           text="DVBS2")
     lbl_nhelpers   = ttk.Label(tab_leansdr,           text="Nhelpers")
     lb2_nhelpers   = ttk.Label(tab_leansdr,           text=" (--nhelpers) : ")
     ent_nhelpers   = ttk.Entry(tab_leansdr, width=10, textvariable=nhelpers)
-    aux_nhelpers   = ttk.Label(tab_leansdr,           text="DVBS2")
+    lb3_nhelpers   = ttk.Label(tab_leansdr,           text="DVBS2")
     lbl_modcods    = ttk.Label(tab_leansdr,           text="modcods")
     lb2_modcods    = ttk.Label(tab_leansdr,           text=" (--modcods) : ")
     ent_modcods    = ttk.Entry(tab_leansdr, width=10, textvariable=modcods)
-    aux_modcods    = ttk.Label(tab_leansdr,           text="empty entry omits parameter")
+    lb3_modcods    = ttk.Label(tab_leansdr,           text="empty entry omits parameter")
     lbl_framesizes = ttk.Label(tab_leansdr,           text="framesizes")
     lb2_framesizes = ttk.Label(tab_leansdr,           text=" (--framesizes) : ")
     ent_framesizes = ttk.Entry(tab_leansdr, width=10, textvariable=framesizes)
-    aux_framesizes = ttk.Label(tab_leansdr,           text="empty entry omits parameter")
+    lb3_framesizes = ttk.Label(tab_leansdr,           text="empty entry omits parameter")
 
     #----- buttons -----
     btn_save   = ttk.Button (dlg, text="save",   command=on_save)
@@ -237,15 +237,15 @@ def dlg_settings():
     lbl_ppm      .grid (row=1, column=0, sticky=E)
     lb2_ppm      .grid (row=1, column=1, sticky=E)
     ent_ppm      .grid (row=1, column=2, sticky=W)
-    aux_ppm      .grid (row=1, column=3, sticky=W)
+    lb3_ppm      .grid (row=1, column=3, sticky=W)
     lbl_gain     .grid (row=2, column=0, sticky=E)
     lb2_gain     .grid (row=2, column=1, sticky=E)
     ent_gain     .grid (row=2, column=2, sticky=W)
-    aux_gain     .grid (row=2, column=3, sticky=W)
+    lb3_gain     .grid (row=2, column=3, sticky=W)
     lbl_rtldongle.grid (row=3, column=0, sticky=E)
     lb2_rtldongle.grid (row=3, column=1, sticky=E)
     ent_rtldongle.grid (row=3, column=2, sticky=W)
-    aux_rtldongle.grid (row=3, column=3, sticky=W)
+    lb3_rtldongle.grid (row=3, column=3, sticky=W)
 
     tab_leansdr.columnconfigure((0,2,3),       pad=4, weight=1)
     tab_leansdr.rowconfigure   ((0,1,2,3,4,5), pad=4, weight=0)
@@ -253,27 +253,27 @@ def dlg_settings():
     lbl_inpipe    .grid (row=1, column=0, sticky=E)
     lb2_inpipe    .grid (row=1, column=1, sticky=E)
     ent_inpipe    .grid (row=1, column=2, sticky=W)
-    aux_inpipe    .grid (row=1, column=3, sticky=W)
+    lb3_inpipe    .grid (row=1, column=3, sticky=W)
     lbl_rolloff   .grid (row=2, column=0, sticky=E)
     lb2_rolloff   .grid (row=2, column=1, sticky=E)
     ent_rolloff   .grid (row=2, column=2, sticky=W)
-    aux_rolloff   .grid (row=2, column=3, sticky=W)
+    lb3_rolloff   .grid (row=2, column=3, sticky=W)
     lbl_rrcrej    .grid (row=3, column=0, sticky=E)
     lb2_rrcrej    .grid (row=3, column=1, sticky=E)
     ent_rrcrej    .grid (row=3, column=2, sticky=W)
-    aux_rrcrej    .grid (row=3, column=3, sticky=W)
+    lb3_rrcrej    .grid (row=3, column=3, sticky=W)
     lbl_nhelpers  .grid (row=4, column=0, sticky=E)
     lb2_nhelpers  .grid (row=4, column=1, sticky=E)
     ent_nhelpers  .grid (row=4, column=2, sticky=W)
-    aux_nhelpers  .grid (row=4, column=3, sticky=W)
+    lb3_nhelpers  .grid (row=4, column=3, sticky=W)
     lbl_modcods   .grid (row=5, column=0, sticky=E)
     lb2_modcods   .grid (row=5, column=1, sticky=E)
     ent_modcods   .grid (row=5, column=2, sticky=W)
-    aux_modcods   .grid (row=5, column=3, sticky=W)
+    lb3_modcods   .grid (row=5, column=3, sticky=W)
     lbl_framesizes.grid (row=6, column=0, sticky=E)
     lb2_framesizes.grid (row=6, column=1, sticky=E)
     ent_framesizes.grid (row=6, column=2, sticky=W)
-    aux_framesizes.grid (row=6, column=3, sticky=W)
+    lb3_framesizes.grid (row=6, column=3, sticky=W)
 
 #===== master window ==========================================================
 
@@ -309,19 +309,19 @@ Label(master,font = "Verdana 10 italic", text="-----------------------").grid(ro
 Label(master,font = "Verdana 10 italic", text="---------------------------------------------------------").grid(row=5,column=1)
 
 #----- user interface packing -----
-lbl_frequency .grid (row=0, column=0)
+lbl_frequency .grid (row=0, column=0, sticky=W)
 ent_frequency .grid (row=0, column=1)
 lb2_frequency .grid (row=0, column=2, sticky=W)
-lbl_samplerate.grid (row=1, column=0)
+lbl_samplerate.grid (row=1, column=0, sticky=W)
 ent_samplerate.grid (row=1, column=1)
 lb2_samplerate.grid (row=1, column=2, sticky=W)
-lbl_fec       .grid (row=2, column=0)
+lbl_fec       .grid (row=2, column=0, sticky=W)
 ent_fec       .grid (row=2, column=1)
 lb2_fec       .grid (row=2, column=2, sticky=W)
-lbl_tune      .grid (row=3, column=0)
+lbl_tune      .grid (row=3, column=0, sticky=W)
 ent_tune      .grid (row=3, column=1)
 lb2_tune      .grid (row=3, column=2, sticky=W)
-lbl_bandwidth .grid (row=4, column=0)
+lbl_bandwidth .grid (row=4, column=0, sticky=W)
 ent_bandwidth .grid (row=4, column=1)
 lb2_bandwidth .grid (row=4, column=2, sticky=W)
 
