@@ -133,9 +133,9 @@ def dlg_settings():
         dlg.destroy()
 
     #----- dialog properties -----
-    dlg = Toplevel(master, borderwidth=4)
+    dlg = Toplevel(root, borderwidth=4)
     dlg.title("Settings")
-    dlg.transient(master)
+    dlg.transient(root)
     dlg.resizable(height = False, width = False)
     dlg.grab_set()
 
@@ -275,12 +275,14 @@ def dlg_settings():
     ent_framesizes.grid (row=6, column=2, sticky=W)
     lb3_framesizes.grid (row=6, column=3, sticky=W)
 
-#===== master window ==========================================================
+#===== root window ============================================================
 
-master = Tk()
+root = Tk()
 
 #----- window properties -----
-master.title('LeanDVB DVBS + DVBS2 interface')
+root.title('LeanDVB DVBS + DVBS2 interface')
+frm_root = ttk.Frame(root, borderwidth=8)
+frm_root.grid(row=0, column=0)
 
 #----- initialize variables -----
 if os.path.isfile(parameters_file):
@@ -289,24 +291,24 @@ else:
     parameters_default()
 
 #----- user interface content -----
-lbl_frequency  = ttk.Label(master, text="Frequency")
-ent_frequency  = ttk.Entry(master)
-lb2_frequency  = ttk.Label(master, text="MHz")
-lbl_samplerate = ttk.Label(master, text="Samplerate")
-ent_samplerate = ttk.Entry(master)
-lb2_samplerate = ttk.Label(master, text="S/R")
-lbl_fec        = ttk.Label(master, text="FEC")
-ent_fec        = ttk.Entry(master)
-lb2_fec        = ttk.Label(master, text="Div")
-lbl_tune       = ttk.Label(master, text="Tune")
-ent_tune       = ttk.Entry(master)
-lb2_tune       = ttk.Label(master, text="Hz")
-lbl_bandwidth  = ttk.Label(master, text="Bandwidth")
-ent_bandwidth  = ttk.Entry(master)
-lb2_bandwidth  = ttk.Label(master, text="kHz")
+lbl_frequency  = ttk.Label(frm_root, text="Frequency")
+ent_frequency  = ttk.Entry(frm_root)
+lb2_frequency  = ttk.Label(frm_root, text="MHz")
+lbl_samplerate = ttk.Label(frm_root, text="Samplerate")
+ent_samplerate = ttk.Entry(frm_root)
+lb2_samplerate = ttk.Label(frm_root, text="S/R")
+lbl_fec        = ttk.Label(frm_root, text="FEC")
+ent_fec        = ttk.Entry(frm_root)
+lb2_fec        = ttk.Label(frm_root, text="Div")
+lbl_tune       = ttk.Label(frm_root, text="Tune")
+ent_tune       = ttk.Entry(frm_root)
+lb2_tune       = ttk.Label(frm_root, text="Hz")
+lbl_bandwidth  = ttk.Label(frm_root, text="Bandwidth")
+ent_bandwidth  = ttk.Entry(frm_root)
+lb2_bandwidth  = ttk.Label(frm_root, text="kHz")
 
-Label(master,font = "Verdana 10 italic", text="-----------------------").grid(row=5,column=0)
-Label(master,font = "Verdana 10 italic", text="---------------------------------------------------------").grid(row=5,column=1)
+Label(frm_root, text="-----------------------").grid(row=5,column=0)
+Label(frm_root, text="-----------------------------------------------").grid(row=5,column=1)
 
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0, sticky=W)
@@ -346,20 +348,17 @@ rtldongle = IntVar()
 rtldongle.set(parameters["rtldongle"])
 
 var1 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic", text="Fastlock",      variable=var1).grid(row=6, column=0, sticky=W)
+Checkbutton(frm_root, text="Fastlock",      variable=var1).grid(row=6, column=0, sticky=W)
 var3 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="Viterbi",       variable=var3).grid(row=6, column=1, sticky=W)
+Checkbutton(frm_root, text="Viterbi",       variable=var3).grid(row=6, column=1, sticky=W)
 var4 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="Hard-Metric",   variable=var4).grid(row=6, column=1, sticky=E)
+Checkbutton(frm_root, text="Hard-Metric",   variable=var4).grid(row=6, column=1, sticky=E)
 var5 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic", text="Gui",           variable=var5).grid(row=8, column=0, sticky=W)
+Checkbutton(frm_root, text="Gui",           variable=var5).grid(row=8, column=0, sticky=W)
 var6 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="DVBS-2",        variable=var6).grid(row=8, column=1, sticky=W)
+Checkbutton(frm_root, text="DVBS-2",        variable=var6).grid(row=8, column=1, sticky=W)
 var7 = IntVar()
-Checkbutton(master, font = "Verdana 13 italic" ,text="Max sensitive", variable=var7).grid(row=8, column=1, sticky=E)
-
-Label(master,font = "Verdana 8 italic", text="").grid(row=7,column=0)
-Label(master,font = "Verdana 8 italic", text="").grid(row=9,column=0)
+Checkbutton(frm_root, text="Max sensitive", variable=var7).grid(row=8, column=1, sticky=E)
 
 viewer = StringVar()
 rolloff_factor = StringVar()
@@ -387,14 +386,14 @@ lnblo.set(parameters["lnb_lo"])
 if os.path.isfile("logo.png"):
     im = Image.open("logo.png")
     photo = ImageTk.PhotoImage(im)
-    label = Label(image=photo)
+    label = ttk.Label(frm_root, image=photo)
     label.image = photo
-    label.grid(row=0, column=3, columnspan=2, rowspan=5, sticky=W+E+N+S, padx=5, pady=5)
+    label.grid(row=0, column=3, columnspan=3, rowspan=5, sticky=W+E+N+S, padx=5, pady=5)
 
 def on_exit():
     parameters_save()
     on_stop()
-    master.destroy()
+    root.destroy()
 
 def on_stop():
     file = open(stop_script, "w")
@@ -526,21 +525,21 @@ def on_start():
     file.close()
     os.system("sh " + run_script + " &")
 
-Button(master, font = "Verdana 11 italic", text='EXIT', command=on_exit).grid(row=8, column=3,sticky=E)
-Button(master, font = "Verdana 11 italic",highlightbackground='red',text='START', command=on_start).grid(row=8, column=3,sticky=W)
-Button(master, font = "Verdana 11 italic",text='STOP', command=on_stop).grid(row=8, column=4,sticky=W)
-Button(master, font = "Verdana 11 italic",fg='red',highlightbackground='blue',text='    Settings    ', command=dlg_settings).grid(row=6, column=3)
+ttk.Button(frm_root, text='START',    command=on_start)     .grid(row=6, column=3)
+ttk.Button(frm_root, text='Settings', command=dlg_settings) .grid(row=6, column=4)
+ttk.Button(frm_root, text='STOP',     command=on_stop)      .grid(row=8, column=3)
+ttk.Button(frm_root, text='EXIT',     command=on_exit)      .grid(row=8, column=4)
 
-master.protocol("WM_DELETE_WINDOW", on_exit)
+root.protocol("WM_DELETE_WINDOW", on_exit)
 
-tkvar1 = StringVar(master)
+tkvar1 = StringVar(root)
 
 # Frequency Dropdown
 choices1 = { '1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
 
 tkvar1.set(str(parameters["frequency"])) # set the default option
 
-popupMenu = OptionMenu(master, tkvar1, *choices1)
+popupMenu = OptionMenu(frm_root, tkvar1, *choices1)
 popupMenu.grid(row = 0, column =1, sticky=E)
 
 # on change dropdown value
@@ -552,14 +551,14 @@ def change_dropdown1(*args):
 # link function to change dropdown
 tkvar1.trace('w', change_dropdown1)
 
-tkvar2 = StringVar(master)
+tkvar2 = StringVar(root)
 
 # SampleRate
 choices2 = { '33', '66','125','150','250','333','400','500','600','750','1000','1500','2000','2083','3000','4000','4340','5000'}
 
 tkvar2.set(str(parameters["samplerate"])) # set the default option
 
-popupMenu = OptionMenu(master, tkvar2, *choices2)
+popupMenu = OptionMenu(frm_root, tkvar2, *choices2)
 popupMenu.grid(row = 1, column =1, sticky=E)
 
 # on change dropdown value
@@ -571,11 +570,11 @@ def change_dropdown2(*args):
 # link function to change dropdown
 tkvar2.trace('w', change_dropdown2)
 
-tkvar3 = StringVar(master)
+tkvar3 = StringVar(root)
 # Fec
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
 tkvar3.set(parameters["fec"])
-popupMenu = OptionMenu(master, tkvar3, *choices3)
+popupMenu = OptionMenu(frm_root, tkvar3, *choices3)
 popupMenu.grid(row = 2, column =1, sticky=E)
 
 # on change dropdown value
@@ -587,12 +586,12 @@ def change_dropdown3(*args):
 # link function to change dropdown
 tkvar3.trace('w', change_dropdown3)
 
-tkvar4 = StringVar(master)
+tkvar4 = StringVar(root)
 # Tune
 choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-2000','-5000','-10000'}
 tkvar4.set(parameters["tune"]) # set the default option
 
-popupMenu = OptionMenu(master, tkvar4, *choices4)
+popupMenu = OptionMenu(frm_root, tkvar4, *choices4)
 popupMenu.grid(row = 3, column =1, sticky=E)
 
 # on change dropdown value
