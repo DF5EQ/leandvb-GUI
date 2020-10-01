@@ -282,7 +282,7 @@ root = Tk()
 #----- window properties -----
 root.title('LeanDVB DVBS + DVBS2 interface')
 frm_root = ttk.Frame(root, borderwidth=8)
-frm_root.grid(row=0, column=0)
+frm_root.pack()
 
 #----- initialize variables -----
 if os.path.isfile(parameters_file):
@@ -307,9 +307,6 @@ lbl_bandwidth  = ttk.Label(frm_root, text="Bandwidth")
 ent_bandwidth  = ttk.Entry(frm_root)
 lb2_bandwidth  = ttk.Label(frm_root, text="kHz")
 
-Label(frm_root, text="-----------------------").grid(row=5,column=0)
-Label(frm_root, text="-----------------------------------------------").grid(row=5,column=1)
-
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0, sticky=W)
 ent_frequency .grid (row=0, column=1)
@@ -326,6 +323,8 @@ lb2_tune      .grid (row=3, column=2, sticky=W)
 lbl_bandwidth .grid (row=4, column=0, sticky=W)
 ent_bandwidth .grid (row=4, column=1)
 lb2_bandwidth .grid (row=4, column=2, sticky=W)
+
+Frame(frm_root, height=1, bg="black").grid(row=5,column=0, columnspan=5, pady=8, sticky=EW)
 
 ent_frequency.focus_set()
 
@@ -354,11 +353,11 @@ Checkbutton(frm_root, text="Viterbi",       variable=var3).grid(row=6, column=1,
 var4 = IntVar()
 Checkbutton(frm_root, text="Hard-Metric",   variable=var4).grid(row=6, column=1, sticky=E)
 var5 = IntVar()
-Checkbutton(frm_root, text="Gui",           variable=var5).grid(row=8, column=0, sticky=W)
+Checkbutton(frm_root, text="Gui",           variable=var5).grid(row=7, column=0, sticky=W)
 var6 = IntVar()
-Checkbutton(frm_root, text="DVBS-2",        variable=var6).grid(row=8, column=1, sticky=W)
+Checkbutton(frm_root, text="DVBS-2",        variable=var6).grid(row=7, column=1, sticky=W)
 var7 = IntVar()
-Checkbutton(frm_root, text="Max sensitive", variable=var7).grid(row=8, column=1, sticky=E)
+Checkbutton(frm_root, text="Max sensitive", variable=var7).grid(row=7, column=1, sticky=E)
 
 viewer = StringVar()
 rolloff_factor = StringVar()
@@ -527,8 +526,8 @@ def on_start():
 
 ttk.Button(frm_root, text='START',    command=on_start)     .grid(row=6, column=3)
 ttk.Button(frm_root, text='Settings', command=dlg_settings) .grid(row=6, column=4)
-ttk.Button(frm_root, text='STOP',     command=on_stop)      .grid(row=8, column=3)
-ttk.Button(frm_root, text='EXIT',     command=on_exit)      .grid(row=8, column=4)
+ttk.Button(frm_root, text='STOP',     command=on_stop)      .grid(row=7, column=3)
+ttk.Button(frm_root, text='EXIT',     command=on_exit)      .grid(row=7, column=4)
 
 root.protocol("WM_DELETE_WINDOW", on_exit)
 
