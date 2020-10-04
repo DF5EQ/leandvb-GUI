@@ -8,8 +8,7 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO connect entries to variables
-# TODO reorganize popup selections
+# TODO reorganize dropdown selections
 # TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO streamline usage of viewer ffplay and mplayer
@@ -58,12 +57,12 @@ parameters = dict()
 
 def parameters_save():
     print "save parameters to file"
-    parameters["frequency"     ] = float(ent_frequency.get())
-    parameters["samplerate"    ] = int(ent_samplerate.get())
-    parameters["fec"           ] = tkvar3.get()
-    parameters["tune"          ] = int(ent_tune.get())
+    parameters["frequency"     ] = float(frequency.get())
+    parameters["samplerate"    ] = int(samplerate.get())
+    parameters["fec"           ] = fec.get()
+    parameters["tune"          ] = int(tune.get())
     parameters["fastlock"      ] = bool(fastlock.get())
-    parameters["bandwidth"     ] = int(ent_bandwidth.get())
+    parameters["bandwidth"     ] = int(bandwidth.get())
     parameters["viterbi"       ] = bool(viterbi.get())
     parameters["gui"           ] = bool(gui.get())
     parameters["dvbs2"         ] = bool(dvbs.get())
@@ -309,6 +308,11 @@ inpipe         = IntVar()
 modcods        = StringVar()
 framesizes     = StringVar()
 lnblo          = DoubleVar()
+frequency      = DoubleVar()
+samplerate     = IntVar()
+fec            = StringVar()
+tune           = StringVar()
+bandwidth      = IntVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -321,7 +325,7 @@ def on_start():
     inpip            = inpipe.get()
     modcods_value    = modcods.get()
     framesizes_value = framesizes.get()
-    bandwidth        = int(ent_bandwidth.get()) * 1000
+    bandwidthvalue   = int(bandwidth.get()) * 1000
     if (viewer.get() == "ffplay"):
         view = "ffplay -v 0"
     else:
@@ -358,17 +362,17 @@ def on_start():
         framesizes_string = ""
     else:
         framesizes_string = " --framesizes " + framesizes_value
-    frequency  = int( ( float(ent_frequency.get()) - float(lnblo.get()) ) * 1000000 )
-    samplerate = int(ent_samplerate.get()) * 1000
-    fec        = tkvar3.get()
-    tune       = ent_tune.get()
+    frequency_value  = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
+    samplerate_value = int(samplerate.get()) * 1000
+    fec_value        = fec.get()
+    tune_value       = tune.get()
     rtl        = rtldongle.get()
     if (dvbs.get() == True): #dvbs2
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
-              " -f " + str(frequency) + \
+              " -f " + str(frequency_value) + \
               " -g " + str(gain_value) +  \
-              " -s " + str(bandwidth) + \
+              " -s " + str(bandwidth_value) + \
               " -p " + str(ppmvalue) + \
               " -" + \
               " | " + \
@@ -380,7 +384,7 @@ def on_start():
               opt_viterbi + \
               opt_hardmetric + \
               opt_fastlock + \
-              " --tune " + tune + \
+              " --tune " + tune_value + \
               " --standard " + opt_dvbs + \
               " --ldpc-helper " + leanpad + "ldpc_tool" + \
               " --inpipe " + str(inpip) + \
@@ -389,17 +393,17 @@ def on_start():
               " --rrc-rej " + str(rrcrej) + \
               " -v" + \
               " --roll-off " + rolloff + \
-              " --sr " + str(samplerate) + \
-              " -f " + str(bandwidth) + \
+              " --sr " + str(samplerate_value) + \
+              " -f " + str(bandwidth_value) + \
               " | " + \
               "ffplay -v 0 -" + \
               " \n"
     else:
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
-              " -f " + str(frequency) + \
+              " -f " + str(frequency_value) + \
               " -g " + str(gain_value) +  \
-              " -s " + str(bandwidth) + \
+              " -s " + str(bandwidth_value) + \
               " -p " + str(ppmvalue) + \
               " -" + \
               " | " + \
@@ -409,12 +413,12 @@ def on_start():
               opt_viterbi + \
               opt_hardmetric + \
               opt_fastlock + \
-              " --tune " + tune + \
-              " --cr " + fec + \
+              " --tune " + tune_value + \
+              " --cr " + fec_value + \
               " --standard " + opt_dvbs + \
               " -v" + \
-              " --sr " + str(samplerate) + \
-              " -f " + str(bandwidth) + \
+              " --sr " + str(samplerate_value) + \
+              " -f " + str(bandwidth_value) + \
               " | " + \
               view + " -" + \
               " \n"
@@ -448,19 +452,19 @@ def on_exit():
 
 #----- user interface content -----
 lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
-ent_frequency  = ttk.Entry   (frm_root)
+ent_frequency  = ttk.Entry   (frm_root, width=10, textvariable=frequency)
 lb2_frequency  = ttk.Label   (frm_root, text="MHz")
 lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
-ent_samplerate = ttk.Entry   (frm_root)
+ent_samplerate = ttk.Entry   (frm_root, width=10, textvariable=samplerate)
 lb2_samplerate = ttk.Label   (frm_root, text="S/R")
 lbl_fec        = ttk.Label   (frm_root, text="FEC")
-ent_fec        = ttk.Entry   (frm_root)
+ent_fec        = ttk.Entry   (frm_root, width=10, textvariable=fec)
 lb2_fec        = ttk.Label   (frm_root, text="Div")
 lbl_tune       = ttk.Label   (frm_root, text="Tune")
-ent_tune       = ttk.Entry   (frm_root)
+ent_tune       = ttk.Entry   (frm_root, width=10, textvariable=tune)
 lb2_tune       = ttk.Label   (frm_root, text="Hz")
 lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
-ent_bandwidth  = ttk.Entry   (frm_root)
+ent_bandwidth  = ttk.Entry   (frm_root, width=10, textvariable=bandwidth)
 lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
 lbl_separator  = Frame       (frm_root, height=1, bg="black")
 chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=fastlock)
@@ -510,12 +514,11 @@ btn_exit      .grid (row=7, column=5)
 
 ent_frequency.focus_set()
 
-ent_frequency .insert(0, parameters["frequency"])
-ent_samplerate.insert(0, parameters["samplerate"])
-ent_fec       .insert(0, parameters["fec"])
-ent_tune      .insert(0, parameters["tune"])
-ent_bandwidth .insert(0, parameters["bandwidth"])
-
+bandwidth     .set(parameters["bandwidth"])
+tune          .set(parameters["tune"])
+fec           .set(parameters["fec"])
+samplerate    .set(parameters["samplerate"])
+frequency     .set(parameters["frequency"])
 ppm           .set(parameters["ppm"])
 padlean       .set(parameters["leanpad"])
 gain          .set(parameters["gain"])
@@ -535,79 +538,59 @@ modcods       .set(parameters["modcods"])
 framesizes    .set(parameters["framesizes"])
 lnblo         .set(parameters["lnb_lo"])
 
-#----- popup entries -----
-tkvar1 = StringVar(root)
-
-# Frequency Dropdown
-choices1 = { '1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
-
-tkvar1.set(str(parameters["frequency"])) # set the default option
-
-popupMenu = OptionMenu(frm_root, tkvar1, *choices1)
+# --- frequency dropdown -----
+choices1 = { '10491.500','1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
+frequency.set(str(parameters["frequency"])) # set the default option
+popupMenu = OptionMenu(frm_root, frequency, *choices1)
 popupMenu.grid(row = 0, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown1(*args):
-    print( tkvar1.get() )
-    ent_frequency.delete(0, END)
-    ent_frequency.insert(0, tkvar1.get())
+    print( frequency.get() )
 
 # link function to change dropdown
-tkvar1.trace('w', change_dropdown1)
+frequency.trace('w', change_dropdown1)
 
-tkvar2 = StringVar(root)
-
-# SampleRate
+# ----- samplerate dropdown -----
+#samplerate = StringVar(root)
 choices2 = { '33', '66','125','150','250','333','400','500','600','750','1000','1500','2000','2083','3000','4000','4340','5000'}
-
-tkvar2.set(str(parameters["samplerate"])) # set the default option
-
-popupMenu = OptionMenu(frm_root, tkvar2, *choices2)
+samplerate.set(str(parameters["samplerate"])) # set the default option
+popupMenu = OptionMenu(frm_root, samplerate, *choices2)
 popupMenu.grid(row = 1, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown2(*args):
-    print( tkvar2.get() )
-    ent_samplerate.delete(0, END)
-    ent_samplerate.insert(0, tkvar2.get())
+    print( samplerate.get() )
 
 # link function to change dropdown
-tkvar2.trace('w', change_dropdown2)
+samplerate.trace('w', change_dropdown2)
 
-tkvar3 = StringVar(root)
-# Fec
+# ----- fec dropdown -----
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
-tkvar3.set(parameters["fec"])
-popupMenu = OptionMenu(frm_root, tkvar3, *choices3)
+popupMenu = OptionMenu(frm_root, fec, *choices3)
 popupMenu.grid(row = 2, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown3(*args):
-    print( tkvar3.get() )
-    ent_fec.delete(0, END)
-    ent_fec.insert(0, tkvar3.get())
+    print( fec.get() )
 
 # link function to change dropdown
-tkvar3.trace('w', change_dropdown3)
+fec.trace('w', change_dropdown3)
 
-tkvar4 = StringVar(root)
-# Tune
+# ----- tune dropdown -----
 choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-2000','-5000','-10000'}
-tkvar4.set(parameters["tune"]) # set the default option
-
-popupMenu = OptionMenu(frm_root, tkvar4, *choices4)
+tune.set(parameters["tune"]) # set the default option
+popupMenu = OptionMenu(frm_root, tune, *choices4)
 popupMenu.grid(row = 3, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown4(*args):
-    print(  )
-    ent_tune.delete(0, END)
-    ent_tune.insert(0, tkvar4.get())
+    print( tune.get() )
 
 # link function to change dropdown
-tkvar4.trace('w', change_dropdown4)
+tune.trace('w', change_dropdown4)
 
-#----- stop user interface
+#----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
 
 #----- start user interface -----
