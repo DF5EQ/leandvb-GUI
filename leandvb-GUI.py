@@ -553,20 +553,18 @@ def change_dropdown1(*args):
 frequency.trace('w', change_dropdown1)
 
 # ----- samplerate dropdown -----
-tkvar2 = StringVar(root)
+#samplerate = StringVar(root)
 choices2 = { '33', '66','125','150','250','333','400','500','600','750','1000','1500','2000','2083','3000','4000','4340','5000'}
-tkvar2.set(str(parameters["samplerate"])) # set the default option
-popupMenu = OptionMenu(frm_root, tkvar2, *choices2)
+samplerate.set(str(parameters["samplerate"])) # set the default option
+popupMenu = OptionMenu(frm_root, samplerate, *choices2)
 popupMenu.grid(row = 1, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown2(*args):
-    print( tkvar2.get() )
-    ent_samplerate.delete(0, END)
-    ent_samplerate.insert(0, tkvar2.get())
+    print( samplerate.get() )
 
 # link function to change dropdown
-tkvar2.trace('w', change_dropdown2)
+samplerate.trace('w', change_dropdown2)
 
 # ----- fec dropdown -----
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
