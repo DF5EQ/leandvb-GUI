@@ -58,7 +58,7 @@ parameters = dict()
 
 def parameters_save():
     print "save parameters to file"
-    parameters["frequency"     ] = float(ent_frequency.get())
+    parameters["frequency"     ] = float(frequency.get())
     parameters["samplerate"    ] = int(ent_samplerate.get())
     parameters["fec"           ] = tkvar3.get()
     parameters["tune"          ] = int(ent_tune.get())
@@ -309,6 +309,7 @@ inpipe         = IntVar()
 modcods        = StringVar()
 framesizes     = StringVar()
 lnblo          = DoubleVar()
+frequency      = DoubleVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -358,7 +359,7 @@ def on_start():
         framesizes_string = ""
     else:
         framesizes_string = " --framesizes " + framesizes_value
-    frequency  = int( ( float(ent_frequency.get()) - float(lnblo.get()) ) * 1000000 )
+    frequency_value  = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
     samplerate = int(ent_samplerate.get()) * 1000
     fec        = tkvar3.get()
     tune       = ent_tune.get()
@@ -366,7 +367,7 @@ def on_start():
     if (dvbs.get() == True): #dvbs2
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
-              " -f " + str(frequency) + \
+              " -f " + str(frequency_value) + \
               " -g " + str(gain_value) +  \
               " -s " + str(bandwidth) + \
               " -p " + str(ppmvalue) + \
@@ -397,7 +398,7 @@ def on_start():
     else:
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
-              " -f " + str(frequency) + \
+              " -f " + str(frequency_value) + \
               " -g " + str(gain_value) +  \
               " -s " + str(bandwidth) + \
               " -p " + str(ppmvalue) + \
@@ -448,7 +449,7 @@ def on_exit():
 
 #----- user interface content -----
 lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
-ent_frequency  = ttk.Entry   (frm_root)
+ent_frequency  = ttk.Entry   (frm_root, width=10, textvariable=frequency)
 lb2_frequency  = ttk.Label   (frm_root, text="MHz")
 lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
 ent_samplerate = ttk.Entry   (frm_root)
@@ -510,12 +511,12 @@ btn_exit      .grid (row=7, column=5)
 
 ent_frequency.focus_set()
 
-ent_frequency .insert(0, parameters["frequency"])
 ent_samplerate.insert(0, parameters["samplerate"])
 ent_fec       .insert(0, parameters["fec"])
 ent_tune      .insert(0, parameters["tune"])
 ent_bandwidth .insert(0, parameters["bandwidth"])
 
+frequency     .set(parameters["frequency"])
 ppm           .set(parameters["ppm"])
 padlean       .set(parameters["leanpad"])
 gain          .set(parameters["gain"])
