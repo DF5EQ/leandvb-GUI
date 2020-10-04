@@ -539,33 +539,23 @@ modcods       .set(parameters["modcods"])
 framesizes    .set(parameters["framesizes"])
 lnblo         .set(parameters["lnb_lo"])
 
-#----- popup entries -----
-tkvar1 = StringVar(root)
-
-# Frequency Dropdown
-choices1 = { '1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
-
-tkvar1.set(str(parameters["frequency"])) # set the default option
-
-popupMenu = OptionMenu(frm_root, tkvar1, *choices1)
+# --- frequency dropdown -----
+choices1 = { '10491.500','1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
+frequency.set(str(parameters["frequency"])) # set the default option
+popupMenu = OptionMenu(frm_root, frequency, *choices1)
 popupMenu.grid(row = 0, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown1(*args):
-    print( tkvar1.get() )
-    ent_frequency.delete(0, END)
-    ent_frequency.insert(0, tkvar1.get())
+    print( frequency.get() )
 
 # link function to change dropdown
-tkvar1.trace('w', change_dropdown1)
+frequency.trace('w', change_dropdown1)
 
+# ----- samplerate dropdown -----
 tkvar2 = StringVar(root)
-
-# SampleRate
 choices2 = { '33', '66','125','150','250','333','400','500','600','750','1000','1500','2000','2083','3000','4000','4340','5000'}
-
 tkvar2.set(str(parameters["samplerate"])) # set the default option
-
 popupMenu = OptionMenu(frm_root, tkvar2, *choices2)
 popupMenu.grid(row = 1, column =2, sticky=E)
 
@@ -578,7 +568,7 @@ def change_dropdown2(*args):
 # link function to change dropdown
 tkvar2.trace('w', change_dropdown2)
 
-# Fec
+# ----- fec dropdown -----
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
 popupMenu = OptionMenu(frm_root, fec, *choices3)
 popupMenu.grid(row = 2, column =2, sticky=E)
@@ -590,10 +580,9 @@ def change_dropdown3(*args):
 # link function to change dropdown
 fec.trace('w', change_dropdown3)
 
-# Tune
+# ----- tune dropdown -----
 choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-2000','-5000','-10000'}
 tune.set(parameters["tune"]) # set the default option
-
 popupMenu = OptionMenu(frm_root, tune, *choices4)
 popupMenu.grid(row = 3, column =2, sticky=E)
 
@@ -604,7 +593,7 @@ def change_dropdown4(*args):
 # link function to change dropdown
 tune.trace('w', change_dropdown4)
 
-#----- stop user interface
+#----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
 
 #----- start user interface -----
