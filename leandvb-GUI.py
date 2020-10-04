@@ -63,13 +63,13 @@ def parameters_save():
     parameters["samplerate"    ] = int(ent_samplerate.get())
     parameters["fec"           ] = tkvar3.get()
     parameters["tune"          ] = int(ent_tune.get())
-    parameters["fastlock"      ] = bool(var1.get())
+    parameters["fastlock"      ] = bool(fastlock.get())
     parameters["bandwidth"     ] = int(ent_bandwidth.get())
-    parameters["viterbi"       ] = bool(var3.get())
-    parameters["gui"           ] = bool(var5.get())
-    parameters["dvbs2"         ] = bool(var6.get())
-    parameters["maxprocess"    ] = bool(var7.get())
-    parameters["hardmetric"    ] = bool(var4.get())
+    parameters["viterbi"       ] = bool(viterbi.get())
+    parameters["gui"           ] = bool(gui.get())
+    parameters["dvbs2"         ] = bool(dvbs.get())
+    parameters["maxprocess"    ] = bool(maxprocess.get())
+    parameters["hardmetric"    ] = bool(hardmetric.get())
     parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = int(ppm.get())
     parameters["gain"          ] = gain.get()
@@ -285,21 +285,33 @@ root.resizable(height = False, width = False)
 frm_root = ttk.Frame(root, borderwidth=8)
 frm_root.pack()
 
-#----- declare variables -----
-var1 = IntVar()
-var3 = IntVar()
-var4 = IntVar()
-var5 = IntVar()
-var6 = IntVar()
-var7 = IntVar()
-
-#----- initialize variables -----
+#----- initialize dictionary -----
 if os.path.isfile(parameters_file):
     parameters_load()
 else:
     parameters_default()
 
-#----- action functions -----
+#----- user interface variables -----
+fastlock       = IntVar()
+viterbi        = IntVar()
+hardmetric     = IntVar()
+gui            = IntVar()
+dvbs           = IntVar()
+maxprocess     = IntVar()
+ppm            = IntVar()
+padlean        = StringVar()
+gain           = IntVar()
+rtldongle      = IntVar()
+viewer         = StringVar()
+rolloff_factor = StringVar()
+rrc_rej_factor = IntVar()
+nhelpers       = IntVar()
+inpipe         = IntVar()
+modcods        = StringVar()
+framesizes     = StringVar()
+lnblo          = DoubleVar()
+
+#----- user interface action functions -----
 def on_start():
     ppmvalue         = int(ppm.get())
     leanpad          = padlean.get()
@@ -315,30 +327,30 @@ def on_start():
         view = "ffplay -v 0"
     else:
         view = "mplayer"
-    if (var1.get() == True):
-        fastlock = " --fastlock"
+    if (fastlock.get() == True):
+        opt_fastlock = " --fastlock"
     else:
-        fastlock = ""
-    if (var3.get() == True):
-        viterbi = " --viterbi"
+        opt_fastlock = ""
+    if (viterbi.get() == True):
+        opt_viterbi = " --viterbi"
     else:
-        viterbi = ""
-    if (var5.get() == True):
-        gui = " --gui"
+        opt_viterbi = ""
+    if (gui.get() == True):
+        opt_gui = " --gui"
     else:
-        gui = ""
-    if (var6.get() == True):
-        dvbs = "DVB-S2"
+        opt_gui = ""
+    if (dvbs.get() == True):
+        opt_dvbs = "DVB-S2"
     else:
-        dvbs = "DVB-S"
-    if (var7.get() == True):
-        maxprocess = " --hq"
+        opt_dvbs = "DVB-S"
+    if (maxprocess.get() == True):
+        opt_maxprocess = " --hq"
     else:
-        maxprocess = ""
-    if (var4.get() == True):
-        hardmetric = " --hard-metric"
+        opt_maxprocess = ""
+    if (hardmetric.get() == True):
+        opt_hardmetric = " --hard-metric"
     else:
-        hardmetric = ""
+        opt_hardmetric = ""
     if (modcods_value == ""):
         modcods_string = ""
     else:
@@ -352,7 +364,7 @@ def on_start():
     fec        = tkvar3.get()
     tune       = ent_tune.get()
     rtl        = rtldongle.get()
-    if (var6.get() == True): #dvbs2
+    if (dvbs.get() == True): #dvbs2
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
               " -f " + str(frequency) + \
@@ -362,15 +374,15 @@ def on_start():
               " -" + \
               " | " + \
               leanpad + "leandvb" + \
-              gui + \
+              opt_gui + \
               modcods_string + \
               framesizes_string + \
-              maxprocess + \
-              viterbi + \
-              hardmetric + \
-              fastlock + \
+              opt_maxprocess + \
+              opt_viterbi + \
+              opt_hardmetric + \
+              opt_fastlock + \
               " --tune " + tune + \
-              " --standard " + dvbs + \
+              " --standard " + opt_dvbs + \
               " --ldpc-helper " + leanpad + "ldpc_tool" + \
               " --inpipe " + str(inpip) + \
               " --nhelpers " + str(nhelp) + \
@@ -393,14 +405,14 @@ def on_start():
               " -" + \
               " | " + \
               leanpad + "leandvb" + \
-              gui + \
-              maxprocess + \
-              viterbi + \
-              hardmetric + \
-              fastlock + \
+              opt_gui + \
+              opt_maxprocess + \
+              opt_viterbi + \
+              opt_hardmetric + \
+              opt_fastlock + \
               " --tune " + tune + \
               " --cr " + fec + \
-              " --standard " + dvbs + \
+              " --standard " + opt_dvbs + \
               " -v" + \
               " --sr " + str(samplerate) + \
               " -f " + str(bandwidth) + \
@@ -452,12 +464,12 @@ lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
 ent_bandwidth  = ttk.Entry   (frm_root)
 lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
 lbl_separator  = Frame       (frm_root, height=1, bg="black")
-chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=var1)
-chk_viterbi    = Checkbutton (frm_root, text="Viterbi",       variable=var3)
-chk_hardmetric = Checkbutton (frm_root, text="Hard-Metric",   variable=var4)
-chk_gui        = Checkbutton (frm_root, text="Gui",           variable=var5)
-chk_dvbs2      = Checkbutton (frm_root, text="DVBS-2",        variable=var6)
-chk_sensitive  = Checkbutton (frm_root, text="Max sensitive", variable=var7)
+chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=fastlock)
+chk_viterbi    = Checkbutton (frm_root, text="Viterbi",       variable=viterbi)
+chk_hardmetric = Checkbutton (frm_root, text="Hard-Metric",   variable=hardmetric)
+chk_gui        = Checkbutton (frm_root, text="Gui",           variable=gui)
+chk_dvbs2      = Checkbutton (frm_root, text="DVBS-2",        variable=dvbs)
+chk_sensitive  = Checkbutton (frm_root, text="Max sensitive", variable=maxprocess)
 btn_start      = ttk.Button  (frm_root, text='START',         command=on_start)
 btn_settings   = ttk.Button  (frm_root, text='Settings',      command=dlg_settings)
 btn_stop       = ttk.Button  (frm_root, text='STOP',          command=on_stop)
@@ -499,40 +511,24 @@ ent_fec       .insert(0, parameters["fec"])
 ent_tune      .insert(0, parameters["tune"])
 ent_bandwidth .insert(0, parameters["bandwidth"])
 
-ppm = IntVar()
-ppm.set(parameters["ppm"])
-
-padlean = StringVar()
-padlean.set(parameters["leanpad"])
-
-gain = IntVar()
-gain.set(parameters["gain"])
-
-rtldongle = IntVar()
-rtldongle.set(parameters["rtldongle"])
-
-viewer = StringVar()
-rolloff_factor = StringVar()
-rrc_rej_factor = IntVar()
-nhelpers = IntVar()
-inpipe = IntVar()
-modcods = StringVar()
-framesizes = StringVar()
-lnblo = DoubleVar()
-var1.set(parameters["fastlock"])
-var3.set(parameters["viterbi"])
-var4.set(parameters["hardmetric"])
-var5.set(parameters["gui"])
-var6.set(parameters["dvbs2"])
-var7.set(parameters["maxprocess"])
-viewer.set(parameters["viewer"])
+ppm           .set(parameters["ppm"])
+padlean       .set(parameters["leanpad"])
+gain          .set(parameters["gain"])
+rtldongle     .set(parameters["rtldongle"])
+fastlock      .set(parameters["fastlock"])
+viterbi       .set(parameters["viterbi"])
+hardmetric    .set(parameters["hardmetric"])
+gui           .set(parameters["gui"])
+dvbs          .set(parameters["dvbs2"])
+maxprocess    .set(parameters["maxprocess"])
+viewer        .set(parameters["viewer"])
 rolloff_factor.set(parameters["rolloff_factor"])
 rrc_rej_factor.set(parameters["rrc_rej_factor"])
-nhelpers.set(parameters["nhelpers"])
-inpipe.set(parameters["inpipe"])
-modcods.set(parameters["modcods"])
-framesizes.set(parameters["framesizes"])
-lnblo.set(parameters["lnb_lo"])
+nhelpers      .set(parameters["nhelpers"])
+inpipe        .set(parameters["inpipe"])
+modcods       .set(parameters["modcods"])
+framesizes    .set(parameters["framesizes"])
+lnblo         .set(parameters["lnb_lo"])
 
 if os.path.isfile("logo.png"):
     im = Image.open("logo.png")
@@ -541,8 +537,7 @@ if os.path.isfile("logo.png"):
     label.image = photo
     label.grid(row=0, column=4, columnspan=2, rowspan=5, sticky=W+E+N+S, padx=5, pady=5)
 
-root.protocol("WM_DELETE_WINDOW", on_exit)
-
+#----- popup entries -----
 tkvar1 = StringVar(root)
 
 # Frequency Dropdown
@@ -614,6 +609,9 @@ def change_dropdown4(*args):
 # link function to change dropdown
 tkvar4.trace('w', change_dropdown4)
 
+#----- stop user interface
+root.protocol("WM_DELETE_WINDOW", on_exit)
 
+#----- start user interface -----
 mainloop()
 
