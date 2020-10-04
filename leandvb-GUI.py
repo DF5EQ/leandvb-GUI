@@ -60,7 +60,7 @@ def parameters_save():
     print "save parameters to file"
     parameters["frequency"     ] = float(frequency.get())
     parameters["samplerate"    ] = int(samplerate.get())
-    parameters["fec"           ] = tkvar3.get()
+    parameters["fec"           ] = fec.get()
     parameters["tune"          ] = int(ent_tune.get())
     parameters["fastlock"      ] = bool(fastlock.get())
     parameters["bandwidth"     ] = int(ent_bandwidth.get())
@@ -311,6 +311,7 @@ framesizes     = StringVar()
 lnblo          = DoubleVar()
 frequency      = DoubleVar()
 samplerate     = IntVar()
+fec            = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -362,7 +363,7 @@ def on_start():
         framesizes_string = " --framesizes " + framesizes_value
     frequency_value  = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
     samplerate_value = int(samplerate.get()) * 1000
-    fec        = tkvar3.get()
+    fec_value        = fec.get()
     tune       = ent_tune.get()
     rtl        = rtldongle.get()
     if (dvbs.get() == True): #dvbs2
@@ -412,7 +413,7 @@ def on_start():
               opt_hardmetric + \
               opt_fastlock + \
               " --tune " + tune + \
-              " --cr " + fec + \
+              " --cr " + fec_value + \
               " --standard " + opt_dvbs + \
               " -v" + \
               " --sr " + str(samplerate_value) + \
@@ -456,7 +457,7 @@ lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
 ent_samplerate = ttk.Entry   (frm_root, width=10, textvariable=samplerate)
 lb2_samplerate = ttk.Label   (frm_root, text="S/R")
 lbl_fec        = ttk.Label   (frm_root, text="FEC")
-ent_fec        = ttk.Entry   (frm_root)
+ent_fec        = ttk.Entry   (frm_root, width=10, textvariable=fec)
 lb2_fec        = ttk.Label   (frm_root, text="Div")
 lbl_tune       = ttk.Label   (frm_root, text="Tune")
 ent_tune       = ttk.Entry   (frm_root)
@@ -512,10 +513,10 @@ btn_exit      .grid (row=7, column=5)
 
 ent_frequency.focus_set()
 
-ent_fec       .insert(0, parameters["fec"])
 ent_tune      .insert(0, parameters["tune"])
 ent_bandwidth .insert(0, parameters["bandwidth"])
 
+fec           .set(parameters["fec"])
 samplerate    .set(parameters["samplerate"])
 frequency     .set(parameters["frequency"])
 ppm           .set(parameters["ppm"])
@@ -576,21 +577,17 @@ def change_dropdown2(*args):
 # link function to change dropdown
 tkvar2.trace('w', change_dropdown2)
 
-tkvar3 = StringVar(root)
 # Fec
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
-tkvar3.set(parameters["fec"])
-popupMenu = OptionMenu(frm_root, tkvar3, *choices3)
+popupMenu = OptionMenu(frm_root, fec, *choices3)
 popupMenu.grid(row = 2, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown3(*args):
-    print( tkvar3.get() )
-    ent_fec.delete(0, END)
-    ent_fec.insert(0, tkvar3.get())
+    print( fec.get() )
 
 # link function to change dropdown
-tkvar3.trace('w', change_dropdown3)
+fec.trace('w', change_dropdown3)
 
 tkvar4 = StringVar(root)
 # Tune
