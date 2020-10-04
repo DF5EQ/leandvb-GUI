@@ -285,6 +285,14 @@ root.resizable(height = False, width = False)
 frm_root = ttk.Frame(root, borderwidth=8)
 frm_root.pack()
 
+#----- declare variables -----
+var1 = IntVar()
+var3 = IntVar()
+var4 = IntVar()
+var5 = IntVar()
+var6 = IntVar()
+var7 = IntVar()
+
 #----- initialize variables -----
 if os.path.isfile(parameters_file):
     parameters_load()
@@ -292,40 +300,52 @@ else:
     parameters_default()
 
 #----- user interface content -----
-lbl_frequency  = ttk.Label(frm_root, text="Frequency")
-ent_frequency  = ttk.Entry(frm_root)
-lb2_frequency  = ttk.Label(frm_root, text="MHz")
-lbl_samplerate = ttk.Label(frm_root, text="Samplerate")
-ent_samplerate = ttk.Entry(frm_root)
-lb2_samplerate = ttk.Label(frm_root, text="S/R")
-lbl_fec        = ttk.Label(frm_root, text="FEC")
-ent_fec        = ttk.Entry(frm_root)
-lb2_fec        = ttk.Label(frm_root, text="Div")
-lbl_tune       = ttk.Label(frm_root, text="Tune")
-ent_tune       = ttk.Entry(frm_root)
-lb2_tune       = ttk.Label(frm_root, text="Hz")
-lbl_bandwidth  = ttk.Label(frm_root, text="Bandwidth")
-ent_bandwidth  = ttk.Entry(frm_root)
-lb2_bandwidth  = ttk.Label(frm_root, text="kHz")
+lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
+ent_frequency  = ttk.Entry   (frm_root)
+lb2_frequency  = ttk.Label   (frm_root, text="MHz")
+lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
+ent_samplerate = ttk.Entry   (frm_root)
+lb2_samplerate = ttk.Label   (frm_root, text="S/R")
+lbl_fec        = ttk.Label   (frm_root, text="FEC")
+ent_fec        = ttk.Entry   (frm_root)
+lb2_fec        = ttk.Label   (frm_root, text="Div")
+lbl_tune       = ttk.Label   (frm_root, text="Tune")
+ent_tune       = ttk.Entry   (frm_root)
+lb2_tune       = ttk.Label   (frm_root, text="Hz")
+lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
+ent_bandwidth  = ttk.Entry   (frm_root)
+lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
+lbl_separator  = Frame       (frm_root, height=1, bg="black")
+chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=var1)
+chk_viterbi    = Checkbutton (frm_root, text="Viterbi",       variable=var3)
+chk_hardmetric = Checkbutton (frm_root, text="Hard-Metric",   variable=var4)
+chk_gui        = Checkbutton (frm_root, text="Gui",           variable=var5)
+chk_dvbs2      = Checkbutton (frm_root, text="DVBS-2",        variable=var6)
+chk_sensitive  = Checkbutton (frm_root, text="Max sensitive", variable=var7)
 
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0, sticky=W)
-ent_frequency .grid (row=0, column=1)
-lb2_frequency .grid (row=0, column=2, sticky=W)
+ent_frequency .grid (row=0, column=1, sticky=W, columnspan=2)
+lb2_frequency .grid (row=0, column=3, sticky=W)
 lbl_samplerate.grid (row=1, column=0, sticky=W)
-ent_samplerate.grid (row=1, column=1)
-lb2_samplerate.grid (row=1, column=2, sticky=W)
+ent_samplerate.grid (row=1, column=1, sticky=W, columnspan=2)
+lb2_samplerate.grid (row=1, column=3, sticky=W)
 lbl_fec       .grid (row=2, column=0, sticky=W)
-ent_fec       .grid (row=2, column=1)
-lb2_fec       .grid (row=2, column=2, sticky=W)
+ent_fec       .grid (row=2, column=1, sticky=W, columnspan=2)
+lb2_fec       .grid (row=2, column=3, sticky=W)
 lbl_tune      .grid (row=3, column=0, sticky=W)
-ent_tune      .grid (row=3, column=1)
-lb2_tune      .grid (row=3, column=2, sticky=W)
+ent_tune      .grid (row=3, column=1, sticky=W, columnspan=2)
+lb2_tune      .grid (row=3, column=3, sticky=W)
 lbl_bandwidth .grid (row=4, column=0, sticky=W)
-ent_bandwidth .grid (row=4, column=1)
-lb2_bandwidth .grid (row=4, column=2, sticky=W)
-
-Frame(frm_root, height=1, bg="black").grid(row=5,column=0, columnspan=5, pady=8, sticky=EW)
+ent_bandwidth .grid (row=4, column=1, sticky=W, columnspan=2)
+lb2_bandwidth .grid (row=4, column=3, sticky=W)
+lbl_separator .grid (row=5, column=0, sticky=EW, columnspan=6, pady=8)
+chk_fastlock  .grid (row=6, column=0, sticky=W)
+chk_viterbi   .grid (row=6, column=1, sticky=W)
+chk_hardmetric.grid (row=6, column=2, sticky=W)
+chk_gui       .grid (row=7, column=0, sticky=W)
+chk_dvbs2     .grid (row=7, column=1, sticky=W)
+chk_sensitive .grid (row=7, column=2, sticky=W)
 
 ent_frequency.focus_set()
 
@@ -346,19 +366,6 @@ gain.set(parameters["gain"])
 
 rtldongle = IntVar()
 rtldongle.set(parameters["rtldongle"])
-
-var1 = IntVar()
-Checkbutton(frm_root, text="Fastlock",      variable=var1).grid(row=6, column=0, sticky=W)
-var3 = IntVar()
-Checkbutton(frm_root, text="Viterbi",       variable=var3).grid(row=6, column=1, sticky=W)
-var4 = IntVar()
-Checkbutton(frm_root, text="Hard-Metric",   variable=var4).grid(row=6, column=1, sticky=E)
-var5 = IntVar()
-Checkbutton(frm_root, text="Gui",           variable=var5).grid(row=7, column=0, sticky=W)
-var6 = IntVar()
-Checkbutton(frm_root, text="DVBS-2",        variable=var6).grid(row=7, column=1, sticky=W)
-var7 = IntVar()
-Checkbutton(frm_root, text="Max sensitive", variable=var7).grid(row=7, column=1, sticky=E)
 
 viewer = StringVar()
 rolloff_factor = StringVar()
@@ -388,7 +395,7 @@ if os.path.isfile("logo.png"):
     photo = ImageTk.PhotoImage(im)
     label = ttk.Label(frm_root, image=photo)
     label.image = photo
-    label.grid(row=0, column=3, columnspan=3, rowspan=5, sticky=W+E+N+S, padx=5, pady=5)
+    label.grid(row=0, column=4, columnspan=2, rowspan=5, sticky=W+E+N+S, padx=5, pady=5)
 
 def on_exit():
     parameters_save()
@@ -525,10 +532,10 @@ def on_start():
     file.close()
     os.system("sh " + run_script + " &")
 
-ttk.Button(frm_root, text='START',    command=on_start)     .grid(row=6, column=3)
-ttk.Button(frm_root, text='Settings', command=dlg_settings) .grid(row=6, column=4)
-ttk.Button(frm_root, text='STOP',     command=on_stop)      .grid(row=7, column=3)
-ttk.Button(frm_root, text='EXIT',     command=on_exit)      .grid(row=7, column=4)
+ttk.Button(frm_root, text='START',    command=on_start)     .grid(row=6, column=4)
+ttk.Button(frm_root, text='Settings', command=dlg_settings) .grid(row=6, column=5)
+ttk.Button(frm_root, text='STOP',     command=on_stop)      .grid(row=7, column=4)
+ttk.Button(frm_root, text='EXIT',     command=on_exit)      .grid(row=7, column=5)
 
 root.protocol("WM_DELETE_WINDOW", on_exit)
 
@@ -540,7 +547,7 @@ choices1 = { '1252','1257','1260','436','437','1255','1252.600','1280','1250','1
 tkvar1.set(str(parameters["frequency"])) # set the default option
 
 popupMenu = OptionMenu(frm_root, tkvar1, *choices1)
-popupMenu.grid(row = 0, column =1, sticky=E)
+popupMenu.grid(row = 0, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown1(*args):
@@ -559,7 +566,7 @@ choices2 = { '33', '66','125','150','250','333','400','500','600','750','1000','
 tkvar2.set(str(parameters["samplerate"])) # set the default option
 
 popupMenu = OptionMenu(frm_root, tkvar2, *choices2)
-popupMenu.grid(row = 1, column =1, sticky=E)
+popupMenu.grid(row = 1, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown2(*args):
@@ -575,7 +582,7 @@ tkvar3 = StringVar(root)
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
 tkvar3.set(parameters["fec"])
 popupMenu = OptionMenu(frm_root, tkvar3, *choices3)
-popupMenu.grid(row = 2, column =1, sticky=E)
+popupMenu.grid(row = 2, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown3(*args):
@@ -592,7 +599,7 @@ choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-20
 tkvar4.set(parameters["tune"]) # set the default option
 
 popupMenu = OptionMenu(frm_root, tkvar4, *choices4)
-popupMenu.grid(row = 3, column =1, sticky=E)
+popupMenu.grid(row = 3, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown4(*args):
