@@ -281,6 +281,7 @@ root = Tk()
 
 #----- window properties -----
 root.title('LeanDVB DVBS + DVBS2 interface')
+root.resizable(height = False, width = False)
 frm_root = ttk.Frame(root, borderwidth=8)
 frm_root.pack()
 
