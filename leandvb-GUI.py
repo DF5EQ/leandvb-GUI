@@ -8,7 +8,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO reorganize logo
 # TODO reorganize popup selections
 # TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
@@ -17,7 +16,6 @@
 # TODO add entries for path and filenames in settings
 
 from Tkinter import *
-from PIL import ImageTk, Image
 import ttk
 import os
 import json
@@ -474,11 +472,17 @@ btn_start      = ttk.Button  (frm_root, text='START',         command=on_start)
 btn_settings   = ttk.Button  (frm_root, text='Settings',      command=dlg_settings)
 btn_stop       = ttk.Button  (frm_root, text='STOP',          command=on_stop)
 btn_exit       = ttk.Button  (frm_root, text='EXIT',          command=on_exit)
+if os.path.isfile("logo.png"):
+    img_logo = PhotoImage(file="logo.png")
+else:
+    img_logo = None
+lbl_logo = Label(frm_root, image=img_logo)
 
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0, sticky=W)
 ent_frequency .grid (row=0, column=1, sticky=W, columnspan=2)
 lb2_frequency .grid (row=0, column=3, sticky=W)
+lbl_logo      .grid (row=0, column=4, sticky=W+E+N+S, columnspan=2, rowspan=5, padx=5, pady=5)
 lbl_samplerate.grid (row=1, column=0, sticky=W)
 ent_samplerate.grid (row=1, column=1, sticky=W, columnspan=2)
 lb2_samplerate.grid (row=1, column=3, sticky=W)
@@ -529,13 +533,6 @@ inpipe        .set(parameters["inpipe"])
 modcods       .set(parameters["modcods"])
 framesizes    .set(parameters["framesizes"])
 lnblo         .set(parameters["lnb_lo"])
-
-if os.path.isfile("logo.png"):
-    im = Image.open("logo.png")
-    photo = ImageTk.PhotoImage(im)
-    label = ttk.Label(frm_root, image=photo)
-    label.image = photo
-    label.grid(row=0, column=4, columnspan=2, rowspan=5, sticky=W+E+N+S, padx=5, pady=5)
 
 #----- popup entries -----
 tkvar1 = StringVar(root)
