@@ -63,7 +63,7 @@ def parameters_save():
     parameters["fec"           ] = fec.get()
     parameters["tune"          ] = int(tune.get())
     parameters["fastlock"      ] = bool(fastlock.get())
-    parameters["bandwidth"     ] = int(ent_bandwidth.get())
+    parameters["bandwidth"     ] = int(bandwidth.get())
     parameters["viterbi"       ] = bool(viterbi.get())
     parameters["gui"           ] = bool(gui.get())
     parameters["dvbs2"         ] = bool(dvbs.get())
@@ -313,6 +313,7 @@ frequency      = DoubleVar()
 samplerate     = IntVar()
 fec            = StringVar()
 tune           = StringVar()
+bandwidth      = IntVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -325,7 +326,7 @@ def on_start():
     inpip            = inpipe.get()
     modcods_value    = modcods.get()
     framesizes_value = framesizes.get()
-    bandwidth        = int(ent_bandwidth.get()) * 1000
+    bandwidthvalue   = int(bandwidth.get()) * 1000
     if (viewer.get() == "ffplay"):
         view = "ffplay -v 0"
     else:
@@ -372,7 +373,7 @@ def on_start():
               " -d " + str(rtl) + \
               " -f " + str(frequency_value) + \
               " -g " + str(gain_value) +  \
-              " -s " + str(bandwidth) + \
+              " -s " + str(bandwidth_value) + \
               " -p " + str(ppmvalue) + \
               " -" + \
               " | " + \
@@ -394,7 +395,7 @@ def on_start():
               " -v" + \
               " --roll-off " + rolloff + \
               " --sr " + str(samplerate_value) + \
-              " -f " + str(bandwidth) + \
+              " -f " + str(bandwidth_value) + \
               " | " + \
               "ffplay -v 0 -" + \
               " \n"
@@ -403,7 +404,7 @@ def on_start():
               " -d " + str(rtl) + \
               " -f " + str(frequency_value) + \
               " -g " + str(gain_value) +  \
-              " -s " + str(bandwidth) + \
+              " -s " + str(bandwidth_value) + \
               " -p " + str(ppmvalue) + \
               " -" + \
               " | " + \
@@ -418,7 +419,7 @@ def on_start():
               " --standard " + opt_dvbs + \
               " -v" + \
               " --sr " + str(samplerate_value) + \
-              " -f " + str(bandwidth) + \
+              " -f " + str(bandwidth_value) + \
               " | " + \
               view + " -" + \
               " \n"
@@ -464,7 +465,7 @@ lbl_tune       = ttk.Label   (frm_root, text="Tune")
 ent_tune       = ttk.Entry   (frm_root, width=10, textvariable=tune)
 lb2_tune       = ttk.Label   (frm_root, text="Hz")
 lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
-ent_bandwidth  = ttk.Entry   (frm_root)
+ent_bandwidth  = ttk.Entry   (frm_root, width=10, textvariable=bandwidth)
 lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
 lbl_separator  = Frame       (frm_root, height=1, bg="black")
 chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=fastlock)
@@ -514,8 +515,7 @@ btn_exit      .grid (row=7, column=5)
 
 ent_frequency.focus_set()
 
-ent_bandwidth .insert(0, parameters["bandwidth"])
-
+bandwidth     .set(parameters["bandwidth"])
 tune          .set(parameters["tune"])
 fec           .set(parameters["fec"])
 samplerate    .set(parameters["samplerate"])
