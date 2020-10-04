@@ -61,7 +61,7 @@ def parameters_save():
     parameters["frequency"     ] = float(frequency.get())
     parameters["samplerate"    ] = int(samplerate.get())
     parameters["fec"           ] = fec.get()
-    parameters["tune"          ] = int(ent_tune.get())
+    parameters["tune"          ] = int(tune.get())
     parameters["fastlock"      ] = bool(fastlock.get())
     parameters["bandwidth"     ] = int(ent_bandwidth.get())
     parameters["viterbi"       ] = bool(viterbi.get())
@@ -312,6 +312,7 @@ lnblo          = DoubleVar()
 frequency      = DoubleVar()
 samplerate     = IntVar()
 fec            = StringVar()
+tune           = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -364,7 +365,7 @@ def on_start():
     frequency_value  = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
     samplerate_value = int(samplerate.get()) * 1000
     fec_value        = fec.get()
-    tune       = ent_tune.get()
+    tune_value       = tune.get()
     rtl        = rtldongle.get()
     if (dvbs.get() == True): #dvbs2
         sub = "rtl_sdr" + \
@@ -383,7 +384,7 @@ def on_start():
               opt_viterbi + \
               opt_hardmetric + \
               opt_fastlock + \
-              " --tune " + tune + \
+              " --tune " + tune_value + \
               " --standard " + opt_dvbs + \
               " --ldpc-helper " + leanpad + "ldpc_tool" + \
               " --inpipe " + str(inpip) + \
@@ -412,7 +413,7 @@ def on_start():
               opt_viterbi + \
               opt_hardmetric + \
               opt_fastlock + \
-              " --tune " + tune + \
+              " --tune " + tune_value + \
               " --cr " + fec_value + \
               " --standard " + opt_dvbs + \
               " -v" + \
@@ -460,7 +461,7 @@ lbl_fec        = ttk.Label   (frm_root, text="FEC")
 ent_fec        = ttk.Entry   (frm_root, width=10, textvariable=fec)
 lb2_fec        = ttk.Label   (frm_root, text="Div")
 lbl_tune       = ttk.Label   (frm_root, text="Tune")
-ent_tune       = ttk.Entry   (frm_root)
+ent_tune       = ttk.Entry   (frm_root, width=10, textvariable=tune)
 lb2_tune       = ttk.Label   (frm_root, text="Hz")
 lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
 ent_bandwidth  = ttk.Entry   (frm_root)
@@ -513,9 +514,9 @@ btn_exit      .grid (row=7, column=5)
 
 ent_frequency.focus_set()
 
-ent_tune      .insert(0, parameters["tune"])
 ent_bandwidth .insert(0, parameters["bandwidth"])
 
+tune          .set(parameters["tune"])
 fec           .set(parameters["fec"])
 samplerate    .set(parameters["samplerate"])
 frequency     .set(parameters["frequency"])
@@ -589,22 +590,19 @@ def change_dropdown3(*args):
 # link function to change dropdown
 fec.trace('w', change_dropdown3)
 
-tkvar4 = StringVar(root)
 # Tune
 choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-2000','-5000','-10000'}
-tkvar4.set(parameters["tune"]) # set the default option
+tune.set(parameters["tune"]) # set the default option
 
-popupMenu = OptionMenu(frm_root, tkvar4, *choices4)
+popupMenu = OptionMenu(frm_root, tune, *choices4)
 popupMenu.grid(row = 3, column =2, sticky=E)
 
 # on change dropdown value
 def change_dropdown4(*args):
-    print(  )
-    ent_tune.delete(0, END)
-    ent_tune.insert(0, tkvar4.get())
+    print( tune.get() )
 
 # link function to change dropdown
-tkvar4.trace('w', change_dropdown4)
+tune.trace('w', change_dropdown4)
 
 #----- stop user interface
 root.protocol("WM_DELETE_WINDOW", on_exit)
