@@ -326,6 +326,7 @@ standard       = StringVar()
 
 #----- user interface action functions -----
 def on_start():
+    opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
     leanpad          = padlean.get()
     gain_value       = gain.get()
@@ -335,7 +336,7 @@ def on_start():
     inpip            = inpipe.get()
     modcods_value    = modcods.get()
     framesizes_value = framesizes.get()
-    bandwidthvalue   = int(bandwidth.get()) * 1000
+    bandwidth_value  = int(bandwidth.get()) * 1000
     if (viewer.get() == "ffplay"):
         view = "ffplay -v 0"
     else:
@@ -377,7 +378,7 @@ def on_start():
     fec_value        = fec.get()
     tune_value       = tune.get()
     rtl        = rtldongle.get()
-    if (dvbs.get() == True): #dvbs2
+    if (opt_standard == "DVB-S2"):
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
               " -f " + str(frequency_value) + \
