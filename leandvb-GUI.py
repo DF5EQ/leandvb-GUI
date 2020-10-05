@@ -452,7 +452,7 @@ def on_exit():
 
 #----- user interface content -----
 lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
-ent_frequency  = ttk.Entry   (frm_root, width=10, textvariable=frequency)
+#ent_frequency  = ttk.Entry   (frm_root, width=10, textvariable=frequency)
 lb2_frequency  = ttk.Label   (frm_root, text="MHz")
 lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
 ent_samplerate = ttk.Entry   (frm_root, width=10, textvariable=samplerate)
@@ -485,7 +485,7 @@ lbl_logo = Label(frm_root, image=img_logo)
 
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0, sticky=W)
-ent_frequency .grid (row=0, column=1, sticky=W, columnspan=2)
+#ent_frequency .grid (row=0, column=1, sticky=W, columnspan=2)
 lb2_frequency .grid (row=0, column=3, sticky=W)
 lbl_logo      .grid (row=0, column=4, sticky=W+E+N+S, columnspan=2, rowspan=5, padx=5, pady=5)
 lbl_samplerate.grid (row=1, column=0, sticky=W)
@@ -512,7 +512,7 @@ chk_sensitive .grid (row=7, column=2, sticky=W)
 btn_stop      .grid (row=7, column=4)
 btn_exit      .grid (row=7, column=5)
 
-ent_frequency.focus_set()
+#ent_frequency.focus_set()
 
 bandwidth     .set(parameters["bandwidth"])
 tune          .set(parameters["tune"])
@@ -539,17 +539,10 @@ framesizes    .set(parameters["framesizes"])
 lnblo         .set(parameters["lnb_lo"])
 
 # --- frequency dropdown -----
-choices1 = { '10491.500','1252','1257','1260','436','437','1255','1252.600','1280','1250','1253'}
-frequency.set(str(parameters["frequency"])) # set the default option
-popupMenu = OptionMenu(frm_root, frequency, *choices1)
-popupMenu.grid(row = 0, column =2, sticky=E)
-
-# on change dropdown value
-def change_dropdown1(*args):
-    print( frequency.get() )
-
-# link function to change dropdown
-frequency.trace('w', change_dropdown1)
+cmb_frequency = ttk.Combobox(frm_root, width=10, textvariable=frequency)
+cmb_frequency["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
+cmb_frequency.grid(row=0, column=1, sticky=W)
+cmb_frequency.focus_set()
 
 # ----- samplerate dropdown -----
 #samplerate = StringVar(root)
