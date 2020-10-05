@@ -65,7 +65,6 @@ def parameters_save():
     parameters["bandwidth"     ] = int(bandwidth.get())
     parameters["viterbi"       ] = bool(viterbi.get())
     parameters["gui"           ] = bool(gui.get())
-    parameters["dvbs2"         ] = bool(dvbs.get())
     parameters["maxprocess"    ] = bool(maxprocess.get())
     parameters["hardmetric"    ] = bool(hardmetric.get())
     parameters["leanpad"       ] = padlean.get()
@@ -103,7 +102,6 @@ def parameters_default():
     parameters["bandwidth"     ] = 2400
     parameters["viterbi"       ] = False
     parameters["gui"           ] = True
-    parameters["dvbs2"         ] = True
     parameters["maxprocess"    ] = False
     parameters["hardmetric"    ] = False
     parameters["leanpad"       ] = home+"leansdr/src/apps/"
@@ -303,7 +301,6 @@ fastlock       = IntVar()
 viterbi        = IntVar()
 hardmetric     = IntVar()
 gui            = IntVar()
-dvbs           = IntVar()
 maxprocess     = IntVar()
 ppm            = IntVar()
 padlean        = StringVar()
@@ -353,10 +350,6 @@ def on_start():
         opt_gui = " --gui"
     else:
         opt_gui = ""
-    if (dvbs.get() == True):
-        opt_dvbs = "DVB-S2"
-    else:
-        opt_dvbs = "DVB-S"
     if (maxprocess.get() == True):
         opt_maxprocess = " --hq"
     else:
@@ -487,7 +480,6 @@ chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=fastlock)
 chk_viterbi    = Checkbutton (frm_root, text="Viterbi",       variable=viterbi)
 chk_hardmetric = Checkbutton (frm_root, text="Hard-Metric",   variable=hardmetric)
 chk_gui        = Checkbutton (frm_root, text="Gui",           variable=gui)
-chk_dvbs2      = Checkbutton (frm_root, text="DVBS-2",        variable=dvbs)
 chk_sensitive  = Checkbutton (frm_root, text="Max sensitive", variable=maxprocess)
 btn_start      = ttk.Button  (frm_root, text='START',         command=on_start)
 btn_settings   = ttk.Button  (frm_root, text='Settings',      command=dlg_settings)
@@ -523,7 +515,6 @@ chk_hardmetric.grid (row=6, column=2, sticky=W)
 btn_start     .grid (row=6, column=3)
 btn_settings  .grid (row=6, column=4)
 chk_gui       .grid (row=7, column=0, sticky=W)
-chk_dvbs2     .grid (row=7, column=1, sticky=W)
 chk_sensitive .grid (row=7, column=2, sticky=W)
 btn_stop      .grid (row=7, column=3)
 btn_exit      .grid (row=7, column=4)
@@ -543,7 +534,6 @@ fastlock      .set(parameters["fastlock"])
 viterbi       .set(parameters["viterbi"])
 hardmetric    .set(parameters["hardmetric"])
 gui           .set(parameters["gui"])
-dvbs          .set(parameters["dvbs2"])
 maxprocess    .set(parameters["maxprocess"])
 viewer        .set(parameters["viewer"])
 rolloff_factor.set(parameters["rolloff_factor"])
