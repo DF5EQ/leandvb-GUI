@@ -455,7 +455,7 @@ lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
 #ent_frequency  = ttk.Entry   (frm_root, width=10, textvariable=frequency)
 lb2_frequency  = ttk.Label   (frm_root, text="MHz")
 lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
-ent_samplerate = ttk.Entry   (frm_root, width=10, textvariable=samplerate)
+#ent_samplerate = ttk.Entry   (frm_root, width=10, textvariable=samplerate)
 lb2_samplerate = ttk.Label   (frm_root, text="S/R")
 lbl_fec        = ttk.Label   (frm_root, text="FEC")
 ent_fec        = ttk.Entry   (frm_root, width=10, textvariable=fec)
@@ -489,7 +489,7 @@ lbl_frequency .grid (row=0, column=0, sticky=W)
 lb2_frequency .grid (row=0, column=3, sticky=W)
 lbl_logo      .grid (row=0, column=4, sticky=W+E+N+S, columnspan=2, rowspan=5, padx=5, pady=5)
 lbl_samplerate.grid (row=1, column=0, sticky=W)
-ent_samplerate.grid (row=1, column=1, sticky=W, columnspan=2)
+#ent_samplerate.grid (row=1, column=1, sticky=W, columnspan=2)
 lb2_samplerate.grid (row=1, column=3, sticky=W)
 lbl_fec       .grid (row=2, column=0, sticky=W)
 ent_fec       .grid (row=2, column=1, sticky=W, columnspan=2)
@@ -538,25 +538,16 @@ modcods       .set(parameters["modcods"])
 framesizes    .set(parameters["framesizes"])
 lnblo         .set(parameters["lnb_lo"])
 
-# --- frequency dropdown -----
+# --- frequency combobox -----
 cmb_frequency = ttk.Combobox(frm_root, width=10, textvariable=frequency)
 cmb_frequency["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
 cmb_frequency.grid(row=0, column=1, sticky=W)
 cmb_frequency.focus_set()
 
-# ----- samplerate dropdown -----
-#samplerate = StringVar(root)
-choices2 = { '33', '66','125','150','250','333','400','500','600','750','1000','1500','2000','2083','3000','4000','4340','5000'}
-samplerate.set(str(parameters["samplerate"])) # set the default option
-popupMenu = OptionMenu(frm_root, samplerate, *choices2)
-popupMenu.grid(row = 1, column =2, sticky=E)
-
-# on change dropdown value
-def change_dropdown2(*args):
-    print( samplerate.get() )
-
-# link function to change dropdown
-samplerate.trace('w', change_dropdown2)
+# ----- samplerate combobox -----
+cmb_samplerate = ttk.Combobox(frm_root, width=10, textvariable=samplerate)
+cmb_samplerate["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
+cmb_samplerate.grid(row=1, column=1, sticky=W)
 
 # ----- fec dropdown -----
 choices3 = { '1/2','2/3','3/4','5/6','6/7','7/8' }
