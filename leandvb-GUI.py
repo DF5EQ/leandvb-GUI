@@ -452,14 +452,19 @@ def on_exit():
 
 #----- user interface content -----
 lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
+cmb_frequency  = ttk.Combobox(frm_root,             width=10, textvariable=frequency)
 lb2_frequency  = ttk.Label   (frm_root, text="MHz")
 lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
+cmb_samplerate = ttk.Combobox(frm_root,             width=10, textvariable=samplerate)
 lb2_samplerate = ttk.Label   (frm_root, text="S/R")
 lbl_fec        = ttk.Label   (frm_root, text="FEC")
+cmb_fec        = ttk.Combobox(frm_root,             width=10, textvariable=fec)
 lb2_fec        = ttk.Label   (frm_root, text="Div")
 lbl_tune       = ttk.Label   (frm_root, text="Tune")
+cmb_tune       = ttk.Combobox(frm_root,             width=10, textvariable=tune)
 lb2_tune       = ttk.Label   (frm_root, text="Hz")
 lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
+cmb_bandwidth  = ttk.Combobox(frm_root,             width=10, textvariable=bandwidth)
 lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
 lbl_separator  = Frame       (frm_root, height=1, bg="black")
 chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=fastlock)
@@ -480,15 +485,25 @@ lbl_logo = Label(frm_root, image=img_logo)
 
 #----- user interface packing -----
 lbl_frequency .grid (row=0, column=0, sticky=W, padx=5)
+cmb_frequency .grid (row=0, column=1, sticky=W)
+cmb_frequency  ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
 lb2_frequency .grid (row=0, column=2, sticky=W, padx=5)
 lbl_logo      .grid (row=0, column=4, sticky=W+E+N+S, columnspan=2, rowspan=5, padx=5, pady=5)
 lbl_samplerate.grid (row=1, column=0, sticky=W, padx=5)
+cmb_samplerate.grid (row=1, column=1, sticky=W)
+cmb_samplerate ["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
 lb2_samplerate.grid (row=1, column=2, sticky=W, padx=5)
 lbl_fec       .grid (row=2, column=0, sticky=W, padx=5)
+cmb_fec       .grid (row=2, column=1, sticky=W)
+cmb_fec        ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
 lb2_fec       .grid (row=2, column=2, sticky=W, padx=5)
 lbl_tune      .grid (row=3, column=0, sticky=W, padx=5)
+cmb_tune      .grid (row=3, column=1, sticky=W)
+cmb_tune       ["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
 lb2_tune      .grid (row=3, column=2, sticky=W, padx=5)
 lbl_bandwidth .grid (row=4, column=0, sticky=W, padx=5)
+cmb_bandwidth .grid (row=4, column=1, sticky=W)
+cmb_bandwidth  ["values"] = ("2400","2000","1000","500")
 lb2_bandwidth .grid (row=4, column=2, sticky=W, padx=5)
 lbl_separator .grid (row=5, column=0, sticky=EW, columnspan=6, pady=8)
 chk_fastlock  .grid (row=6, column=0, sticky=W)
@@ -501,6 +516,8 @@ chk_dvbs2     .grid (row=7, column=1, sticky=W)
 chk_sensitive .grid (row=7, column=2, sticky=W)
 btn_stop      .grid (row=7, column=4)
 btn_exit      .grid (row=7, column=5)
+
+cmb_frequency.focus_set()
 
 bandwidth     .set(parameters["bandwidth"])
 tune          .set(parameters["tune"])
@@ -525,32 +542,6 @@ inpipe        .set(parameters["inpipe"])
 modcods       .set(parameters["modcods"])
 framesizes    .set(parameters["framesizes"])
 lnblo         .set(parameters["lnb_lo"])
-
-# --- frequency combobox -----
-cmb_frequency = ttk.Combobox(frm_root, width=10, textvariable=frequency)
-cmb_frequency["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
-cmb_frequency.grid(row=0, column=1, sticky=W)
-cmb_frequency.focus_set()
-
-# ----- samplerate combobox -----
-cmb_samplerate = ttk.Combobox(frm_root, width=10, textvariable=samplerate)
-cmb_samplerate["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
-cmb_samplerate.grid(row=1, column=1, sticky=W)
-
-# ----- fec combobox -----
-cmb_fec = ttk.Combobox(frm_root, width=10, textvariable=fec)
-cmb_fec["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
-cmb_fec.grid(row=2, column=1, sticky=W)
-
-# ----- tune combobox -----
-cmb_tune = ttk.Combobox(frm_root, width=10, textvariable=tune)
-cmb_tune["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
-cmb_tune.grid(row=3, column=1, sticky=W)
-
-# ----- bandwidth combobox -----
-cmb_bandwidth = ttk.Combobox(frm_root, width=10, textvariable=bandwidth)
-cmb_bandwidth["values"] = ("2400","2000","1000","500")
-cmb_bandwidth.grid(row=4, column=1, sticky=W)
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
