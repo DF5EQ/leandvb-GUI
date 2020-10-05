@@ -461,10 +461,10 @@ lbl_fec        = ttk.Label   (frm_root, text="FEC")
 #ent_fec        = ttk.Entry   (frm_root, width=10, textvariable=fec)
 lb2_fec        = ttk.Label   (frm_root, text="Div")
 lbl_tune       = ttk.Label   (frm_root, text="Tune")
-ent_tune       = ttk.Entry   (frm_root, width=10, textvariable=tune)
+#ent_tune       = ttk.Entry   (frm_root, width=10, textvariable=tune)
 lb2_tune       = ttk.Label   (frm_root, text="Hz")
 lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
-ent_bandwidth  = ttk.Entry   (frm_root, width=10, textvariable=bandwidth)
+#ent_bandwidth  = ttk.Entry   (frm_root, width=10, textvariable=bandwidth)
 lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
 lbl_separator  = Frame       (frm_root, height=1, bg="black")
 chk_fastlock   = Checkbutton (frm_root, text="Fastlock",      variable=fastlock)
@@ -495,10 +495,10 @@ lbl_fec       .grid (row=2, column=0, sticky=W)
 #ent_fec       .grid (row=2, column=1, sticky=W, columnspan=2)
 lb2_fec       .grid (row=2, column=3, sticky=W)
 lbl_tune      .grid (row=3, column=0, sticky=W)
-ent_tune      .grid (row=3, column=1, sticky=W, columnspan=2)
+#ent_tune      .grid (row=3, column=1, sticky=W, columnspan=2)
 lb2_tune      .grid (row=3, column=3, sticky=W)
 lbl_bandwidth .grid (row=4, column=0, sticky=W)
-ent_bandwidth .grid (row=4, column=1, sticky=W, columnspan=2)
+#ent_bandwidth .grid (row=4, column=1, sticky=W, columnspan=2)
 lb2_bandwidth .grid (row=4, column=3, sticky=W)
 lbl_separator .grid (row=5, column=0, sticky=EW, columnspan=6, pady=8)
 chk_fastlock  .grid (row=6, column=0, sticky=W)
@@ -554,18 +554,15 @@ cmb_fec = ttk.Combobox(frm_root, width=10, textvariable=fec)
 cmb_fec["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
 cmb_fec.grid(row=2, column=1, sticky=W)
 
-# ----- tune dropdown -----
-choices4 = { '100','500','1000','2000','5000','10000','-100','-500','-1000','-2000','-5000','-10000'}
-tune.set(parameters["tune"]) # set the default option
-popupMenu = OptionMenu(frm_root, tune, *choices4)
-popupMenu.grid(row = 3, column =2, sticky=E)
+# ----- tune combobox -----
+cmb_tune = ttk.Combobox(frm_root, width=10, textvariable=tune)
+cmb_tune["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
+cmb_tune.grid(row=3, column=1, sticky=W)
 
-# on change dropdown value
-def change_dropdown4(*args):
-    print( tune.get() )
-
-# link function to change dropdown
-tune.trace('w', change_dropdown4)
+# ----- bandwidth combobox -----
+cmb_bandwidth = ttk.Combobox(frm_root, width=10, textvariable=bandwidth)
+cmb_bandwidth["values"] = ("2400","2000","1000","500")
+cmb_bandwidth.grid(row=4, column=1, sticky=W)
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
