@@ -396,7 +396,7 @@ def on_start():
               opt_hardmetric + \
               opt_fastlock + \
               " --tune " + tune_value + \
-              " --standard " + opt_dvbs + \
+              " --standard " + opt_standard + \
               " --ldpc-helper " + leanpad + "ldpc_tool" + \
               " --inpipe " + str(inpip) + \
               " --nhelpers " + str(nhelp) + \
@@ -426,7 +426,7 @@ def on_start():
               opt_fastlock + \
               " --tune " + tune_value + \
               " --cr " + fec_value + \
-              " --standard " + opt_dvbs + \
+              " --standard " + opt_standard + \
               " -v" + \
               " --sr " + str(samplerate_value) + \
               " -f " + str(bandwidth_value) + \
