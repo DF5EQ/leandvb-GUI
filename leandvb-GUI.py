@@ -80,6 +80,7 @@ def parameters_save():
     parameters["lnb_lo"        ] = lnblo.get()
     parameters["rtldongle"     ] = rtldongle.get()
     parameters["standard"      ] = standard.get()
+    parameters["sampler"       ] = sampler.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -117,6 +118,7 @@ def parameters_default():
     parameters["lnb_lo"        ] = 9750.0
     parameters["rtldongle"     ] = 0
     parameters["standard"      ] = "DVB-S2"
+    parameters["sampler"       ] = "rrc"
 
 #===== settings dialog ========================================================
 
@@ -129,6 +131,9 @@ def dlg_settings():
 
     def on_cancel():
         dlg.destroy()
+
+    def on_standard():
+        print "on_standard: " + standard.get()
 
     #----- dialog properties -----
     dlg = Toplevel(root, borderwidth=4)
@@ -144,11 +149,13 @@ def dlg_settings():
     tab_files   = ttk.Frame (ntb, padding=10)
     tab_rtlsdr  = ttk.Frame (ntb, padding=10)
     tab_leansdr = ttk.Frame (ntb, padding=10)
+    tab_leandvb = ttk.Frame (ntb, padding=10)
 
     ntb.add(tab_general, text="general")
     ntb.add(tab_files,   text="files")
     ntb.add(tab_rtlsdr,  text="rtl_sdr")
     ntb.add(tab_leansdr, text="leansdr")
+    ntb.add(tab_leandvb, text="leandvb")
 
     #----- tab_general -----
     lbl_general = ttk.Label(tab_general, text="General settings")
@@ -207,6 +214,39 @@ def dlg_settings():
     lb2_framesizes = ttk.Label   (tab_leansdr,           text=" (--framesizes) : ")
     ent_framesizes = ttk.Entry   (tab_leansdr, width=10, textvariable=framesizes)
     lb3_framesizes = ttk.Label   (tab_leansdr,           text="empty entry omits parameter")
+
+    #----- tab_leandvb -----
+    tab_leandvb.columnconfigure((0,1),     pad=4, weight=1)
+    tab_leandvb.rowconfigure   ((0,1,2,3), pad=4, weight=0)
+
+    lbl_leandvb = ttk.Label (tab_leandvb, text="Settings for leandvb program")
+    lbl_leandvb.grid (row=0, column=0, sticky=N, columnspan=2, pady=6)
+
+    frm_dvb = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
+    frm_dvb.grid (row=1, column=0, columnspan=2)
+
+    chk_dvbs = Radiobutton (tab_leandvb, text="DVB-S", variable=standard, value="DVB-S", command=on_standard)
+    chk_dvbs.grid (row=2, column=0)
+    chk_dvbs2 = Radiobutton (tab_leandvb, text="DVB-S2", variable=standard, value="DVB-S2", command=on_standard)
+    chk_dvbs2.grid (row=2, column=1)
+
+    frm_dvbs = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", height=100, width=200, padding=10)
+    frm_dvbs.grid (row=3, column=0)
+
+    frm_dvbs2 = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", height=100, width=200, padding=10)
+    frm_dvbs2.grid (row=3, column=1)
+
+    #----- tab_leandvb frm_dvb -----
+    lbl_inpipe_1 = ttk.Label (frm_dvb,           text="inpipe")
+    ent_inpipe_1 = ttk.Entry (frm_dvb, width=10, textvariable=inpipe)
+    lbl_inpipe_1.grid (row=0, column=0, sticky=W)
+    ent_inpipe_1.grid (row=0, column=1, sticky=W)
+
+    lbl_sampler = ttk.Label   (frm_dvb, text="sampler")
+    cmb_sampler = ttk.Combobox(frm_dvb, width=10, textvariable=sampler)
+    cmb_sampler ["values"] = ("nearest","linear","rrc")
+    lbl_sampler.grid (row=1, column=0, sticky=W)
+    cmb_sampler.grid (row=1, column=1, sticky=W)
 
     #----- buttons -----
     btn_save   = ttk.Button (dlg, text="save",   command=on_save)
@@ -320,6 +360,7 @@ fec            = StringVar()
 tune           = StringVar()
 bandwidth      = IntVar()
 standard       = StringVar()
+sampler        = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -544,6 +585,7 @@ modcods       .set(parameters["modcods"])
 framesizes    .set(parameters["framesizes"])
 lnblo         .set(parameters["lnb_lo"])
 standard      .set(parameters["standard"])
+sampler       .set(parameters["sampler"])
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
