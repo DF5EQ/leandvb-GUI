@@ -293,6 +293,11 @@ def dlg_settings():
     lbl_ldpc_bf.grid (row=4, column=0, sticky=E)
     ent_ldpc_bf.grid (row=4, column=1, sticky=W)
 
+    lbl_nhelpers_1 = ttk.Label (frm_dvbs2, text="Number of decoders")
+    ent_nhelpers_1 = ttk.Entry (frm_dvbs2, width=10, textvariable=nhelpers)
+    lbl_nhelpers_1.grid (row=5, column=0, sticky=E)
+    ent_nhelpers_1.grid (row=5, column=1, sticky=W)
+
     #----- buttons -----
     btn_save   = ttk.Button (dlg, text="save",   command=on_save)
     btn_cancel = ttk.Button (dlg, text="cancel", command=on_cancel)
@@ -421,7 +426,7 @@ def on_start():
     gain_value       = gain.get()
     rolloff          = rolloff_factor.get()
     rrcrej           = rrc_rej_factor.get()
-    nhelp            = nhelpers.get()
+    nhelpers_value   = nhelpers.get()
     inpip            = inpipe.get()
     modcods_value    = modcods.get()
     framesizes_value = framesizes.get()
@@ -496,7 +501,7 @@ def on_start():
               " --ldpc-bf " + str(ldpc_bf_value) + \
               " --ldpc-helper " + leanpad + ldpc_helper_value + \
               " --inpipe " + str(inpip) + \
-              " --nhelpers " + str(nhelp) + \
+              " --nhelpers " + str(nhelpers_value) + \
               " --sampler rrc" + \
               " --rrc-rej " + str(rrcrej) + \
               " -v" + \
