@@ -256,8 +256,17 @@ def dlg_settings():
     cmb_sampler.grid (row=1, column=1, sticky=W)
 
     #----- tab_leandvb frm_dvbs2 -----
-    chk_strongpls = Checkbutton (frm_dvbs2, text="strongpls",       variable=strongpls)
-    chk_strongpls.grid (row=0, column=0, sticky=W)
+    lbl_strongpls = ttk.Label   (frm_dvbs2, text="strongpls")
+    chk_strongpls = Checkbutton (frm_dvbs2, variable=strongpls)
+    lbl_strongpls.grid (row=0, column=0, sticky=E)
+    chk_strongpls.grid (row=0, column=1, sticky=W)
+
+    lbl_modcods_1 = ttk.Label (frm_dvbs2, text="modcods")
+    ent_modcods_1 = ttk.Entry (frm_dvbs2, width=10, textvariable=modcods)
+    lb2_modcods_1 = ttk.Label (frm_dvbs2, text="empty entry omits parameter")
+    lbl_modcods_1.grid (row=1, column=0, sticky=E)
+    ent_modcods_1.grid (row=1, column=1, sticky=W)
+    lb2_modcods_1.grid (row=1, column=2, sticky=W)
 
     #----- buttons -----
     btn_save   = ttk.Button (dlg, text="save",   command=on_save)
