@@ -85,6 +85,7 @@ def parameters_save():
     parameters["fastdrift"     ] = bool(fastdrift.get())
     parameters["ldpc_bf"       ] = int(ldpc_bf.get())
     parameters["ldpc_helper"   ] = ldpc_helper.get()
+    parameters["constellation" ] = const.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -127,6 +128,7 @@ def parameters_default():
     parameters["fastdrift"     ] = False
     parameters["ldpc_bf"       ] = 0
     parameters["ldpc_helper"   ] = "ldpc_tool"
+    parameters["constellation" ] = "QPSK"
 
 #===== settings dialog ========================================================
 
@@ -262,6 +264,13 @@ def dlg_settings():
     cmb_sampler ["values"] = ("nearest","linear","rrc")
     lbl_sampler.grid (row=1, column=0, sticky=W)
     cmb_sampler.grid (row=1, column=1, sticky=W)
+
+    #----- tab_leandvb frm_dvbs -----
+    lbl_const = ttk.Label    (frm_dvbs, text="constellation")
+    cmb_const = ttk.Combobox (frm_dvbs, width=10, textvariable=const, state="readonly")
+    cmb_const ["values"] = ("QPSK","BPSK")
+    lbl_const.grid (row=0, column=0, sticky=E)
+    cmb_const.grid (row=0, column=1, sticky=W)
 
     #----- tab_leandvb frm_dvbs2 -----
     lbl_strongpls = ttk.Label   (frm_dvbs2, text="strongpls")
@@ -417,6 +426,7 @@ strongpls      = IntVar()
 fastdrift      = IntVar()
 ldpc_bf        = IntVar()
 ldpc_helper    = StringVar()
+const          = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -478,6 +488,7 @@ def on_start():
     rtl               = rtldongle.get()
     ldpc_bf_value     = ldpc_bf.get()
     ldpc_helper_value = ldpc_helper.get()
+    const_value       = const.get()
     if (opt_standard == "DVB-S2"):
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
@@ -527,8 +538,9 @@ def on_start():
               opt_hardmetric + \
               opt_fastlock + \
               " --tune " + tune_value + \
-              " --cr " + fec_value + \
               " --standard " + opt_standard + \
+              " --const " + const_value + \
+              " --cr " + fec_value + \
               " -v" + \
               " --sr " + str(samplerate_value) + \
               " -f " + str(bandwidth_value) + \
@@ -660,6 +672,7 @@ strongpls     .set(parameters["strongpls"])
 fastdrift     .set(parameters["fastdrift"])
 ldpc_bf       .set(parameters["ldpc_bf"])
 ldpc_helper   .set(parameters["ldpc_helper"])
+const         .set(parameters["constellation"])
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
