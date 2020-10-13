@@ -82,6 +82,7 @@ def parameters_save():
     parameters["standard"      ] = standard.get()
     parameters["sampler"       ] = sampler.get()
     parameters["strongpls"     ] = bool(strongpls.get())
+    parameters["fastdrift"     ] = bool(fastdrift.get())
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -121,6 +122,7 @@ def parameters_default():
     parameters["standard"      ] = "DVB-S2"
     parameters["sampler"       ] = "rrc"
     parameters["strongpls"     ] = False
+    parameters["fastdrift"     ] = False
 
 #===== settings dialog ========================================================
 
@@ -275,6 +277,11 @@ def dlg_settings():
     ent_framesizes_1.grid (row=2, column=1, sticky=W)
     lb2_framesizes_1.grid (row=2, column=2, sticky=W)
 
+    lbl_fastdrift = ttk.Label   (frm_dvbs2, text="fastdrift")
+    chk_fastdrift = Checkbutton (frm_dvbs2, variable=fastdrift)
+    lbl_fastdrift.grid (row=3, column=0, sticky=E)
+    chk_fastdrift.grid (row=3, column=1, sticky=W)
+
     #----- buttons -----
     btn_save   = ttk.Button (dlg, text="save",   command=on_save)
     btn_cancel = ttk.Button (dlg, text="cancel", command=on_cancel)
@@ -389,6 +396,7 @@ bandwidth      = IntVar()
 standard       = StringVar()
 sampler        = StringVar()
 strongpls      = IntVar()
+fastdrift      = IntVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -439,6 +447,10 @@ def on_start():
         opt_strongpls = " --strongpls"
     else:
         opt_strongpls = ""
+    if (fastdrift.get() == True):
+        opt_fastdrift = " --fastdrift"
+    else:
+        opt_fastdrift = ""
     frequency_value  = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
     samplerate_value = int(samplerate.get()) * 1000
     fec_value        = fec.get()
@@ -459,6 +471,7 @@ def on_start():
               framesizes_string + \
               opt_maxprocess + \
               opt_strongpls + \
+              opt_fastdrift + \
               opt_hardmetric + \
               opt_fastlock + \
               " --tune " + tune_value + \
@@ -621,6 +634,7 @@ lnblo         .set(parameters["lnb_lo"])
 standard      .set(parameters["standard"])
 sampler       .set(parameters["sampler"])
 strongpls     .set(parameters["strongpls"])
+fastdrift     .set(parameters["fastdrift"])
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
