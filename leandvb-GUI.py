@@ -272,6 +272,12 @@ def dlg_settings():
     lbl_const.grid (row=0, column=0, sticky=E)
     cmb_const.grid (row=0, column=1, sticky=W)
 
+    lbl_fec_1 = ttk.Label   (frm_dvbs, text="code rate")
+    cmb_fec_1 = ttk.Combobox(frm_dvbs, width=10, textvariable=fec, state="readonly")
+    cmb_fec_1 ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
+    lbl_fec_1.grid (row=1, column=0, sticky=E)
+    cmb_fec_1.grid (row=1, column=1, sticky=W)
+
     #----- tab_leandvb frm_dvbs2 -----
     lbl_strongpls = ttk.Label   (frm_dvbs2, text="strongpls")
     chk_strongpls = Checkbutton (frm_dvbs2, variable=strongpls)
