@@ -268,6 +268,13 @@ def dlg_settings():
     ent_modcods_1.grid (row=1, column=1, sticky=W)
     lb2_modcods_1.grid (row=1, column=2, sticky=W)
 
+    lbl_framesizes_1 = ttk.Label (frm_dvbs2, text="framesizes")
+    ent_framesizes_1 = ttk.Entry (frm_dvbs2, width=10, textvariable=framesizes)
+    lb2_framesizes_1 = ttk.Label (frm_dvbs2, text="empty entry omits parameter")
+    lbl_framesizes_1.grid (row=2, column=0, sticky=E)
+    ent_framesizes_1.grid (row=2, column=1, sticky=W)
+    lb2_framesizes_1.grid (row=2, column=2, sticky=W)
+
     #----- buttons -----
     btn_save   = ttk.Button (dlg, text="save",   command=on_save)
     btn_cancel = ttk.Button (dlg, text="cancel", command=on_cancel)
