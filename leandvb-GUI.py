@@ -83,6 +83,7 @@ def parameters_save():
     parameters["sampler"       ] = sampler.get()
     parameters["strongpls"     ] = bool(strongpls.get())
     parameters["fastdrift"     ] = bool(fastdrift.get())
+    parameters["ldpc_bf"       ] = int(ldpc_bf.get())
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -123,6 +124,7 @@ def parameters_default():
     parameters["sampler"       ] = "rrc"
     parameters["strongpls"     ] = False
     parameters["fastdrift"     ] = False
+    parameters["ldpc_bf"       ] = 0
 
 #===== settings dialog ========================================================
 
@@ -282,6 +284,11 @@ def dlg_settings():
     lbl_fastdrift.grid (row=3, column=0, sticky=E)
     chk_fastdrift.grid (row=3, column=1, sticky=W)
 
+    lbl_ldpc_bf = ttk.Label (frm_dvbs2, text="max. LDPC bitflips")
+    ent_ldpc_bf = ttk.Entry (frm_dvbs2, width=10, textvariable=ldpc_bf)
+    lbl_ldpc_bf.grid (row=4, column=0, sticky=E)
+    ent_ldpc_bf.grid (row=4, column=1, sticky=W)
+
     #----- buttons -----
     btn_save   = ttk.Button (dlg, text="save",   command=on_save)
     btn_cancel = ttk.Button (dlg, text="cancel", command=on_cancel)
@@ -397,6 +404,7 @@ standard       = StringVar()
 sampler        = StringVar()
 strongpls      = IntVar()
 fastdrift      = IntVar()
+ldpc_bf        = IntVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -455,7 +463,8 @@ def on_start():
     samplerate_value = int(samplerate.get()) * 1000
     fec_value        = fec.get()
     tune_value       = tune.get()
-    rtl        = rtldongle.get()
+    rtl              = rtldongle.get()
+    ldpc_bf_value    = ldpc_bf.get()
     if (opt_standard == "DVB-S2"):
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
@@ -476,6 +485,7 @@ def on_start():
               opt_fastlock + \
               " --tune " + tune_value + \
               " --standard " + opt_standard + \
+              " --ldpc-bf " + str(ldpc_bf_value) + \
               " --ldpc-helper " + leanpad + "ldpc_tool" + \
               " --inpipe " + str(inpip) + \
               " --nhelpers " + str(nhelp) + \
@@ -635,6 +645,7 @@ standard      .set(parameters["standard"])
 sampler       .set(parameters["sampler"])
 strongpls     .set(parameters["strongpls"])
 fastdrift     .set(parameters["fastdrift"])
+ldpc_bf       .set(parameters["ldpc_bf"])
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
