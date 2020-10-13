@@ -84,6 +84,7 @@ def parameters_save():
     parameters["strongpls"     ] = bool(strongpls.get())
     parameters["fastdrift"     ] = bool(fastdrift.get())
     parameters["ldpc_bf"       ] = int(ldpc_bf.get())
+    parameters["ldpc_helper"   ] = ldpc_helper.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -125,6 +126,7 @@ def parameters_default():
     parameters["strongpls"     ] = False
     parameters["fastdrift"     ] = False
     parameters["ldpc_bf"       ] = 0
+    parameters["ldpc_helper"   ] = "ldpc_tool"
 
 #===== settings dialog ========================================================
 
@@ -171,9 +173,11 @@ def dlg_settings():
     ent_lnblo   = ttk.Entry(tab_general, width=10, textvariable=lnblo)
 
     #----- tab_files -----
-    lbl_files        = ttk.Label(tab_files, text="Setting of files and directories")
-    lbl_leansdr_file = ttk.Label(tab_files,           text="Path to leansdr : ")
-    ent_leansdr_file = ttk.Entry(tab_files, width=40, textvariable=padlean)
+    lbl_files           = ttk.Label(tab_files, text="Setting of files and directories")
+    lbl_leansdr_file    = ttk.Label(tab_files,           text="Path to leansdr : ")
+    ent_leansdr_file    = ttk.Entry(tab_files, width=40, textvariable=padlean)
+    lbl_ldpchelper_file = ttk.Label(tab_files,           text="LDPC helper : ")
+    ent_ldpchelper_file = ttk.Entry(tab_files, width=40, textvariable=ldpc_helper)
 
      #----- tab_rtlsdr -----
     lbl_rtlsdr    = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
@@ -308,11 +312,13 @@ def dlg_settings():
     lbl_lnblo  .grid (row=2, column=0, sticky=E)
     ent_lnblo  .grid (row=2, column=1, sticky=W)
 
-    tab_files.columnconfigure((0,1), pad=4, weight=1)
-    tab_files.rowconfigure   ((0,1), pad=4, weight=0)
-    lbl_files       .grid (row=0, column=0, sticky=N, columnspan=4, pady=6)
-    lbl_leansdr_file.grid (row=1, column=0, sticky=E)
-    ent_leansdr_file.grid (row=1, column=1, sticky=W)
+    tab_files.columnconfigure((0,1,2), pad=4, weight=1)
+    tab_files.rowconfigure   ((0,1,2), pad=4, weight=0)
+    lbl_files          .grid (row=0, column=0, sticky=N, columnspan=4, pady=6)
+    lbl_leansdr_file   .grid (row=1, column=0, sticky=E)
+    ent_leansdr_file   .grid (row=1, column=1, sticky=W)
+    lbl_ldpchelper_file.grid (row=2, column=0, sticky=E)
+    ent_ldpchelper_file.grid (row=2, column=1, sticky=W)
 
     tab_rtlsdr.columnconfigure((0,2,3),     pad=4, weight=1)
     tab_rtlsdr.rowconfigure   ((0,1,2,3,4), pad=4, weight=0)
@@ -405,6 +411,7 @@ sampler        = StringVar()
 strongpls      = IntVar()
 fastdrift      = IntVar()
 ldpc_bf        = IntVar()
+ldpc_helper    = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -459,12 +466,13 @@ def on_start():
         opt_fastdrift = " --fastdrift"
     else:
         opt_fastdrift = ""
-    frequency_value  = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
-    samplerate_value = int(samplerate.get()) * 1000
-    fec_value        = fec.get()
-    tune_value       = tune.get()
-    rtl              = rtldongle.get()
-    ldpc_bf_value    = ldpc_bf.get()
+    frequency_value   = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
+    samplerate_value  = int(samplerate.get()) * 1000
+    fec_value         = fec.get()
+    tune_value        = tune.get()
+    rtl               = rtldongle.get()
+    ldpc_bf_value     = ldpc_bf.get()
+    ldpc_helper_value = ldpc_helper.get()
     if (opt_standard == "DVB-S2"):
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
@@ -486,7 +494,7 @@ def on_start():
               " --tune " + tune_value + \
               " --standard " + opt_standard + \
               " --ldpc-bf " + str(ldpc_bf_value) + \
-              " --ldpc-helper " + leanpad + "ldpc_tool" + \
+              " --ldpc-helper " + leanpad + ldpc_helper_value + \
               " --inpipe " + str(inpip) + \
               " --nhelpers " + str(nhelp) + \
               " --sampler rrc" + \
@@ -646,6 +654,7 @@ sampler       .set(parameters["sampler"])
 strongpls     .set(parameters["strongpls"])
 fastdrift     .set(parameters["fastdrift"])
 ldpc_bf       .set(parameters["ldpc_bf"])
+ldpc_helper   .set(parameters["ldpc_helper"])
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
