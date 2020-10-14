@@ -233,25 +233,25 @@ def dlg_settings():
 
         #----- label -----
     lbl_leandvb = ttk.Label (tab_leandvb, text="Settings for leandvb program")
-    lbl_leandvb.grid (row=0, column=0, sticky=N, columnspan=2, pady=6)
-
-        #----- frame 'dvb' -----
-    frm_dvb = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
-    frm_dvb.grid (row=1, column=0, columnspan=2)
+    lbl_leandvb.grid (row=0, column=0, sticky=N, columnspan=3, pady=6)
 
         #----- radiobuttons 'standard' -----
     chk_dvbs = Radiobutton (tab_leandvb, text="DVB-S", variable=standard, value="DVB-S", command=on_standard)
-    chk_dvbs.grid (row=2, column=0)
+    chk_dvbs.grid (row=1, column=1)
     chk_dvbs2 = Radiobutton (tab_leandvb, text="DVB-S2", variable=standard, value="DVB-S2", command=on_standard)
-    chk_dvbs2.grid (row=2, column=1)
+    chk_dvbs2.grid (row=1, column=2)
+
+        #----- frame 'dvb' -----
+    frm_dvb = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
+    frm_dvb.grid (row=2, column=0, sticky=N)
 
         #----- frame 'dvbs' -----
-    frm_dvbs = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", height=100, width=200, padding=10)
-    frm_dvbs.grid (row=3, column=0)
+    frm_dvbs = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
+    frm_dvbs.grid (row=2, column=1, sticky=N)
 
         #----- frame 'dvbs2' -----
-    frm_dvbs2 = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", height=100, width=200, padding=10)
-    frm_dvbs2.grid (row=3, column=1)
+    frm_dvbs2 = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
+    frm_dvbs2.grid (row=2, column=2, sticky=N)
 
     #----- tab_leandvb frm_dvb -----
     lbl_inpipe_1 = ttk.Label (frm_dvb,           text="inpipe")
