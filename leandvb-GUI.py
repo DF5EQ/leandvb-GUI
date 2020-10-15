@@ -134,6 +134,17 @@ def parameters_default():
 
 def dlg_settings():
 
+    #----- helper functions -----
+    def set_visibility_frame_dvbs_dvbs2():
+        if standard.get() == "DVB-S":
+            frm_dvbs2.grid_remove()
+            frm_dvbs.grid()
+        elif standard.get() == "DVB-S2":
+            frm_dvbs.grid_remove()
+            frm_dvbs2.grid()
+        else:
+            print "show " + "what?"
+
     #----- action functions -----
     def on_save():
         parameters_save()
@@ -143,7 +154,7 @@ def dlg_settings():
         dlg.destroy()
 
     def on_standard():
-        print "on_standard: " + standard.get()
+        set_visibility_frame_dvbs_dvbs2()
 
     #----- dialog properties -----
     dlg = Toplevel(root, borderwidth=4)
@@ -396,6 +407,8 @@ def dlg_settings():
     lb2_framesizes.grid (row=7, column=1, sticky=E)
     ent_framesizes.grid (row=7, column=2, sticky=W)
     lb3_framesizes.grid (row=7, column=3, sticky=W)
+
+    set_visibility_frame_dvbs_dvbs2()
 
 #===== root window ============================================================
 
