@@ -168,13 +168,11 @@ def dlg_settings():
     tab_general = ttk.Frame (ntb, padding=10)
     tab_files   = ttk.Frame (ntb, padding=10)
     tab_rtlsdr  = ttk.Frame (ntb, padding=10)
-    tab_leansdr = ttk.Frame (ntb, padding=10)
     tab_leandvb = ttk.Frame (ntb, padding=10)
 
     ntb.add(tab_general, text="general")
     ntb.add(tab_files,   text="files")
     ntb.add(tab_rtlsdr,  text="rtl_sdr")
-    ntb.add(tab_leansdr, text="leansdr")
     ntb.add(tab_leandvb, text="leandvb")
 
     #----- tab_general -----
@@ -205,9 +203,6 @@ def dlg_settings():
     lb2_rtldongle = ttk.Label(tab_rtlsdr,           text=" (-d) : ")
     ent_rtldongle = ttk.Entry(tab_rtlsdr, width=10, textvariable=rtldongle)
     lb3_rtldongle = ttk.Label(tab_rtlsdr,           text="default 0")
-
-    #----- tab_leansdr -----
-    lbl_leansdr    = ttk.Label   (tab_leansdr, text="Settings for leansdr program")
 
     #----- tab_leandvb -----
     tab_leandvb.columnconfigure((0,1,2),   pad=4, weight=1)
@@ -385,10 +380,6 @@ def dlg_settings():
     lb2_rtldongle.grid (row=3, column=1, sticky=E)
     ent_rtldongle.grid (row=3, column=2, sticky=W)
     lb3_rtldongle.grid (row=3, column=3, sticky=W)
-
-    tab_leansdr.columnconfigure((0,2,3),       pad=4, weight=1)
-    tab_leansdr.rowconfigure   ((0,1,2,3,4,5), pad=4, weight=0)
-    lbl_leansdr   .grid (row=0, column=0, sticky=N, columnspan=4, pady=6)
 
     set_visibility_dvb_options(None)
 
