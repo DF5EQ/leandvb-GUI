@@ -134,8 +134,8 @@ def parameters_default():
 
 def dlg_settings():
 
-    #----- helper functions -----
-    def set_visibility_dvb_options():
+    #----- local functions -----
+    def set_visibility_dvb_options(dummy):
 
         # cover current options
         frm_blank.lift()
@@ -148,16 +148,12 @@ def dlg_settings():
             for x in options_dvbs2:
                 x.lift()
 
-    #----- action functions -----
     def on_save():
         parameters_save()
         dlg.destroy()
 
     def on_cancel():
         dlg.destroy()
-
-    def on_standard():
-        set_visibility_dvb_options()
 
     #----- dialog properties -----
     dlg = Toplevel(root, borderwidth=4)
@@ -249,27 +245,21 @@ def dlg_settings():
     lbl_leandvb = ttk.Label (tab_leandvb, text="Settings for leandvb program")
     lbl_leandvb.grid (row=0, column=0, sticky=N, columnspan=3, pady=6)
 
-        #----- radiobuttons 'standard' -----
-    chk_dvbs = Radiobutton (tab_leandvb, text="DVB-S", variable=standard, value="DVB-S", command=on_standard)
-    chk_dvbs.grid (row=1, column=0)
-    chk_dvbs2 = Radiobutton (tab_leandvb, text="DVB-S2", variable=standard, value="DVB-S2", command=on_standard)
-    chk_dvbs2.grid (row=1, column=1)
-
         #----- frame 'common options' -----
     frm_common_options = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
-    frm_common_options.grid (row=2, column=0, sticky=N)
+    frm_common_options.grid (row=1, column=0, sticky=N)
 
         #----- frame 'dvb options' -----
     frm_dvb_options = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
-    frm_dvb_options.grid (row=2, column=1, sticky=N)
+    frm_dvb_options.grid (row=1, column=1, sticky=N)
     frm_dvb_options.columnconfigure((0,1), weight=1)
-    options_dvbs = []
-    options_dvbs2 = []
+    options_dvbs  = [] # for collecting all DVB-S  options
+    options_dvbs2 = [] # for collecting all DVB-S2 options
 
         #----- for covering current options when switching to new options -----
         #----- see set_visibility_dvb_options() -----
     frm_blank = ttk.Frame (frm_dvb_options)
-    frm_blank.grid (row=0, column=0, rowspan=6, columnspan=3, sticky=NSEW)
+    frm_blank.grid (row=1, column=0, rowspan=6, columnspan=3, sticky=NSEW)
 
     #----- tab_leandvb frm_common_options -----
     lbl_inpipe_1 = ttk.Label (frm_common_options,           text="inpipe")
@@ -283,51 +273,59 @@ def dlg_settings():
     lbl_sampler.grid (row=1, column=0, sticky=W)
     cmb_sampler.grid (row=1, column=1, sticky=W)
 
+    #----- tab_leandvb frm_dvb_options (control) -----
+    lbl_standard_1 = ttk.Label    (frm_dvb_options, text="standard")
+    cmb_standard_1 = ttk.Combobox (frm_dvb_options, width=10, textvariable=standard, state="readonly")
+    cmb_standard_1 ["values"] = ("DVB-S","DVB-S2")
+    cmb_standard_1.bind("<<ComboboxSelected>>", set_visibility_dvb_options)
+    lbl_standard_1.grid (row=0, column=0, sticky=E)
+    cmb_standard_1.grid (row=0, column=1, sticky=W)
+
     #----- tab_leandvb frm_dvb_options (DVB-S) -----
     lbl_const = ttk.Label    (frm_dvb_options, text="constellation")
     cmb_const = ttk.Combobox (frm_dvb_options, width=10, textvariable=const, state="readonly")
     cmb_const ["values"] = ("QPSK","BPSK")
-    lbl_const.grid (row=0, column=0, sticky=E)
-    cmb_const.grid (row=0, column=1, sticky=W)
+    lbl_const.grid (row=1, column=0, sticky=E)
+    cmb_const.grid (row=1, column=1, sticky=W)
     options_dvbs.append(lbl_const)
     options_dvbs.append(cmb_const)
 
     lbl_fec_1 = ttk.Label   (frm_dvb_options, text="code rate")
     cmb_fec_1 = ttk.Combobox(frm_dvb_options, width=10, textvariable=fec, state="readonly")
     cmb_fec_1 ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
-    lbl_fec_1.grid (row=1, column=0, sticky=E)
-    cmb_fec_1.grid (row=1, column=1, sticky=W)
+    lbl_fec_1.grid (row=2, column=0, sticky=E)
+    cmb_fec_1.grid (row=2, column=1, sticky=W)
     options_dvbs.append(lbl_fec_1)
     options_dvbs.append(cmb_fec_1)
 
     lbl_viterbi = ttk.Label   (frm_dvb_options, text="Viterbi")
     chk_viterbi = Checkbutton (frm_dvb_options, variable=viterbi)
-    lbl_viterbi.grid (row=2, column=0, sticky=E)
-    chk_viterbi.grid (row=2, column=1, sticky=W)
+    lbl_viterbi.grid (row=3, column=0, sticky=E)
+    chk_viterbi.grid (row=3, column=1, sticky=W)
     options_dvbs.append(lbl_viterbi)
     options_dvbs.append(chk_viterbi)
 
     lbl_hardmetric = ttk.Label   (frm_dvb_options, text="Hard-Metric")
     chk_hardmetric = Checkbutton (frm_dvb_options, variable=hardmetric)
-    lbl_hardmetric.grid (row=3, column=0, sticky=E)
-    chk_hardmetric.grid (row=3, column=1, sticky=W)
+    lbl_hardmetric.grid (row=4, column=0, sticky=E)
+    chk_hardmetric.grid (row=4, column=1, sticky=W)
     options_dvbs.append(lbl_hardmetric)
     options_dvbs.append(chk_hardmetric)
 
     #----- tab_leandvb frm_dvb_options (DVB-S2) -----
     lbl_strongpls = ttk.Label   (frm_dvb_options, text="strongpls")
     chk_strongpls = Checkbutton (frm_dvb_options, variable=strongpls)
-    lbl_strongpls.grid (row=0, column=0, sticky=E)
-    chk_strongpls.grid (row=0, column=1, sticky=W)
+    lbl_strongpls.grid (row=1, column=0, sticky=E)
+    chk_strongpls.grid (row=1, column=1, sticky=W)
     options_dvbs2.append(lbl_strongpls)
     options_dvbs2.append(chk_strongpls)
 
     lbl_modcods_1 = ttk.Label (frm_dvb_options, text="modcods")
     ent_modcods_1 = ttk.Entry (frm_dvb_options, width=10, textvariable=modcods)
     lb2_modcods_1 = ttk.Label (frm_dvb_options, text="empty entry omits parameter")
-    lbl_modcods_1.grid (row=1, column=0, sticky=E)
-    ent_modcods_1.grid (row=1, column=1, sticky=W)
-    lb2_modcods_1.grid (row=1, column=2, sticky=W)
+    lbl_modcods_1.grid (row=2, column=0, sticky=E)
+    ent_modcods_1.grid (row=2, column=1, sticky=W)
+    lb2_modcods_1.grid (row=2, column=2, sticky=W)
     options_dvbs2.append(lbl_modcods_1)
     options_dvbs2.append(ent_modcods_1)
     options_dvbs2.append(lb2_modcods_1)
@@ -335,31 +333,31 @@ def dlg_settings():
     lbl_framesizes_1 = ttk.Label (frm_dvb_options, text="framesizes")
     ent_framesizes_1 = ttk.Entry (frm_dvb_options, width=10, textvariable=framesizes)
     lb2_framesizes_1 = ttk.Label (frm_dvb_options, text="empty entry omits parameter")
-    lbl_framesizes_1.grid (row=2, column=0, sticky=E)
-    ent_framesizes_1.grid (row=2, column=1, sticky=W)
-    lb2_framesizes_1.grid (row=2, column=2, sticky=W)
+    lbl_framesizes_1.grid (row=3, column=0, sticky=E)
+    ent_framesizes_1.grid (row=3, column=1, sticky=W)
+    lb2_framesizes_1.grid (row=3, column=2, sticky=W)
     options_dvbs2.append(lbl_framesizes_1)
     options_dvbs2.append(ent_framesizes_1)
     options_dvbs2.append(lb2_framesizes_1)
 
     lbl_fastdrift = ttk.Label   (frm_dvb_options, text="fastdrift")
     chk_fastdrift = Checkbutton (frm_dvb_options, variable=fastdrift)
-    lbl_fastdrift.grid (row=3, column=0, sticky=E)
-    chk_fastdrift.grid (row=3, column=1, sticky=W)
+    lbl_fastdrift.grid (row=4, column=0, sticky=E)
+    chk_fastdrift.grid (row=4, column=1, sticky=W)
     options_dvbs2.append(lbl_fastdrift)
     options_dvbs2.append(chk_fastdrift)
 
     lbl_ldpc_bf = ttk.Label (frm_dvb_options, text="max. LDPC bitflips")
     ent_ldpc_bf = ttk.Entry (frm_dvb_options, width=10, textvariable=ldpc_bf)
-    lbl_ldpc_bf.grid (row=4, column=0, sticky=E)
-    ent_ldpc_bf.grid (row=4, column=1, sticky=W)
+    lbl_ldpc_bf.grid (row=5, column=0, sticky=E)
+    ent_ldpc_bf.grid (row=5, column=1, sticky=W)
     options_dvbs2.append(lbl_ldpc_bf)
     options_dvbs2.append(ent_ldpc_bf)
 
     lbl_nhelpers_1 = ttk.Label (frm_dvb_options, text="Number of decoders")
     ent_nhelpers_1 = ttk.Entry (frm_dvb_options, width=10, textvariable=nhelpers)
-    lbl_nhelpers_1.grid (row=5, column=0, sticky=E)
-    ent_nhelpers_1.grid (row=5, column=1, sticky=W)
+    lbl_nhelpers_1.grid (row=6, column=0, sticky=E)
+    ent_nhelpers_1.grid (row=6, column=1, sticky=W)
     options_dvbs2.append(lbl_nhelpers_1)
     options_dvbs2.append(ent_nhelpers_1)
 
@@ -437,7 +435,7 @@ def dlg_settings():
     ent_framesizes.grid (row=7, column=2, sticky=W)
     lb3_framesizes.grid (row=7, column=3, sticky=W)
 
-    set_visibility_dvb_options()
+    set_visibility_dvb_options(None)
 
 #===== root window ============================================================
 
