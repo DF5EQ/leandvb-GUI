@@ -208,14 +208,6 @@ def dlg_settings():
 
     #----- tab_leansdr -----
     lbl_leansdr    = ttk.Label   (tab_leansdr, text="Settings for leansdr program")
-    lbl_rolloff    = ttk.Label   (tab_leansdr,           text="Roll Off Factor")
-    lb2_rolloff    = ttk.Label   (tab_leansdr,           text=" (--roll-off) : ")
-    ent_rolloff    = ttk.Entry   (tab_leansdr, width=10, textvariable=rolloff_factor)
-    lb3_rolloff    = ttk.Label   (tab_leansdr,           text="DVBS2")
-    lbl_rrcrej     = ttk.Label   (tab_leansdr,           text="RRC Rej Factor")
-    lb2_rrcrej     = ttk.Label   (tab_leansdr,           text=" (--rrc-rej) : ")
-    ent_rrcrej     = ttk.Entry   (tab_leansdr, width=10, textvariable=rrc_rej_factor)
-    lb3_rrcrej     = ttk.Label   (tab_leansdr,           text="DVBS2")
 
     #----- tab_leandvb -----
     tab_leandvb.columnconfigure((0,1,2),   pad=4, weight=1)
@@ -247,11 +239,21 @@ def dlg_settings():
     lbl_inpipe_1.grid (row=0, column=0, sticky=W)
     ent_inpipe_1.grid (row=0, column=1, sticky=W)
 
-    lbl_sampler = ttk.Label   (frm_common_options, text="sampler")
-    cmb_sampler = ttk.Combobox(frm_common_options, width=10, textvariable=sampler)
+    lbl_sampler = ttk.Label (frm_common_options, text="sampler")
+    cmb_sampler = ttk.Combobox(frm_common_options, width=10, textvariable=sampler, state="readonly")
     cmb_sampler ["values"] = ("nearest","linear","rrc")
     lbl_sampler.grid (row=1, column=0, sticky=W)
     cmb_sampler.grid (row=1, column=1, sticky=W)
+
+    lbl_rolloff = ttk.Label (frm_common_options,           text="Roll Off")
+    ent_rolloff = ttk.Entry (frm_common_options, width=10, textvariable=rolloff_factor)
+    lbl_rolloff.grid (row=2, column=0, sticky=W)
+    ent_rolloff.grid (row=2, column=1, sticky=W)
+
+    lbl_rrcrej = ttk.Label (frm_common_options,           text="RRC Rej")
+    ent_rrcrej = ttk.Entry (frm_common_options, width=10, textvariable=rrc_rej_factor)
+    lbl_rrcrej.grid (row=3, column=0, sticky=W)
+    ent_rrcrej.grid (row=3, column=1, sticky=W)
 
     #----- tab_leandvb frm_dvb_options (control) -----
     lbl_standard_1 = ttk.Label    (frm_dvb_options, text="DVB standard")
@@ -387,14 +389,6 @@ def dlg_settings():
     tab_leansdr.columnconfigure((0,2,3),       pad=4, weight=1)
     tab_leansdr.rowconfigure   ((0,1,2,3,4,5), pad=4, weight=0)
     lbl_leansdr   .grid (row=0, column=0, sticky=N, columnspan=4, pady=6)
-    lbl_rolloff   .grid (row=3, column=0, sticky=E)
-    lb2_rolloff   .grid (row=3, column=1, sticky=E)
-    ent_rolloff   .grid (row=3, column=2, sticky=W)
-    lb3_rolloff   .grid (row=3, column=3, sticky=W)
-    lbl_rrcrej    .grid (row=4, column=0, sticky=E)
-    lb2_rrcrej    .grid (row=4, column=1, sticky=E)
-    ent_rrcrej    .grid (row=4, column=2, sticky=W)
-    lb3_rrcrej    .grid (row=4, column=3, sticky=W)
 
     set_visibility_dvb_options(None)
 
