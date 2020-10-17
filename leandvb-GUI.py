@@ -246,11 +246,11 @@ def dlg_settings():
     lbl_leandvb.grid (row=0, column=0, sticky=N, columnspan=3, pady=6)
 
         #----- frame 'common options' -----
-    frm_common_options = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
+    frm_common_options = ttk.Frame (tab_leandvb, borderwidth=4, padding=4)
     frm_common_options.grid (row=1, column=0, sticky=N)
 
         #----- frame 'dvb options' -----
-    frm_dvb_options = ttk.Frame (tab_leandvb, borderwidth=4, relief="groove", padding=4)
+    frm_dvb_options = ttk.Frame (tab_leandvb, borderwidth=4, padding=4)
     frm_dvb_options.grid (row=1, column=1, sticky=N)
     frm_dvb_options.columnconfigure((0,1), weight=1)
     options_dvbs  = [] # for collecting all DVB-S  options
