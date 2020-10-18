@@ -72,7 +72,7 @@ def parameters_save():
     parameters["gain"          ] = gain.get()
     parameters["viewer"        ] = viewer.get()
     parameters["rolloff"       ] = float(rolloff.get())
-    parameters["rrc_rej_factor"] = rrc_rej_factor.get()
+    parameters["rrcrej"        ] = float(rrcrej.get())
     parameters["nhelpers"      ] = nhelpers.get()
     parameters["inpipe"        ] = inpipe.get()
     parameters["modcods"       ] = modcods.get()
@@ -115,7 +115,7 @@ def parameters_default():
     parameters["gain"          ] = 36
     parameters["viewer"        ] = "ffplay"
     parameters["rolloff"       ] = 0.35
-    parameters["rrc_rej_factor"] = 30
+    parameters["rrcrej"        ] = 30.0
     parameters["nhelpers"      ] = 6
     parameters["inpipe"        ] = 32000000
     parameters["modcods"       ] = "0x0040"
@@ -249,7 +249,7 @@ def dlg_settings():
     ent_rolloff.grid (row=2, column=1, sticky=W)
 
     lbl_rrcrej = ttk.Label (frm_common_options,           text="rrc rej")
-    ent_rrcrej = ttk.Entry (frm_common_options, width=10, textvariable=rrc_rej_factor)
+    ent_rrcrej = ttk.Entry (frm_common_options, width=10, textvariable=rrcrej)
     lbl_rrcrej.grid (row=3, column=0, sticky=W)
     ent_rrcrej.grid (row=3, column=1, sticky=W)
 
@@ -429,7 +429,7 @@ gain           = IntVar()
 rtldongle      = IntVar()
 viewer         = StringVar()
 rolloff        = DoubleVar()
-rrc_rej_factor = IntVar()
+rrcrej         = DoubleVar()
 nhelpers       = IntVar()
 inpipe         = IntVar()
 modcods        = StringVar()
@@ -453,13 +453,14 @@ def on_start():
     opt_inpipe  = " --inpipe "   + str(inpipe.get())
     opt_sampler = " --sampler "  + sampler.get()
     opt_rolloff = " --roll-off " + str(rolloff.get())
+    opt_rrcrej  = " --rrc-rej "  + str(rrcrej.get())
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
     leanpad          = padlean.get()
     gain_value       = gain.get()
     rolloff_value    = str(rolloff.get())
-    rrcrej           = rrc_rej_factor.get()
+    rrcrej_value     = rrcrej.get()
     nhelpers_value   = nhelpers.get()
     inpip            = inpipe.get()
     modcods_value    = modcods.get()
@@ -538,7 +539,7 @@ def on_start():
               " --inpipe " + str(inpip) + \
               " --nhelpers " + str(nhelpers_value) + \
               " --sampler rrc" + \
-              " --rrc-rej " + str(rrcrej) + \
+              " --rrc-rej " + str(rrcrej_value) + \
               " -v" + \
               " --roll-off " + rolloff_value + \
               " --sr " + str(samplerate_value) + \
@@ -572,7 +573,7 @@ def on_start():
               view + " -" + \
               " \n"
 
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
@@ -673,7 +674,7 @@ gui           .set(parameters["gui"])
 maxsensitivity.set(parameters["maxsensitivity"])
 viewer        .set(parameters["viewer"])
 rolloff       .set(parameters["rolloff"])
-rrc_rej_factor.set(parameters["rrc_rej_factor"])
+rrcrej       .set(parameters["rrcrej"])
 nhelpers      .set(parameters["nhelpers"])
 inpipe        .set(parameters["inpipe"])
 modcods       .set(parameters["modcods"])
