@@ -505,72 +505,26 @@ def on_start():
     ldpc_helper_value = ldpc_helper.get()
     const_value       = const.get()
 
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
-                          + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
-                          + opt_fastlock + opt_gui + opt_maxsens \
-                          + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
-                          + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
-                          + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper
-    print "opt leandvb: " + opt_leandvb
+    opt_leandvb = " -v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
+                           + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
+                           + opt_fastlock + opt_gui + opt_maxsens \
+                           + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
+                           + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
+                           + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper
+    print "opt leandvb:" + opt_leandvb
 
-    if (standard_value == "DVB-S2"):
-        sub = "rtl_sdr" + \
-              " -d " + str(rtl) + \
-              " -f " + str(frequency_value) + \
-              " -g " + str(gain_value) +  \
-              " -s " + str(bandwidth_value) + \
-              " -p " + str(ppmvalue) + \
-              " -" + \
-              " | " + \
-              leanpad + "leandvb" + \
-              opt_gui + \
-              modcods_string + \
-              framesizes_string + \
-              opt_maxsens + \
-              opt_strongpls + \
-              opt_fastdrift + \
-              opt_hardmetric + \
-              opt_fastlock + \
-              " --tune " + str(tune_value) + \
-              " --standard " + standard_value + \
-              " --ldpc-bf " + str(ldpc_bf_value) + \
-              " --ldpc-helper " + leanpad + ldpc_helper_value + \
-              " --inpipe " + str(inpip) + \
-              " --nhelpers " + str(nhelpers_value) + \
-              " --sampler rrc" + \
-              " --rrc-rej " + str(rrcrej_value) + \
-              " -v" + \
-              " --roll-off " + rolloff_value + \
-              " --sr " + str(symbolrate_value) + \
-              " -f " + str(bandwidth_value) + \
-              " | " + \
-              "ffplay -v 0 -" + \
-              " \n"
-    else:
-        sub = "rtl_sdr" + \
-              " -d " + str(rtl) + \
-              " -f " + str(frequency_value) + \
-              " -g " + str(gain_value) +  \
-              " -s " + str(bandwidth_value) + \
-              " -p " + str(ppmvalue) + \
-              " -" + \
-              " | " + \
-              leanpad + "leandvb" + \
-              opt_gui + \
-              opt_maxsens + \
-              opt_viterbi + \
-              opt_hardmetric + \
-              opt_fastlock + \
-              " --tune " + str(tune_value) + \
-              " --standard " + standard_value + \
-              " --const " + const_value + \
-              " --cr " + fec_value + \
-              " -v" + \
-              " --sr " + str(symbolrate_value) + \
-              " -f " + str(bandwidth_value) + \
-              " | " + \
-              view + " -" + \
-              " \n"
+    sub = "rtl_sdr" + \
+          " -d " + str(rtl) + \
+          " -f " + str(frequency_value) + \
+          " -g " + str(gain_value) +  \
+          " -s " + str(bandwidth_value) + \
+          " -p " + str(ppmvalue) + \
+          " -" + \
+          " | " + \
+          leanpad + "leandvb" + opt_leandvb + \
+          " | " + \
+          view + " -" + \
+          " \n"
 
     parameters_save()
 
