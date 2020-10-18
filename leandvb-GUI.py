@@ -450,10 +450,11 @@ const          = StringVar()
 
 #----- user interface action functions -----
 def on_start():
-    opt_inpipe  = " --inpipe "   + str(inpipe.get())
-    opt_sampler = " --sampler "  + sampler.get()
-    opt_rolloff = " --roll-off " + str(rolloff.get())
-    opt_rrcrej  = " --rrc-rej "  + str(rrcrej.get())
+    opt_inpipe   = " --inpipe "   + str(inpipe.get())
+    opt_sampler  = " --sampler "  + sampler.get()
+    opt_rolloff  = " --roll-off " + str(rolloff.get())
+    opt_rrcrej   = " --rrc-rej "  + str(rrcrej.get())
+    opt_fastlock = " --fastlock " if fastlock.get() == True else ""
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
@@ -470,10 +471,6 @@ def on_start():
         view = "ffplay -v 0"
     else:
         view = "mplayer"
-    if (fastlock.get() == True):
-        opt_fastlock = " --fastlock"
-    else:
-        opt_fastlock = ""
     if (viterbi.get() == True):
         opt_viterbi = " --viterbi"
     else:
@@ -573,7 +570,7 @@ def on_start():
               view + " -" + \
               " \n"
 
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej + opt_fastlock
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
