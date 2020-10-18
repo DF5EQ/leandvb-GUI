@@ -58,7 +58,7 @@ parameters = dict()
 def parameters_save():
     print "save parameters to file"
     parameters["frequency"     ] = float(frequency.get())
-    parameters["samplerate"    ] = int(samplerate.get())
+    parameters["symbolrate"    ] = int(symbolrate.get())
     parameters["fec"           ] = fec.get()
     parameters["tune"          ] = int(tune.get())
     parameters["fastlock"      ] = bool(fastlock.get())
@@ -101,7 +101,7 @@ def parameters_load():
 def parameters_default():
     print "load parameters with defaults"
     parameters["frequency"     ] = 10491.500
-    parameters["samplerate"    ] = 1500
+    parameters["symbolrate"    ] = 1500
     parameters["fec"           ] = "1/2"
     parameters["tune"          ] = 0
     parameters["fastlock"      ] = False
@@ -436,9 +436,9 @@ modcods        = StringVar()
 framesizes     = StringVar()
 lnblo          = DoubleVar()
 frequency      = DoubleVar()
-samplerate     = IntVar()
+symbolrate     = IntVar()
 fec            = StringVar()
-tune           = StringVar()
+tune           = IntVar()
 bandwidth      = IntVar()
 standard       = StringVar()
 sampler        = StringVar()
@@ -454,6 +454,10 @@ def on_start():
     opt_sampler    = " --sampler "  + sampler.get()
     opt_rolloff    = " --roll-off " + str(rolloff.get())
     opt_rrcrej     = " --rrc-rej "  + str(rrcrej.get())
+    opt_bandwidth  = " -f "         + str(bandwidth.get() * 1000)
+    opt_symbolrate = " --sr "       + str(symbolrate.get() * 1000)
+    opt_tune       = " --tune "     + str(tune.get())
+    opt_standard   = " --standard " + standard.get()
     opt_fastlock   = " --fastlock" if fastlock.get() == True else ""
     opt_gui        = " --gui"      if gui.get()      == True else ""
     opt_maxsens    = " --hq"       if maxsens.get()  == True else ""
@@ -467,8 +471,9 @@ def on_start():
     opt_fastdrift  = " --fastdrift" if fastdrift.get() == True and standard.get() == "DVB-S2" else ""
     opt_ldpc_bf    = (" --ldpc-bf " + str(ldpc_bf.get()))       if standard.get() == "DVB-S2" else ""
     opt_nhelpers   = (" --nhelpers " + str(nhelpers.get()))     if standard.get() == "DVB-S2" else ""
+    opt_ldpc_helper= " --ldpc-helper " + padlean.get() + ldpc_helper.get()
 
-    opt_standard     = standard.get()
+    standard_value   = standard.get()
     ppmvalue         = int(ppm.get())
     leanpad          = padlean.get()
     gain_value       = gain.get()
@@ -492,14 +497,23 @@ def on_start():
     else:
         framesizes_string = " --framesizes " + framesizes_value
     frequency_value   = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
-    samplerate_value  = int(samplerate.get()) * 1000
+    symbolrate_value  = int(symbolrate.get()) * 1000
     fec_value         = fec.get()
     tune_value        = tune.get()
     rtl               = rtldongle.get()
     ldpc_bf_value     = ldpc_bf.get()
     ldpc_helper_value = ldpc_helper.get()
     const_value       = const.get()
-    if (opt_standard == "DVB-S2"):
+
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
+                          + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
+                          + opt_fastlock + opt_gui + opt_maxsens \
+                          + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
+                          + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
+                          + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper
+    print "opt leandvb: " + opt_leandvb
+
+    if (standard_value == "DVB-S2"):
         sub = "rtl_sdr" + \
               " -d " + str(rtl) + \
               " -f " + str(frequency_value) + \
@@ -517,8 +531,8 @@ def on_start():
               opt_fastdrift + \
               opt_hardmetric + \
               opt_fastlock + \
-              " --tune " + tune_value + \
-              " --standard " + opt_standard + \
+              " --tune " + str(tune_value) + \
+              " --standard " + standard_value + \
               " --ldpc-bf " + str(ldpc_bf_value) + \
               " --ldpc-helper " + leanpad + ldpc_helper_value + \
               " --inpipe " + str(inpip) + \
@@ -527,7 +541,7 @@ def on_start():
               " --rrc-rej " + str(rrcrej_value) + \
               " -v" + \
               " --roll-off " + rolloff_value + \
-              " --sr " + str(samplerate_value) + \
+              " --sr " + str(symbolrate_value) + \
               " -f " + str(bandwidth_value) + \
               " | " + \
               "ffplay -v 0 -" + \
@@ -547,22 +561,16 @@ def on_start():
               opt_viterbi + \
               opt_hardmetric + \
               opt_fastlock + \
-              " --tune " + tune_value + \
-              " --standard " + opt_standard + \
+              " --tune " + str(tune_value) + \
+              " --standard " + standard_value + \
               " --const " + const_value + \
               " --cr " + fec_value + \
               " -v" + \
-              " --sr " + str(samplerate_value) + \
+              " --sr " + str(symbolrate_value) + \
               " -f " + str(bandwidth_value) + \
               " | " + \
               view + " -" + \
               " \n"
-
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
-                          + opt_fastlock + opt_gui + opt_maxsens \
-                          + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
-                          + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift + opt_ldpc_bf + opt_nhelpers
-    print "opt leandvb: " + opt_leandvb
 
     parameters_save()
 
@@ -596,10 +604,10 @@ lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
 cmb_frequency  = ttk.Combobox(frm_root, width=10, textvariable=frequency)
 cmb_frequency  ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
 lb2_frequency  = ttk.Label   (frm_root, text="MHz")
-lbl_samplerate = ttk.Label   (frm_root, text="Samplerate")
-cmb_samplerate = ttk.Combobox(frm_root, width=10, textvariable=samplerate)
-cmb_samplerate ["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
-lb2_samplerate = ttk.Label   (frm_root, text="S/R")
+lbl_symbolrate = ttk.Label   (frm_root, text="Symbolrate")
+cmb_symbolrate = ttk.Combobox(frm_root, width=10, textvariable=symbolrate)
+cmb_symbolrate ["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
+lb2_symbolrate = ttk.Label   (frm_root, text="kHz")
 lbl_fec        = ttk.Label   (frm_root, text="FEC")
 cmb_fec        = ttk.Combobox(frm_root, width=10, textvariable=fec)
 cmb_fec        ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
@@ -627,9 +635,9 @@ lbl_frequency .grid (row=0, column=0, sticky=W, padx=5)
 cmb_frequency .grid (row=0, column=1, sticky=W)
 lb2_frequency .grid (row=0, column=2, sticky=W, padx=5)
 lbl_logo      .grid (row=0, column=3, sticky=W+E+N+S, columnspan=2, rowspan=5, padx=5, pady=5)
-lbl_samplerate.grid (row=1, column=0, sticky=W, padx=5)
-cmb_samplerate.grid (row=1, column=1, sticky=W)
-lb2_samplerate.grid (row=1, column=2, sticky=W, padx=5)
+lbl_symbolrate.grid (row=1, column=0, sticky=W, padx=5)
+cmb_symbolrate.grid (row=1, column=1, sticky=W)
+lb2_symbolrate.grid (row=1, column=2, sticky=W, padx=5)
 lbl_fec       .grid (row=2, column=0, sticky=W, padx=5)
 cmb_fec       .grid (row=2, column=1, sticky=W)
 lb2_fec       .grid (row=2, column=2, sticky=W, padx=5)
@@ -649,7 +657,7 @@ cmb_frequency.focus_set()
 bandwidth     .set(parameters["bandwidth"])
 tune          .set(parameters["tune"])
 fec           .set(parameters["fec"])
-samplerate    .set(parameters["samplerate"])
+symbolrate    .set(parameters["symbolrate"])
 frequency     .set(parameters["frequency"])
 ppm           .set(parameters["ppm"])
 padlean       .set(parameters["leanpad"])
