@@ -513,7 +513,7 @@ def on_start():
     opt_fastdrift  = " --fastdrift" if fastdrift.get() == True and standard.get() == "DVB-S2" else ""
     opt_ldpc_bf    = (" --ldpc-bf " + str(ldpc_bf.get()))       if standard.get() == "DVB-S2" else ""
     opt_nhelpers   = (" --nhelpers " + str(nhelpers.get()))     if standard.get() == "DVB-S2" else ""
-    opt_ldpc_helper= " --ldpc-helper " + ldpchelper_path.get() + ldpchelper_file.get()
+    opt_ldpc_helper= " --ldpc-helper " + "\"" + ldpchelper_path.get() + ldpchelper_file.get() + "\""
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
 
@@ -522,14 +522,16 @@ def on_start():
     else:
         view = "mplayer"
 
-    opt_leandvb = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
+    leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
                 + opt_fastlock + opt_gui + opt_maxsens \
                 + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
                 + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
                 + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
                 + opt_debug_v + opt_debug_d
-    print "opt leandvb:" + opt_leandvb
+    leandvb_sub = "\"" + leandvb_path.get() + leandvb_file.get() + "\"" + leandvb_opt
+    print
+    print "leandvb:" + leandvb_sub
 
     sub = "rtl_sdr" + \
           " -d " + str( rtldongle.get() ) + \
@@ -539,12 +541,10 @@ def on_start():
           " -p " + str( ppm.get() ) + \
           " -" + \
           " | " + \
-          leandvb_path.get() + leandvb_file.get() + opt_leandvb + \
+          leandvb_sub + \
           " | " + \
           view + " -" + \
           " \n"
-    print
-    print sub
 
     parameters_save()
 
