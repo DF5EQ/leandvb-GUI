@@ -411,7 +411,7 @@ root.resizable(height = False, width = False)
 frm_root = ttk.Frame(root, borderwidth=8)
 frm_root.pack()
 
-#----- initialize dictionary -----
+#----- initialize parameters dictionary -----
 if os.path.isfile(parameters_file):
     parameters_load()
 else:
@@ -450,6 +450,8 @@ const          = StringVar()
 
 #----- user interface action functions -----
 def on_start():
+    opt_inpipe = " --inpipe " + str(inpipe.get())
+
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
     leanpad          = padlean.get()
@@ -568,7 +570,8 @@ def on_start():
               view + " -" + \
               " \n"
 
-    print sub
+    opt_leandvb = "-v -d" + opt_inpipe
+    print "opt leandvb: " + opt_leandvb
 
     parameters_save()
 
