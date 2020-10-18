@@ -20,20 +20,19 @@ import os
 import json
 
 # set directory for auxiliary files (settings, run, stop)
-home            = os.path.expanduser("~/")
-aux_dir         = os.path.expanduser("~/") + ".leandvb-GUI/"
-parameters_file = aux_dir + "parameters.json"
-run_script      = aux_dir + "run.sh"
-stop_script     = aux_dir + "stop.sh"
+parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
+parameters_file = parameters_path + "parameters.json"
+run_script      = parameters_path + "run.sh"
+stop_script     = parameters_path + "stop.sh"
 
-if not os.path.exists(aux_dir):
-    print "create " + aux_dir
-    os.mkdir(aux_dir)
+if not os.path.exists(parameters_path):
+    print "create " + parameters_path
+    os.mkdir(parameters_path)
 
-print "Home directory      : " + home
-print "auxilliary directory: " + aux_dir
-print "run script          : " + run_script
-print "stop script         : " + stop_script
+print "config path:", parameters_path
+print "config file:",  parameters_file
+print "run script :",  run_script
+print "stop script:",  stop_script
 
 # check max pipe size and adjust if needed
 
@@ -192,74 +191,72 @@ def dlg_settings():
     ent_lnblo   = ttk.Entry(tab_general, width=10, textvariable=lnblo)
 
     #----- tab_files -----
-    tab_files.columnconfigure((0),         pad=4, weight=1)
-    tab_files.rowconfigure   ((0,1,2,3,4), pad=4, weight=0)
+    tab_files.columnconfigure((0,1),   pad=4, weight=1)
+    tab_files.rowconfigure   ((0,1),   pad=4, weight=0)
+    tab_files.rowconfigure   ((2,3,4), pad=4, weight=1)
 
         #----- label -----
     lbl_files = ttk.Label(tab_files, text="Setting of files and directories")
     lbl_files.grid (row=0, column=0, columnspan=2)
 
     lbl_files_separator = Frame (tab_files, height=1, bg="grey")
-    lbl_files_separator.grid (row=1, column=0, columnspan=2, sticky=EW)
+    lbl_files_separator.grid (row=1, column=0, columnspan=4, sticky=EW)
 
         #----- leandvb -----
     frm_files_leandvb = ttk.LabelFrame (tab_files, text="leandvb", borderwidth=2, padding=4)
-    frm_files_leandvb.grid (row=2, column=0, sticky=N)
+    frm_files_leandvb.grid (row=2, column=0)
 
     lbl_leandvb_path = ttk.Label(frm_files_leandvb, text="Path : ")
-    ent_leandvb_path = ttk.Entry(frm_files_leandvb, width=40, textvariable=leandvb_path)
+    ent_leandvb_path = ttk.Entry(frm_files_leandvb, width=30, textvariable=leandvb_path)
     lbl_leandvb_path.grid (row=0, column=0, sticky=W)
     ent_leandvb_path.grid (row=0, column=1, sticky=W)
 
     lbl_leandvb_file = ttk.Label(frm_files_leandvb, text="File : ")
-    ent_leandvb_file = ttk.Entry(frm_files_leandvb, width=20, textvariable=leandvb_file)
+    ent_leandvb_file = ttk.Entry(frm_files_leandvb, width=15, textvariable=leandvb_file)
     lbl_leandvb_file.grid (row=1, column=0, sticky=W)
     ent_leandvb_file.grid (row=1, column=1, sticky=W)
 
         #----- LDCP helper -----
     frm_files_ldcphelper = ttk.LabelFrame (tab_files, text="LDCP helper", borderwidth=2, padding=4)
-    frm_files_ldcphelper.grid (row=3, column=0, sticky=N)
+    frm_files_ldcphelper.grid (row=3, column=0)
 
     lbl_ldpchelper_path = ttk.Label(frm_files_ldcphelper, text="Path : ")
-    ent_ldpchelper_path = ttk.Entry(frm_files_ldcphelper, width=40, textvariable=ldpchelper_path)
+    ent_ldpchelper_path = ttk.Entry(frm_files_ldcphelper, width=30, textvariable=ldpchelper_path)
     lbl_ldpchelper_path.grid (row=0, column=0, sticky=W)
     ent_ldpchelper_path.grid (row=0, column=1, sticky=W)
 
     lbl_ldpchelper_file = ttk.Label(frm_files_ldcphelper, text="File : ")
-    ent_ldpchelper_file = ttk.Entry(frm_files_ldcphelper, width=20, textvariable=ldpchelper_file)
+    ent_ldpchelper_file = ttk.Entry(frm_files_ldcphelper, width=15, textvariable=ldpchelper_file)
     lbl_ldpchelper_file.grid (row=1, column=0, sticky=W)
     ent_ldpchelper_file.grid (row=1, column=1, sticky=W)
 
         #----- rtl_sdr -----
     frm_files_rtlsdr = ttk.LabelFrame (tab_files, text="rtl_sdr", borderwidth=2, padding=4)
-    frm_files_rtlsdr.grid (row=4, column=0, sticky=N)
+    frm_files_rtlsdr.grid (row=2, column=1)
 
     lbl_rtlsdr_path = ttk.Label(frm_files_rtlsdr, text="Path : ")
-    ent_rtlsdr_path = ttk.Entry(frm_files_rtlsdr, width=40, textvariable=rtlsdr_path)
+    ent_rtlsdr_path = ttk.Entry(frm_files_rtlsdr, width=30, textvariable=rtlsdr_path)
     lbl_rtlsdr_path.grid (row=0, column=0, sticky=W)
     ent_rtlsdr_path.grid (row=0, column=1, sticky=W)
 
     lbl_rtlsdr_file = ttk.Label(frm_files_rtlsdr, text="File : ")
-    ent_rtlsdr_file = ttk.Entry(frm_files_rtlsdr, width=20, textvariable=rtlsdr_file)
+    ent_rtlsdr_file = ttk.Entry(frm_files_rtlsdr, width=15, textvariable=rtlsdr_file)
     lbl_rtlsdr_file.grid (row=1, column=0, sticky=W)
     ent_rtlsdr_file.grid (row=1, column=1, sticky=W)
 
         #----- viewer -----
     frm_files_viewer = ttk.LabelFrame (tab_files, text="viewer", borderwidth=2, padding=4)
-    frm_files_viewer.grid (row=5, column=0, sticky=N)
+    frm_files_viewer.grid (row=3, column=1)
 
     lbl_viewer_path = ttk.Label(frm_files_viewer, text="Path : ")
-    ent_viewer_path = ttk.Entry(frm_files_viewer, width=40, textvariable=viewer_path)
+    ent_viewer_path = ttk.Entry(frm_files_viewer, width=30, textvariable=viewer_path)
     lbl_viewer_path.grid (row=0, column=0, sticky=W)
     ent_viewer_path.grid (row=0, column=1, sticky=W)
 
     lbl_viewer_file = ttk.Label(frm_files_viewer, text="File : ")
-    ent_viewer_file = ttk.Entry(frm_files_viewer, width=20, textvariable=viewer_file)
+    ent_viewer_file = ttk.Entry(frm_files_viewer, width=15, textvariable=viewer_file)
     lbl_viewer_file.grid (row=1, column=0, sticky=W)
     ent_viewer_file.grid (row=1, column=1, sticky=W)
-
-        #----- settings -----
-
 
      #----- tab_rtlsdr -----
     lbl_rtlsdr    = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
@@ -566,11 +563,11 @@ def on_start():
     viewer_sub = "\"" + viewer_path.get() + "\"" + viewer_file.get()  + viewer_opt
 
     print
-    print "leandvb:" + leandvb_sub
+    print "leandvb:", leandvb_sub
     print
-    print "rtlsdr :" + rtlsdr_sub
+    print "rtlsdr:", rtlsdr_sub
     print
-    print "viewer :" + viewer_sub
+    print "viewer:", viewer_sub
     print
 
     sub = rtlsdr_sub + \
