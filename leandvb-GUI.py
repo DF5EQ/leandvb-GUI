@@ -70,7 +70,8 @@ def parameters_save():
     parameters["leandvb_file"   ] = leandvb_file.get()
     parameters["ppm"            ] = int(ppm.get())
     parameters["gain"           ] = gain.get()
-    parameters["viewer"         ] = viewer.get()
+    parameters["viewer_path"    ] = viewer_path.get()
+    parameters["viewer_file"    ] = viewer_file.get()
     parameters["rolloff"        ] = float(rolloff.get())
     parameters["rrcrej"         ] = float(rrcrej.get())
     parameters["nhelpers"       ] = int(nhelpers.get())
@@ -118,7 +119,8 @@ def parameters_default():
     parameters["leandvb_file"   ] = "leandvb"
     parameters["ppm"            ] = 0
     parameters["gain"           ] = 36
-    parameters["viewer"         ] = "ffplay"
+    parameters["viewer_path"    ] = ""
+    parameters["viewer_file"    ] = "ffplay -v 0"
     parameters["rolloff"        ] = 0.35
     parameters["rrcrej"         ] = 30.0
     parameters["nhelpers"       ] = 6
@@ -186,8 +188,6 @@ def dlg_settings():
 
     #----- tab_general -----
     lbl_general = ttk.Label(tab_general, text="General settings")
-    lbl_viewer  = ttk.Label(tab_general,           text="Viewer : ")
-    ent_viewer  = ttk.Entry(tab_general, width=10, textvariable=viewer)
     lbl_lnblo   = ttk.Label(tab_general,           text="LNB LO : ")
     ent_lnblo   = ttk.Entry(tab_general, width=10, textvariable=lnblo)
 
@@ -245,6 +245,18 @@ def dlg_settings():
     ent_rtlsdr_file.grid (row=1, column=1, sticky=W)
 
         #----- viewer -----
+    frm_files_viewer = ttk.LabelFrame (tab_files, text="viewer", borderwidth=2, padding=4)
+    frm_files_viewer.grid (row=5, column=0, sticky=N)
+
+    lbl_viewer_path = ttk.Label(frm_files_viewer, text="Path : ")
+    ent_viewer_path = ttk.Entry(frm_files_viewer, width=40, textvariable=viewer_path)
+    lbl_viewer_path.grid (row=0, column=0, sticky=W)
+    ent_viewer_path.grid (row=0, column=1, sticky=W)
+
+    lbl_viewer_file = ttk.Label(frm_files_viewer, text="File : ")
+    ent_viewer_file = ttk.Entry(frm_files_viewer, width=20, textvariable=viewer_file)
+    lbl_viewer_file.grid (row=1, column=0, sticky=W)
+    ent_viewer_file.grid (row=1, column=1, sticky=W)
 
         #----- settings -----
 
@@ -436,10 +448,8 @@ def dlg_settings():
     tab_general.columnconfigure((0,1),   pad=4, weight=1)
     tab_general.rowconfigure   ((0,1,2), pad=4, weight=0)
     lbl_general.grid(row=0, column=0, sticky=N, columnspan=4, pady=6)
-    lbl_viewer .grid (row=1, column=0, sticky=E)
-    ent_viewer .grid (row=1, column=1, sticky=W)
-    lbl_lnblo  .grid (row=2, column=0, sticky=E)
-    ent_lnblo  .grid (row=2, column=1, sticky=W)
+    lbl_lnblo  .grid (row=1, column=0, sticky=E)
+    ent_lnblo  .grid (row=1, column=1, sticky=W)
 
     tab_rtlsdr.columnconfigure((0,2,3),     pad=4, weight=1)
     tab_rtlsdr.rowconfigure   ((0,1,2,3,4), pad=4, weight=0)
@@ -510,7 +520,8 @@ rtldongle       = IntVar()
 frequency       = DoubleVar()
 symbolrate      = IntVar()
 lnblo           = DoubleVar()
-viewer          = StringVar()
+viewer_path     = StringVar()
+viewer_file     = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -539,11 +550,6 @@ def on_start():
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
 
-    if (viewer.get() == "ffplay"):
-        view = "ffplay -v 0"
-    else:
-        view = "mplayer"
-
     leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
                 + opt_fastlock + opt_gui + opt_maxsens \
@@ -556,10 +562,15 @@ def on_start():
     rtlsdr_opt = ""
     rtlsdr_sub = "\"" + rtlsdr_path.get()  + rtlsdr_file.get()  + "\"" + rtlsdr_opt
 
+    viewer_opt = " -"
+    viewer_sub = "\"" + viewer_path.get() + "\"" + viewer_file.get()  + viewer_opt
+
     print
     print "leandvb:" + leandvb_sub
     print
     print "rtlsdr :" + rtlsdr_sub
+    print
+    print "viewer :" + viewer_sub
     print
 
     sub = rtlsdr_sub + \
@@ -572,7 +583,7 @@ def on_start():
           " | " + \
           leandvb_sub + \
           " | " + \
-          view + " -" + \
+          viewer_sub + \
           " \n"
 
     parameters_save()
@@ -672,7 +683,8 @@ viterbi        .set(parameters["viterbi"])
 hardmetric     .set(parameters["hardmetric"])
 gui            .set(parameters["gui"])
 maxsens        .set(parameters["maxsens"])
-viewer         .set(parameters["viewer"])
+viewer_path    .set(parameters["viewer_path"])
+viewer_file    .set(parameters["viewer_file"])
 rolloff        .set(parameters["rolloff"])
 rrcrej         .set(parameters["rrcrej"])
 nhelpers       .set(parameters["nhelpers"])
