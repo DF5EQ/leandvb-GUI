@@ -431,20 +431,12 @@ viterbi        = IntVar()
 hardmetric     = IntVar()
 gui            = IntVar()
 maxsens        = IntVar()
-ppm            = IntVar()
-padlean        = StringVar()
-gain           = IntVar()
-rtldongle      = IntVar()
-viewer         = StringVar()
 rolloff        = DoubleVar()
 rrcrej         = DoubleVar()
 nhelpers       = IntVar()
 inpipe         = IntVar()
 modcods        = StringVar()
 framesizes     = StringVar()
-lnblo          = DoubleVar()
-frequency      = DoubleVar()
-symbolrate     = IntVar()
 fec            = StringVar()
 tune           = IntVar()
 bandwidth      = IntVar()
@@ -456,6 +448,14 @@ ldpc_bf        = IntVar()
 ldpc_helper    = StringVar()
 const          = StringVar()
 debug          = StringVar()
+ppm            = IntVar()
+padlean        = StringVar()
+gain           = IntVar()
+rtldongle      = IntVar()
+frequency      = DoubleVar()
+symbolrate     = IntVar()
+lnblo          = DoubleVar()
+viewer         = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -484,37 +484,10 @@ def on_start():
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
 
-    standard_value   = standard.get()
-    ppmvalue         = int(ppm.get())
-    leanpad          = padlean.get()
-    gain_value       = gain.get()
-    rolloff_value    = str(rolloff.get())
-    rrcrej_value     = rrcrej.get()
-    nhelpers_value   = nhelpers.get()
-    inpip            = inpipe.get()
-    modcods_value    = modcods.get()
-    framesizes_value = framesizes.get()
-    bandwidth_value  = int(bandwidth.get()) * 1000
     if (viewer.get() == "ffplay"):
         view = "ffplay -v 0"
     else:
         view = "mplayer"
-    if (modcods_value == ""):
-        modcods_string = ""
-    else:
-        modcods_string = " --modcods " + modcods_value
-    if (framesizes_value == ""):
-        framesizes_string = ""
-    else:
-        framesizes_string = " --framesizes " + framesizes_value
-    frequency_value   = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
-    symbolrate_value  = int(symbolrate.get()) * 1000
-    fec_value         = fec.get()
-    tune_value        = tune.get()
-    rtl               = rtldongle.get()
-    ldpc_bf_value     = ldpc_bf.get()
-    ldpc_helper_value = ldpc_helper.get()
-    const_value       = const.get()
 
     opt_leandvb = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
@@ -526,14 +499,14 @@ def on_start():
     print "opt leandvb:" + opt_leandvb
 
     sub = "rtl_sdr" + \
-          " -d " + str(rtl) + \
-          " -f " + str(frequency_value) + \
-          " -g " + str(gain_value) +  \
-          " -s " + str(bandwidth_value) + \
-          " -p " + str(ppmvalue) + \
+          " -d " + str( rtldongle.get() ) + \
+          " -f " + str( int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 ) ) + \
+          " -g " + str( gain.get() ) +  \
+          " -s " + str( bandwidth.get() * 1000) + \
+          " -p " + str( ppm.get() ) + \
           " -" + \
           " | " + \
-          leanpad + "leandvb" + opt_leandvb + \
+          padlean.get() + "leandvb" + opt_leandvb + \
           " | " + \
           view + " -" + \
           " \n"
