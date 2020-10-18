@@ -65,7 +65,7 @@ def parameters_save():
     parameters["bandwidth"     ] = int(bandwidth.get())
     parameters["viterbi"       ] = bool(viterbi.get())
     parameters["gui"           ] = bool(gui.get())
-    parameters["maxsensitivity"] = bool(maxsensitivity.get())
+    parameters["maxsens"       ] = bool(maxsens.get())
     parameters["hardmetric"    ] = bool(hardmetric.get())
     parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = int(ppm.get())
@@ -108,7 +108,7 @@ def parameters_default():
     parameters["bandwidth"     ] = 2400
     parameters["viterbi"       ] = False
     parameters["gui"           ] = True
-    parameters["maxsensitivity"] = False
+    parameters["maxsens"       ] = False
     parameters["hardmetric"    ] = False
     parameters["leanpad"       ] = home+"leansdr/src/apps/"
     parameters["ppm"           ] = 0
@@ -264,7 +264,7 @@ def dlg_settings():
     chk_gui.grid (row=5, column=1, sticky=W)
 
     lbl_sensitivity = ttk.Label (frm_common_options, text="max sensitivity")
-    chk_sensitivity = Checkbutton (frm_common_options, variable=maxsensitivity)
+    chk_sensitivity = Checkbutton (frm_common_options, variable=maxsens)
     lbl_sensitivity.grid (row=6, column=0, sticky=W)
     chk_sensitivity.grid (row=6, column=1, sticky=W)
 
@@ -422,7 +422,7 @@ fastlock       = IntVar()
 viterbi        = IntVar()
 hardmetric     = IntVar()
 gui            = IntVar()
-maxsensitivity = IntVar()
+maxsens        = IntVar()
 ppm            = IntVar()
 padlean        = StringVar()
 gain           = IntVar()
@@ -456,6 +456,7 @@ def on_start():
     opt_rrcrej   = " --rrc-rej "  + str(rrcrej.get())
     opt_fastlock = " --fastlock" if fastlock.get() == True else ""
     opt_gui      = " --gui"      if gui.get()      == True else ""
+    opt_maxsens  = " --hq"       if maxsens.get()  == True else ""
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
@@ -476,10 +477,6 @@ def on_start():
         opt_viterbi = " --viterbi"
     else:
         opt_viterbi = ""
-    if (maxsensitivity.get() == True):
-        opt_maxsensitivity = " --hq"
-    else:
-        opt_maxsensitivity = ""
     if (hardmetric.get() == True):
         opt_hardmetric = " --hard-metric"
     else:
@@ -521,7 +518,7 @@ def on_start():
               opt_gui + \
               modcods_string + \
               framesizes_string + \
-              opt_maxsensitivity + \
+              opt_maxsens + \
               opt_strongpls + \
               opt_fastdrift + \
               opt_hardmetric + \
@@ -552,7 +549,7 @@ def on_start():
               " | " + \
               leanpad + "leandvb" + \
               opt_gui + \
-              opt_maxsensitivity + \
+              opt_maxsens + \
               opt_viterbi + \
               opt_hardmetric + \
               opt_fastlock + \
@@ -567,7 +564,7 @@ def on_start():
               view + " -" + \
               " \n"
 
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej + opt_fastlock + opt_gui
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej + opt_fastlock + opt_gui + opt_maxsens
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
@@ -665,7 +662,7 @@ fastlock      .set(parameters["fastlock"])
 viterbi       .set(parameters["viterbi"])
 hardmetric    .set(parameters["hardmetric"])
 gui           .set(parameters["gui"])
-maxsensitivity.set(parameters["maxsensitivity"])
+maxsens       .set(parameters["maxsens"])
 viewer        .set(parameters["viewer"])
 rolloff       .set(parameters["rolloff"])
 rrcrej        .set(parameters["rrcrej"])
