@@ -622,7 +622,6 @@ lbl_separator  = Frame       (frm_root, height=1, bg="grey")
 btn_start      = ttk.Button  (frm_root, text='START',         command=on_start)
 btn_settings   = ttk.Button  (frm_root, text='Settings',      command=dlg_settings)
 btn_stop       = ttk.Button  (frm_root, text='STOP',          command=on_stop)
-btn_exit       = ttk.Button  (frm_root, text='EXIT',          command=on_exit)
 if os.path.isfile("logo.png"):
     img_logo = PhotoImage(file="logo.png")
 else:
@@ -649,8 +648,7 @@ lb2_bandwidth .grid (row=4, column=2, sticky=W, padx=5)
 lbl_separator .grid (row=5, column=0, sticky=EW, columnspan=6, pady=6)
 btn_start     .grid (row=6, column=0)
 btn_stop      .grid (row=6, column=1)
-btn_settings  .grid (row=6, column=3)
-btn_exit      .grid (row=6, column=4)
+btn_settings  .grid (row=6, column=3, columnspan=2)
 
 cmb_frequency.focus_set()
 
