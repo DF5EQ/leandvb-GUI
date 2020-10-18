@@ -454,7 +454,8 @@ def on_start():
     opt_sampler  = " --sampler "  + sampler.get()
     opt_rolloff  = " --roll-off " + str(rolloff.get())
     opt_rrcrej   = " --rrc-rej "  + str(rrcrej.get())
-    opt_fastlock = " --fastlock " if fastlock.get() == True else ""
+    opt_fastlock = " --fastlock" if fastlock.get() == True else ""
+    opt_gui      = " --gui"      if gui.get()      == True else ""
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
@@ -475,10 +476,6 @@ def on_start():
         opt_viterbi = " --viterbi"
     else:
         opt_viterbi = ""
-    if (gui.get() == True):
-        opt_gui = " --gui"
-    else:
-        opt_gui = ""
     if (maxsensitivity.get() == True):
         opt_maxsensitivity = " --hq"
     else:
@@ -570,7 +567,7 @@ def on_start():
               view + " -" + \
               " \n"
 
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej + opt_fastlock
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej + opt_fastlock + opt_gui
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
@@ -671,7 +668,7 @@ gui           .set(parameters["gui"])
 maxsensitivity.set(parameters["maxsensitivity"])
 viewer        .set(parameters["viewer"])
 rolloff       .set(parameters["rolloff"])
-rrcrej       .set(parameters["rrcrej"])
+rrcrej        .set(parameters["rrcrej"])
 nhelpers      .set(parameters["nhelpers"])
 inpipe        .set(parameters["inpipe"])
 modcods       .set(parameters["modcods"])
