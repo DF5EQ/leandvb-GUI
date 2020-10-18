@@ -8,7 +8,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO reorganize DVB-S / DVB-S2 checkbox evaluation
 # TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO streamline usage of viewer ffplay and mplayer
