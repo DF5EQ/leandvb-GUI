@@ -65,7 +65,7 @@ def parameters_save():
     parameters["bandwidth"     ] = int(bandwidth.get())
     parameters["viterbi"       ] = bool(viterbi.get())
     parameters["gui"           ] = bool(gui.get())
-    parameters["maxprocess"    ] = bool(maxprocess.get())
+    parameters["maxsensitivity"    ] = bool(maxsensitivity.get())
     parameters["hardmetric"    ] = bool(hardmetric.get())
     parameters["leanpad"       ] = padlean.get()
     parameters["ppm"           ] = int(ppm.get())
@@ -108,7 +108,7 @@ def parameters_default():
     parameters["bandwidth"     ] = 2400
     parameters["viterbi"       ] = False
     parameters["gui"           ] = True
-    parameters["maxprocess"    ] = False
+    parameters["maxsensitivity"    ] = False
     parameters["hardmetric"    ] = False
     parameters["leanpad"       ] = home+"leansdr/src/apps/"
     parameters["ppm"           ] = 0
@@ -259,6 +259,11 @@ def dlg_settings():
     chk_gui = Checkbutton (frm_common_options, variable=gui)
     lbl_gui.grid (row=5, column=0, sticky=E)
     chk_gui.grid (row=5, column=1, sticky=W)
+
+    lbl_sensitivity = ttk.Label (frm_common_options, text="max sensitivity")
+    chk_sensitivity = Checkbutton (frm_common_options, variable=maxsensitivity)
+    lbl_sensitivity.grid (row=6, column=0, sticky=E)
+    chk_sensitivity.grid (row=6, column=1, sticky=W)
 
     #----- tab_leandvb frm_dvb_options (control) -----
     lbl_standard = ttk.Label    (frm_dvb_options, text="DVB standard")
@@ -414,7 +419,7 @@ fastlock       = IntVar()
 viterbi        = IntVar()
 hardmetric     = IntVar()
 gui            = IntVar()
-maxprocess     = IntVar()
+maxsensitivity     = IntVar()
 ppm            = IntVar()
 padlean        = StringVar()
 gain           = IntVar()
@@ -469,10 +474,10 @@ def on_start():
         opt_gui = " --gui"
     else:
         opt_gui = ""
-    if (maxprocess.get() == True):
-        opt_maxprocess = " --hq"
+    if (maxsensitivity.get() == True):
+        opt_maxsensitivity = " --hq"
     else:
-        opt_maxprocess = ""
+        opt_maxsensitivity = ""
     if (hardmetric.get() == True):
         opt_hardmetric = " --hard-metric"
     else:
@@ -514,7 +519,7 @@ def on_start():
               opt_gui + \
               modcods_string + \
               framesizes_string + \
-              opt_maxprocess + \
+              opt_maxsensitivity + \
               opt_strongpls + \
               opt_fastdrift + \
               opt_hardmetric + \
@@ -545,7 +550,7 @@ def on_start():
               " | " + \
               leanpad + "leandvb" + \
               opt_gui + \
-              opt_maxprocess + \
+              opt_maxsensitivity + \
               opt_viterbi + \
               opt_hardmetric + \
               opt_fastlock + \
@@ -611,7 +616,6 @@ cmb_bandwidth  = ttk.Combobox(frm_root, width=10, textvariable=bandwidth)
 cmb_bandwidth  ["values"] = ("2400","2000","1000","500")
 lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
 lbl_separator  = Frame       (frm_root, height=1, bg="black")
-chk_sensitive  = Checkbutton (frm_root, text="Max sensitive", variable=maxprocess)
 btn_start      = ttk.Button  (frm_root, text='START',         command=on_start)
 btn_settings   = ttk.Button  (frm_root, text='Settings',      command=dlg_settings)
 btn_stop       = ttk.Button  (frm_root, text='STOP',          command=on_stop)
@@ -642,7 +646,6 @@ lb2_bandwidth .grid (row=4, column=2, sticky=W, padx=5)
 lbl_separator .grid (row=5, column=0, sticky=EW, columnspan=6, pady=8)
 btn_start     .grid (row=6, column=3)
 btn_settings  .grid (row=6, column=4)
-chk_sensitive .grid (row=7, column=2, sticky=W)
 btn_stop      .grid (row=7, column=3)
 btn_exit      .grid (row=7, column=4)
 
@@ -661,7 +664,7 @@ fastlock      .set(parameters["fastlock"])
 viterbi       .set(parameters["viterbi"])
 hardmetric    .set(parameters["hardmetric"])
 gui           .set(parameters["gui"])
-maxprocess    .set(parameters["maxprocess"])
+maxsensitivity    .set(parameters["maxsensitivity"])
 viewer        .set(parameters["viewer"])
 rolloff_factor.set(parameters["rolloff_factor"])
 rrc_rej_factor.set(parameters["rrc_rej_factor"])
