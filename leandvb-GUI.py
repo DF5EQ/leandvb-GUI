@@ -86,6 +86,7 @@ def parameters_save():
     parameters["ldpc_bf"       ] = int(ldpc_bf.get())
     parameters["ldpc_helper"   ] = ldpc_helper.get()
     parameters["constellation" ] = const.get()
+    parameters["debug"         ] = debug.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -129,6 +130,7 @@ def parameters_default():
     parameters["ldpc_bf"       ] = 0
     parameters["ldpc_helper"   ] = "ldpc_tool"
     parameters["constellation" ] = "QPSK"
+    parameters["debug"         ] = "all"
 
 #===== settings dialog ========================================================
 
@@ -258,15 +260,21 @@ def dlg_settings():
     lbl_fastlock.grid (row=4, column=0, sticky=W)
     chk_fastlock.grid (row=4, column=1, sticky=W)
 
-    lbl_gui = ttk.Label (frm_common_options, text="GUI")
-    chk_gui = Checkbutton (frm_common_options, variable=gui)
-    lbl_gui.grid (row=5, column=0, sticky=W)
-    chk_gui.grid (row=5, column=1, sticky=W)
-
     lbl_sensitivity = ttk.Label (frm_common_options, text="max sensitivity")
     chk_sensitivity = Checkbutton (frm_common_options, variable=maxsens)
-    lbl_sensitivity.grid (row=6, column=0, sticky=W)
-    chk_sensitivity.grid (row=6, column=1, sticky=W)
+    lbl_sensitivity.grid (row=5, column=0, sticky=W)
+    chk_sensitivity.grid (row=5, column=1, sticky=W)
+
+    lbl_debug = ttk.Label (frm_common_options, text="debug info")
+    cmb_debug = ttk.Combobox(frm_common_options, width=10, textvariable=debug, state="readonly")
+    cmb_debug ["values"] = ("all","operation","startup","none")
+    lbl_debug.grid (row=6, column=0, sticky=W)
+    cmb_debug.grid (row=6, column=1, sticky=W)
+
+    lbl_gui = ttk.Label (frm_common_options, text="GUI")
+    chk_gui = Checkbutton (frm_common_options, variable=gui)
+    lbl_gui.grid (row=7, column=0, sticky=W)
+    chk_gui.grid (row=7, column=1, sticky=W)
 
     #----- tab_leandvb frm_dvb_options (control) -----
     lbl_standard = ttk.Label    (frm_dvb_options, text="DVB standard")
@@ -447,6 +455,7 @@ fastdrift      = IntVar()
 ldpc_bf        = IntVar()
 ldpc_helper    = StringVar()
 const          = StringVar()
+debug          = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -472,6 +481,8 @@ def on_start():
     opt_ldpc_bf    = (" --ldpc-bf " + str(ldpc_bf.get()))       if standard.get() == "DVB-S2" else ""
     opt_nhelpers   = (" --nhelpers " + str(nhelpers.get()))     if standard.get() == "DVB-S2" else ""
     opt_ldpc_helper= " --ldpc-helper " + padlean.get() + ldpc_helper.get()
+    opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
+    opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
 
     standard_value   = standard.get()
     ppmvalue         = int(ppm.get())
@@ -505,12 +516,13 @@ def on_start():
     ldpc_helper_value = ldpc_helper.get()
     const_value       = const.get()
 
-    opt_leandvb = " -v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
-                           + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
-                           + opt_fastlock + opt_gui + opt_maxsens \
-                           + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
-                           + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
-                           + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper
+    opt_leandvb = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
+                + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
+                + opt_fastlock + opt_gui + opt_maxsens \
+                + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
+                + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
+                + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
+                + opt_debug_v + opt_debug_d
     print "opt leandvb:" + opt_leandvb
 
     sub = "rtl_sdr" + \
@@ -637,6 +649,7 @@ fastdrift     .set(parameters["fastdrift"])
 ldpc_bf       .set(parameters["ldpc_bf"])
 ldpc_helper   .set(parameters["ldpc_helper"])
 const         .set(parameters["constellation"])
+debug         .set(parameters["debug"])
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
