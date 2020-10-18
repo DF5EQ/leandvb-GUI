@@ -73,7 +73,7 @@ def parameters_save():
     parameters["viewer"        ] = viewer.get()
     parameters["rolloff"       ] = float(rolloff.get())
     parameters["rrcrej"        ] = float(rrcrej.get())
-    parameters["nhelpers"      ] = nhelpers.get()
+    parameters["nhelpers"      ] = int(nhelpers.get())
     parameters["inpipe"        ] = inpipe.get()
     parameters["modcods"       ] = modcods.get()
     parameters["framesizes"    ] = framesizes.get()
@@ -461,6 +461,12 @@ def on_start():
     opt_fec        = (" --cr "    + fec.get()  )                   if standard.get() == "DVB-S" else ""
     opt_viterbi    = " --viterbi"     if viterbi.get()    == True and standard.get() == "DVB-S" else ""
     opt_hardmetric = " --hard-metric" if hardmetric.get() == True and standard.get() == "DVB-S" else ""
+    opt_strongpls  = " --strongpls"   if strongpls.get()  == True and standard.get() == "DVB-S2" else ""
+    opt_modcods    = (" --modcods "    + modcods.get())    if modcods.get()    != "" and standard.get() == "DVB-S2" else ""
+    opt_framesizes = (" --framesizes " + framesizes.get()) if framesizes.get() != "" and standard.get() == "DVB-S2" else ""
+    opt_fastdrift  = " --fastdrift" if fastdrift.get() == True and standard.get() == "DVB-S2" else ""
+    opt_ldpc_bf    = (" --ldpc-bf " + str(ldpc_bf.get()))       if standard.get() == "DVB-S2" else ""
+    opt_nhelpers   = (" --nhelpers " + str(nhelpers.get()))     if standard.get() == "DVB-S2" else ""
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
@@ -485,14 +491,6 @@ def on_start():
         framesizes_string = ""
     else:
         framesizes_string = " --framesizes " + framesizes_value
-    if (strongpls.get() == True):
-        opt_strongpls = " --strongpls"
-    else:
-        opt_strongpls = ""
-    if (fastdrift.get() == True):
-        opt_fastdrift = " --fastdrift"
-    else:
-        opt_fastdrift = ""
     frequency_value   = int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 )
     samplerate_value  = int(samplerate.get()) * 1000
     fec_value         = fec.get()
@@ -562,7 +560,8 @@ def on_start():
 
     opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                           + opt_fastlock + opt_gui + opt_maxsens \
-                          + opt_const + opt_fec + opt_viterbi + opt_hardmetric
+                          + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
+                          + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift + opt_ldpc_bf + opt_nhelpers
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
