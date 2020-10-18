@@ -450,7 +450,8 @@ const          = StringVar()
 
 #----- user interface action functions -----
 def on_start():
-    opt_inpipe = " --inpipe " + str(inpipe.get())
+    opt_inpipe  = " --inpipe "  + str(inpipe.get())
+    opt_sampler = " --sampler " + sampler.get()
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
@@ -570,7 +571,7 @@ def on_start():
               view + " -" + \
               " \n"
 
-    opt_leandvb = "-v -d" + opt_inpipe
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
