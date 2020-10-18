@@ -450,13 +450,17 @@ const          = StringVar()
 
 #----- user interface action functions -----
 def on_start():
-    opt_inpipe   = " --inpipe "   + str(inpipe.get())
-    opt_sampler  = " --sampler "  + sampler.get()
-    opt_rolloff  = " --roll-off " + str(rolloff.get())
-    opt_rrcrej   = " --rrc-rej "  + str(rrcrej.get())
-    opt_fastlock = " --fastlock" if fastlock.get() == True else ""
-    opt_gui      = " --gui"      if gui.get()      == True else ""
-    opt_maxsens  = " --hq"       if maxsens.get()  == True else ""
+    opt_inpipe     = " --inpipe "   + str(inpipe.get())
+    opt_sampler    = " --sampler "  + sampler.get()
+    opt_rolloff    = " --roll-off " + str(rolloff.get())
+    opt_rrcrej     = " --rrc-rej "  + str(rrcrej.get())
+    opt_fastlock   = " --fastlock" if fastlock.get() == True else ""
+    opt_gui        = " --gui"      if gui.get()      == True else ""
+    opt_maxsens    = " --hq"       if maxsens.get()  == True else ""
+    opt_const      = (" --const " + const.get())                   if standard.get() == "DVB-S" else ""
+    opt_fec        = (" --cr "    + fec.get()  )                   if standard.get() == "DVB-S" else ""
+    opt_viterbi    = " --viterbi"     if viterbi.get()    == True and standard.get() == "DVB-S" else ""
+    opt_hardmetric = " --hard-metric" if hardmetric.get() == True and standard.get() == "DVB-S" else ""
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
@@ -473,14 +477,6 @@ def on_start():
         view = "ffplay -v 0"
     else:
         view = "mplayer"
-    if (viterbi.get() == True):
-        opt_viterbi = " --viterbi"
-    else:
-        opt_viterbi = ""
-    if (hardmetric.get() == True):
-        opt_hardmetric = " --hard-metric"
-    else:
-        opt_hardmetric = ""
     if (modcods_value == ""):
         modcods_string = ""
     else:
@@ -564,7 +560,9 @@ def on_start():
               view + " -" + \
               " \n"
 
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej + opt_fastlock + opt_gui + opt_maxsens
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
+                          + opt_fastlock + opt_gui + opt_maxsens \
+                          + opt_const + opt_fec + opt_viterbi + opt_hardmetric
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
