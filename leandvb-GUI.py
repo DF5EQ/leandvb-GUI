@@ -71,7 +71,7 @@ def parameters_save():
     parameters["ppm"           ] = int(ppm.get())
     parameters["gain"          ] = gain.get()
     parameters["viewer"        ] = viewer.get()
-    parameters["rolloff_factor"] = rolloff_factor.get()
+    parameters["rolloff"       ] = float(rolloff.get())
     parameters["rrc_rej_factor"] = rrc_rej_factor.get()
     parameters["nhelpers"      ] = nhelpers.get()
     parameters["inpipe"        ] = inpipe.get()
@@ -114,7 +114,7 @@ def parameters_default():
     parameters["ppm"           ] = 0
     parameters["gain"          ] = 36
     parameters["viewer"        ] = "ffplay"
-    parameters["rolloff_factor"] = "0.35"
+    parameters["rolloff"       ] = 0.35
     parameters["rrc_rej_factor"] = 30
     parameters["nhelpers"      ] = 6
     parameters["inpipe"        ] = 32000000
@@ -244,7 +244,7 @@ def dlg_settings():
     cmb_sampler.grid (row=1, column=1, sticky=W)
 
     lbl_rolloff = ttk.Label (frm_common_options,           text="roll off")
-    ent_rolloff = ttk.Entry (frm_common_options, width=10, textvariable=rolloff_factor)
+    ent_rolloff = ttk.Entry (frm_common_options, width=10, textvariable=rolloff)
     lbl_rolloff.grid (row=2, column=0, sticky=W)
     ent_rolloff.grid (row=2, column=1, sticky=W)
 
@@ -428,7 +428,7 @@ padlean        = StringVar()
 gain           = IntVar()
 rtldongle      = IntVar()
 viewer         = StringVar()
-rolloff_factor = StringVar()
+rolloff        = DoubleVar()
 rrc_rej_factor = IntVar()
 nhelpers       = IntVar()
 inpipe         = IntVar()
@@ -450,14 +450,15 @@ const          = StringVar()
 
 #----- user interface action functions -----
 def on_start():
-    opt_inpipe  = " --inpipe "  + str(inpipe.get())
-    opt_sampler = " --sampler " + sampler.get()
+    opt_inpipe  = " --inpipe "   + str(inpipe.get())
+    opt_sampler = " --sampler "  + sampler.get()
+    opt_rolloff = " --roll-off " + str(rolloff.get())
 
     opt_standard     = standard.get()
     ppmvalue         = int(ppm.get())
     leanpad          = padlean.get()
     gain_value       = gain.get()
-    rolloff          = rolloff_factor.get()
+    rolloff_value    = str(rolloff.get())
     rrcrej           = rrc_rej_factor.get()
     nhelpers_value   = nhelpers.get()
     inpip            = inpipe.get()
@@ -539,7 +540,7 @@ def on_start():
               " --sampler rrc" + \
               " --rrc-rej " + str(rrcrej) + \
               " -v" + \
-              " --roll-off " + rolloff + \
+              " --roll-off " + rolloff_value + \
               " --sr " + str(samplerate_value) + \
               " -f " + str(bandwidth_value) + \
               " | " + \
@@ -571,7 +572,7 @@ def on_start():
               view + " -" + \
               " \n"
 
-    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler
+    opt_leandvb = "-v -d" + opt_inpipe + opt_sampler + opt_rolloff
     print "opt leandvb: " + opt_leandvb
 
     parameters_save()
@@ -671,7 +672,7 @@ hardmetric    .set(parameters["hardmetric"])
 gui           .set(parameters["gui"])
 maxsensitivity.set(parameters["maxsensitivity"])
 viewer        .set(parameters["viewer"])
-rolloff_factor.set(parameters["rolloff_factor"])
+rolloff       .set(parameters["rolloff"])
 rrc_rej_factor.set(parameters["rrc_rej_factor"])
 nhelpers      .set(parameters["nhelpers"])
 inpipe        .set(parameters["inpipe"])
