@@ -164,6 +164,12 @@ def dlg_settings():
         if len(d) > 0:
             leandvb_path.set(d)
 
+    def on_leandvb_file():
+        f = askopenfilename(parent=dlg, initialdir=leandvb_path.get(), initialfile=leandvb_file.get())
+        if len(f) > 0:
+            f = os.path.basename(f)
+            leandvb_file.set(f)
+
     def on_save():
         parameters_save()
         dlg.destroy()
@@ -220,9 +226,11 @@ def dlg_settings():
     btn_leandvb_path.grid (row=0, column=2)
 
     lbl_leandvb_file = ttk.Label(frm_files_leandvb, text="File : ")
-    ent_leandvb_file = ttk.Entry(frm_files_leandvb, width=15, textvariable=leandvb_file)
+    ent_leandvb_file = ttk.Entry(frm_files_leandvb, width=30, textvariable=leandvb_file)
+    btn_leandvb_file = Button(frm_files_leandvb, padx=0, pady=0, text="...", command=on_leandvb_file)
     lbl_leandvb_file.grid (row=1, column=0, sticky=W)
     ent_leandvb_file.grid (row=1, column=1, sticky=W)
+    btn_leandvb_file.grid (row=1, column=2)
 
         #----- frame LDCP helper -----
     frm_files_ldcphelper = ttk.LabelFrame (tab_files, text="LDCP helper", borderwidth=2, padding=4)
