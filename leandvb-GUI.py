@@ -15,6 +15,7 @@
 # TODO 'cancel' in settings not working propperly
 
 from Tkinter import *
+from tkFileDialog import *
 import ttk
 import os
 import json
@@ -158,6 +159,11 @@ def dlg_settings():
             for x in options_dvbs2:
                 x.lift()
 
+    def on_leandvb_path():
+        d = askdirectory(parent=dlg, initialdir=leandvb_path.get())
+        if len(d) > 0:
+            leandvb_path.set(d)
+
     def on_save():
         parameters_save()
         dlg.destroy()
@@ -202,21 +208,23 @@ def dlg_settings():
     lbl_files_separator = Frame (tab_files, height=1, bg="grey")
     lbl_files_separator.grid (row=1, column=0, columnspan=4, sticky=EW)
 
-        #----- leandvb -----
+        #----- frame leandvb -----
     frm_files_leandvb = ttk.LabelFrame (tab_files, text="leandvb", borderwidth=2, padding=4)
     frm_files_leandvb.grid (row=2, column=0)
 
     lbl_leandvb_path = ttk.Label(frm_files_leandvb, text="Path : ")
     ent_leandvb_path = ttk.Entry(frm_files_leandvb, width=30, textvariable=leandvb_path)
+    btn_leandvb_path = Button(frm_files_leandvb, padx=0, pady=0, text="...", command=on_leandvb_path)
     lbl_leandvb_path.grid (row=0, column=0, sticky=W)
     ent_leandvb_path.grid (row=0, column=1, sticky=W)
+    btn_leandvb_path.grid (row=0, column=2)
 
     lbl_leandvb_file = ttk.Label(frm_files_leandvb, text="File : ")
     ent_leandvb_file = ttk.Entry(frm_files_leandvb, width=15, textvariable=leandvb_file)
     lbl_leandvb_file.grid (row=1, column=0, sticky=W)
     ent_leandvb_file.grid (row=1, column=1, sticky=W)
 
-        #----- LDCP helper -----
+        #----- frame LDCP helper -----
     frm_files_ldcphelper = ttk.LabelFrame (tab_files, text="LDCP helper", borderwidth=2, padding=4)
     frm_files_ldcphelper.grid (row=3, column=0)
 
@@ -230,7 +238,7 @@ def dlg_settings():
     lbl_ldpchelper_file.grid (row=1, column=0, sticky=W)
     ent_ldpchelper_file.grid (row=1, column=1, sticky=W)
 
-        #----- rtl_sdr -----
+        #----- frame rtl_sdr -----
     frm_files_rtlsdr = ttk.LabelFrame (tab_files, text="rtl_sdr", borderwidth=2, padding=4)
     frm_files_rtlsdr.grid (row=2, column=1)
 
@@ -244,7 +252,7 @@ def dlg_settings():
     lbl_rtlsdr_file.grid (row=1, column=0, sticky=W)
     ent_rtlsdr_file.grid (row=1, column=1, sticky=W)
 
-        #----- viewer -----
+        #----- frame viewer -----
     frm_files_viewer = ttk.LabelFrame (tab_files, text="viewer", borderwidth=2, padding=4)
     frm_files_viewer.grid (row=3, column=1)
 
