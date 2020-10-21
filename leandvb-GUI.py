@@ -247,6 +247,7 @@ def dlg_settings():
         dlg.destroy()
 
     def on_cancel():
+        parameters_load()
         dlg.destroy()
 
     def on_default():
