@@ -181,6 +181,17 @@ def dlg_settings():
             f = os.path.basename(f)
             ldpchelper_file.set(f)
 
+    def on_rtlsdr_path():
+        d = askdirectory(parent=dlg)#, initialdir=rtlsdr_path.get())
+        if len(d) > 0:
+            rtlsdr_path.set(d)
+
+    def on_rtlsdr_file():
+        f = askopenfilename(parent=dlg, initialdir=rtlsdr_path.get(), initialfile=rtlsdr_file.get())
+        if len(f) > 0:
+            f = os.path.basename(f)
+            rtlsdr_file.set(f)
+
     def on_save():
         parameters_save()
         dlg.destroy()
@@ -267,13 +278,17 @@ def dlg_settings():
 
     lbl_rtlsdr_path = ttk.Label(frm_files_rtlsdr, text="Path : ")
     ent_rtlsdr_path = ttk.Entry(frm_files_rtlsdr, width=30, textvariable=rtlsdr_path)
+    btn_rtlsdr_path = Button(frm_files_rtlsdr, padx=0, pady=0, text="...", command=on_rtlsdr_path)
     lbl_rtlsdr_path.grid (row=0, column=0, sticky=W)
     ent_rtlsdr_path.grid (row=0, column=1, sticky=W)
+    btn_rtlsdr_path.grid (row=0, column=2)
 
     lbl_rtlsdr_file = ttk.Label(frm_files_rtlsdr, text="File : ")
-    ent_rtlsdr_file = ttk.Entry(frm_files_rtlsdr, width=15, textvariable=rtlsdr_file)
+    ent_rtlsdr_file = ttk.Entry(frm_files_rtlsdr, width=30, textvariable=rtlsdr_file)
+    btn_rtlsdr_file = Button(frm_files_rtlsdr, padx=0, pady=0, text="...", command=on_rtlsdr_file)
     lbl_rtlsdr_file.grid (row=1, column=0, sticky=W)
     ent_rtlsdr_file.grid (row=1, column=1, sticky=W)
+    btn_rtlsdr_file.grid (row=1, column=2)
 
         #----- frame viewer -----
     frm_files_viewer = ttk.LabelFrame (tab_files, text="viewer", borderwidth=2, padding=4)
