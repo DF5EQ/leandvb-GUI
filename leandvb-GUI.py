@@ -102,6 +102,7 @@ def parameters_load():
     file = open(parameters_file, "r")
     parameters = json.load(file)
     file.close()
+    guivars_init()
 
 def parameters_default():
     print "load parameters with defaults"
@@ -140,6 +141,45 @@ def parameters_default():
     parameters["debug"          ] = "all"
     parameters["rtlsdr_path"    ] = ""
     parameters["rtlsdr_file"    ] = "rtl_sdr"
+    guivars_init()
+
+def guivars_init():
+    print "initialize GUI variables"
+    bandwidth      .set(parameters["bandwidth"])
+    const          .set(parameters["constellation"])
+    debug          .set(parameters["debug"])
+    fastdrift      .set(parameters["fastdrift"])
+    fastlock       .set(parameters["fastlock"])
+    fec            .set(parameters["fec"])
+    framesizes     .set(parameters["framesizes"])
+    frequency      .set(parameters["frequency"])
+    gain           .set(parameters["gain"])
+    gui            .set(parameters["gui"])
+    hardmetric     .set(parameters["hardmetric"])
+    inpipe         .set(parameters["inpipe"])
+    ldpc_bf        .set(parameters["ldpc_bf"])
+    ldpchelper_file.set(parameters["ldpchelper_file"])
+    ldpchelper_path.set(parameters["ldpchelper_path"])
+    leandvb_file   .set(parameters["leandvb_file"])
+    leandvb_path   .set(parameters["leandvb_path"])
+    lnblo          .set(parameters["lnb_lo"])
+    maxsens        .set(parameters["maxsens"])
+    modcods        .set(parameters["modcods"])
+    nhelpers       .set(parameters["nhelpers"])
+    ppm            .set(parameters["ppm"])
+    rolloff        .set(parameters["rolloff"])
+    rrcrej         .set(parameters["rrcrej"])
+    rtldongle      .set(parameters["rtldongle"])
+    rtlsdr_file    .set(parameters["rtlsdr_file"])
+    rtlsdr_path    .set(parameters["rtlsdr_path"])
+    sampler        .set(parameters["sampler"])
+    standard       .set(parameters["standard"])
+    strongpls      .set(parameters["strongpls"])
+    symbolrate     .set(parameters["symbolrate"])
+    tune           .set(parameters["tune"])
+    viewer_file    .set(parameters["viewer_file"])
+    viewer_path    .set(parameters["viewer_path"])
+    viterbi        .set(parameters["viterbi"])
 
 #===== settings dialog ========================================================
 
@@ -537,13 +577,7 @@ root.resizable(height = False, width = False)
 frm_root = ttk.Frame(root, borderwidth=8)
 frm_root.pack()
 
-#----- initialize parameters dictionary -----
-if os.path.isfile(parameters_file):
-    parameters_load()
-else:
-    parameters_default()
-
-#----- user interface variables -----
+#----- 'declare' user interface variables -----
 bandwidth       = IntVar()
 const           = StringVar()
 debug           = StringVar()
@@ -580,41 +614,11 @@ viewer_file     = StringVar()
 viewer_path     = StringVar()
 viterbi         = IntVar()
 
-bandwidth      .set(parameters["bandwidth"])
-const          .set(parameters["constellation"])
-debug          .set(parameters["debug"])
-fastdrift      .set(parameters["fastdrift"])
-fastlock       .set(parameters["fastlock"])
-fec            .set(parameters["fec"])
-framesizes     .set(parameters["framesizes"])
-frequency      .set(parameters["frequency"])
-gain           .set(parameters["gain"])
-gui            .set(parameters["gui"])
-hardmetric     .set(parameters["hardmetric"])
-inpipe         .set(parameters["inpipe"])
-ldpc_bf        .set(parameters["ldpc_bf"])
-ldpchelper_file.set(parameters["ldpchelper_file"])
-ldpchelper_path.set(parameters["ldpchelper_path"])
-leandvb_file   .set(parameters["leandvb_file"])
-leandvb_path   .set(parameters["leandvb_path"])
-lnblo          .set(parameters["lnb_lo"])
-maxsens        .set(parameters["maxsens"])
-modcods        .set(parameters["modcods"])
-nhelpers       .set(parameters["nhelpers"])
-ppm            .set(parameters["ppm"])
-rolloff        .set(parameters["rolloff"])
-rrcrej         .set(parameters["rrcrej"])
-rtldongle      .set(parameters["rtldongle"])
-rtlsdr_file    .set(parameters["rtlsdr_file"])
-rtlsdr_path    .set(parameters["rtlsdr_path"])
-sampler        .set(parameters["sampler"])
-standard       .set(parameters["standard"])
-strongpls      .set(parameters["strongpls"])
-symbolrate     .set(parameters["symbolrate"])
-tune           .set(parameters["tune"])
-viewer_file    .set(parameters["viewer_file"])
-viewer_path    .set(parameters["viewer_path"])
-viterbi        .set(parameters["viterbi"])
+#----- initialize parameters dictionary -----
+if os.path.isfile(parameters_file):
+    parameters_load()
+else:
+    parameters_default()
 
 #----- user interface action functions -----
 def on_start():
