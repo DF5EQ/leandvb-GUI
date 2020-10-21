@@ -2,7 +2,7 @@
 
 # Simple UI voor LEANDVB, DVBS receiver.
 # requires sudo apt-get install python-imaging-tk package
-# keeps configuration and helper scripts in ~/.leandvb-GUI
+# keeps parameters file and helper scripts in ~/.leandvb-GUI (see parameters_path)
 # if you add a file called logo.png it will be shown on the right side
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
@@ -17,20 +17,22 @@ import ttk
 import os
 import json
 
-# set directory for auxiliary files (settings, run, stop)
+# settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
 parameters_file = parameters_path + "parameters.json"
 run_script      = parameters_path + "run.sh"
 stop_script     = parameters_path + "stop.sh"
 
+# show settings for auxiliary files (parameters, run, stop)
+print "parameters path:", parameters_path
+print "parameters file:",  parameters_file
+print "run script     :",  run_script
+print "stop script    :",  stop_script
+
+# create parameters path if not existend
 if not os.path.exists(parameters_path):
     print "create " + parameters_path
     os.mkdir(parameters_path)
-
-print "config path:", parameters_path
-print "config file:",  parameters_file
-print "run script :",  run_script
-print "stop script:",  stop_script
 
 # check max pipe size and adjust if needed
 
