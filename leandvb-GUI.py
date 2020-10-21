@@ -2,9 +2,8 @@
 
 # Simple UI voor LEANDVB, DVBS receiver.
 # requires sudo apt-get install python-imaging-tk package
-# keep everything in your home directory
-# if you add a 180x180 pixels file called logo.png it will be
-# showed in right corner.
+# keeps configuration and helper scripts in ~/.leandvb-GUI
+# if you add a file called logo.png it will be shown on the right side
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
