@@ -43,11 +43,11 @@ max_current = int(fd.readline())
 fd.close()
 
 if (max_current < max_needed):
-    print "max pipe size is", max_current, ", will be set to", max_needed
+    print "max pipe size  :", max_current, ", will be set to", max_needed
     cmd = "bash -c 'echo " + str(max_needed) + " > /proc/sys/fs/pipe-max-size'"
     os.system("pkexec " + cmd)
 else:
-    print "max pipe size is", max_current, ", this is ok"
+    print "max pipe size  :", max_current, ", this is ok"
 
 #===== handle parameters (save, load, default) ================================
 
