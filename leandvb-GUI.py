@@ -8,6 +8,7 @@
 # Wrapper by pe2jko@540.org
 
 # TODO review rtl_sdr options
+# TODO redirect stdout to test-widget
 # TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
 
