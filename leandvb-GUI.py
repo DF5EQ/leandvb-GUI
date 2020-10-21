@@ -8,32 +8,30 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO improve entries for path and filenames in settings
 # TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
-# TODO streamline usage of viewer ffplay and mplayer
 # TODO 'cancel' in settings not working propperly
 
 from Tkinter import *
+from tkFileDialog import *
 import ttk
 import os
 import json
 
-# set directory for lb3iliary files (settings, run, stop)
-home            = os.path.expanduser("~/")
-lb3_dir         = os.path.expanduser("~/") + ".leandvb-GUI/"
-parameters_file = lb3_dir + "parameters.json"
-run_script      = lb3_dir + "run.sh"
-stop_script     = lb3_dir + "stop.sh"
+# set directory for auxiliary files (settings, run, stop)
+parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
+parameters_file = parameters_path + "parameters.json"
+run_script      = parameters_path + "run.sh"
+stop_script     = parameters_path + "stop.sh"
 
-if not os.path.exists(lb3_dir):
-    print "create " + lb3_dir
-    os.mkdir(lb3_dir)
+if not os.path.exists(parameters_path):
+    print "create " + parameters_path
+    os.mkdir(parameters_path)
 
-print "Home directory      : " + home
-print "lb3illiary directory: " + lb3_dir
-print "run script          : " + run_script
-print "stop script         : " + stop_script
+print "config path:", parameters_path
+print "config file:",  parameters_file
+print "run script :",  run_script
+print "stop script:",  stop_script
 
 # check max pipe size and adjust if needed
 
@@ -56,36 +54,41 @@ parameters = dict()
 
 def parameters_save():
     print "save parameters to file"
-    parameters["frequency"     ] = float(frequency.get())
-    parameters["symbolrate"    ] = int(symbolrate.get())
-    parameters["fec"           ] = fec.get()
-    parameters["tune"          ] = int(tune.get())
-    parameters["fastlock"      ] = bool(fastlock.get())
-    parameters["bandwidth"     ] = int(bandwidth.get())
-    parameters["viterbi"       ] = bool(viterbi.get())
-    parameters["gui"           ] = bool(gui.get())
-    parameters["maxsens"       ] = bool(maxsens.get())
-    parameters["hardmetric"    ] = bool(hardmetric.get())
-    parameters["leanpad"       ] = padlean.get()
-    parameters["ppm"           ] = int(ppm.get())
-    parameters["gain"          ] = gain.get()
-    parameters["viewer"        ] = viewer.get()
-    parameters["rolloff"       ] = float(rolloff.get())
-    parameters["rrcrej"        ] = float(rrcrej.get())
-    parameters["nhelpers"      ] = int(nhelpers.get())
-    parameters["inpipe"        ] = inpipe.get()
-    parameters["modcods"       ] = modcods.get()
-    parameters["framesizes"    ] = framesizes.get()
-    parameters["lnb_lo"        ] = lnblo.get()
-    parameters["rtldongle"     ] = rtldongle.get()
-    parameters["standard"      ] = standard.get()
-    parameters["sampler"       ] = sampler.get()
-    parameters["strongpls"     ] = bool(strongpls.get())
-    parameters["fastdrift"     ] = bool(fastdrift.get())
-    parameters["ldpc_bf"       ] = int(ldpc_bf.get())
-    parameters["ldpc_helper"   ] = ldpc_helper.get()
-    parameters["constellation" ] = const.get()
-    parameters["debug"         ] = debug.get()
+    parameters["frequency"      ] = float(frequency.get())
+    parameters["symbolrate"     ] = int(symbolrate.get())
+    parameters["fec"            ] = fec.get()
+    parameters["tune"           ] = int(tune.get())
+    parameters["fastlock"       ] = bool(fastlock.get())
+    parameters["bandwidth"      ] = int(bandwidth.get())
+    parameters["viterbi"        ] = bool(viterbi.get())
+    parameters["gui"            ] = bool(gui.get())
+    parameters["maxsens"        ] = bool(maxsens.get())
+    parameters["hardmetric"     ] = bool(hardmetric.get())
+    parameters["leandvb_path"   ] = leandvb_path.get()
+    parameters["leandvb_file"   ] = leandvb_file.get()
+    parameters["ppm"            ] = int(ppm.get())
+    parameters["gain"           ] = gain.get()
+    parameters["viewer_path"    ] = viewer_path.get()
+    parameters["viewer_file"    ] = viewer_file.get()
+    parameters["rolloff"        ] = float(rolloff.get())
+    parameters["rrcrej"         ] = float(rrcrej.get())
+    parameters["nhelpers"       ] = int(nhelpers.get())
+    parameters["inpipe"         ] = inpipe.get()
+    parameters["modcods"        ] = modcods.get()
+    parameters["framesizes"     ] = framesizes.get()
+    parameters["lnb_lo"         ] = lnblo.get()
+    parameters["rtldongle"      ] = rtldongle.get()
+    parameters["standard"       ] = standard.get()
+    parameters["sampler"        ] = sampler.get()
+    parameters["strongpls"      ] = bool(strongpls.get())
+    parameters["fastdrift"      ] = bool(fastdrift.get())
+    parameters["ldpc_bf"        ] = int(ldpc_bf.get())
+    parameters["ldpchelper_path"] = ldpchelper_path.get()
+    parameters["ldpchelper_file"] = ldpchelper_file.get()
+    parameters["constellation"  ] = const.get()
+    parameters["debug"          ] = debug.get()
+    parameters["rtlsdr_path"    ] = rtlsdr_path.get()
+    parameters["rtlsdr_file"    ] = rtlsdr_file.get()
 
     file = open(parameters_file, "w")
     file.write(json.dumps(parameters, indent=4, sort_keys=True))
@@ -100,36 +103,41 @@ def parameters_load():
 
 def parameters_default():
     print "load parameters with defaults"
-    parameters["frequency"     ] = 10491.500
-    parameters["symbolrate"    ] = 1500
-    parameters["fec"           ] = "1/2"
-    parameters["tune"          ] = 0
-    parameters["fastlock"      ] = False
-    parameters["bandwidth"     ] = 2400
-    parameters["viterbi"       ] = False
-    parameters["gui"           ] = True
-    parameters["maxsens"       ] = False
-    parameters["hardmetric"    ] = False
-    parameters["leanpad"       ] = home+"leansdr/src/apps/"
-    parameters["ppm"           ] = 0
-    parameters["gain"          ] = 36
-    parameters["viewer"        ] = "ffplay"
-    parameters["rolloff"       ] = 0.35
-    parameters["rrcrej"        ] = 30.0
-    parameters["nhelpers"      ] = 6
-    parameters["inpipe"        ] = 32000000
-    parameters["modcods"       ] = "0x0040"
-    parameters["framesizes"    ] = "0x01"
-    parameters["lnb_lo"        ] = 9750.0
-    parameters["rtldongle"     ] = 0
-    parameters["standard"      ] = "DVB-S2"
-    parameters["sampler"       ] = "rrc"
-    parameters["strongpls"     ] = False
-    parameters["fastdrift"     ] = False
-    parameters["ldpc_bf"       ] = 0
-    parameters["ldpc_helper"   ] = "ldpc_tool"
-    parameters["constellation" ] = "QPSK"
-    parameters["debug"         ] = "all"
+    parameters["frequency"      ] = 10491.500
+    parameters["symbolrate"     ] = 1500
+    parameters["fec"            ] = "1/2"
+    parameters["tune"           ] = 0
+    parameters["fastlock"       ] = False
+    parameters["bandwidth"      ] = 2400
+    parameters["viterbi"        ] = False
+    parameters["gui"            ] = True
+    parameters["maxsens"        ] = False
+    parameters["hardmetric"     ] = False
+    parameters["leandvb_path"   ] = "./"
+    parameters["leandvb_file"   ] = "leandvb"
+    parameters["ppm"            ] = 0
+    parameters["gain"           ] = 36
+    parameters["viewer_path"    ] = ""
+    parameters["viewer_file"    ] = "ffplay -v 0"
+    parameters["rolloff"        ] = 0.35
+    parameters["rrcrej"         ] = 30.0
+    parameters["nhelpers"       ] = 6
+    parameters["inpipe"         ] = 32000000
+    parameters["modcods"        ] = "0x0040"
+    parameters["framesizes"     ] = "0x01"
+    parameters["lnb_lo"         ] = 9750.0
+    parameters["rtldongle"      ] = 0
+    parameters["standard"       ] = "DVB-S2"
+    parameters["sampler"        ] = "rrc"
+    parameters["strongpls"      ] = False
+    parameters["fastdrift"      ] = False
+    parameters["ldpc_bf"        ] = 0
+    parameters["ldpchelper_path"] = "./"
+    parameters["ldpchelper_file"] = "ldpc_tool"
+    parameters["constellation"  ] = "QPSK"
+    parameters["debug"          ] = "all"
+    parameters["rtlsdr_path"    ] = ""
+    parameters["rtlsdr_file"    ] = "rtl_sdr"
 
 #===== settings dialog ========================================================
 
@@ -148,6 +156,50 @@ def dlg_settings():
         elif standard.get() == "DVB-S2":
             for x in options_dvbs2:
                 x.lift()
+
+    def on_leandvb_path():
+        d = askdirectory(parent=dlg, initialdir=leandvb_path.get())
+        if len(d) > 0:
+            leandvb_path.set(d)
+
+    def on_leandvb_file():
+        f = askopenfilename(parent=dlg, initialdir=leandvb_path.get(), initialfile=leandvb_file.get())
+        if len(f) > 0:
+            f = os.path.basename(f)
+            leandvb_file.set(f)
+
+    def on_ldpchelper_path():
+        d = askdirectory(parent=dlg, initialdir=ldpchelper_path.get())
+        if len(d) > 0:
+            ldpchelper_path.set(d)
+
+    def on_ldpchelper_file():
+        f = askopenfilename(parent=dlg, initialdir=ldpchelper_path.get(), initialfile=ldpchelper_file.get())
+        if len(f) > 0:
+            f = os.path.basename(f)
+            ldpchelper_file.set(f)
+
+    def on_rtlsdr_path():
+        d = askdirectory(parent=dlg, initialdir=rtlsdr_path.get())
+        if len(d) > 0:
+            rtlsdr_path.set(d)
+
+    def on_rtlsdr_file():
+        f = askopenfilename(parent=dlg, initialdir=rtlsdr_path.get(), initialfile=rtlsdr_file.get())
+        if len(f) > 0:
+            f = os.path.basename(f)
+            rtlsdr_file.set(f)
+
+    def on_viewer_path():
+        d = askdirectory(parent=dlg, initialdir=viewer_path.get())
+        if len(d) > 0:
+            viewer_path.set(d)
+
+    def on_viewer_file():
+        f = askopenfilename(parent=dlg, initialdir=viewer_path.get(), initialfile=viewer_file.get())
+        if len(f) > 0:
+            f = os.path.basename(f)
+            viewer_file.set(f)
 
     def on_save():
         parameters_save()
@@ -178,17 +230,92 @@ def dlg_settings():
 
     #----- tab_general -----
     lbl_general = ttk.Label(tab_general, text="General settings")
-    lbl_viewer  = ttk.Label(tab_general,           text="Viewer : ")
-    ent_viewer  = ttk.Entry(tab_general, width=10, textvariable=viewer)
     lbl_lnblo   = ttk.Label(tab_general,           text="LNB LO : ")
     ent_lnblo   = ttk.Entry(tab_general, width=10, textvariable=lnblo)
 
     #----- tab_files -----
-    lbl_files           = ttk.Label(tab_files, text="Setting of files and directories")
-    lbl_leansdr_file    = ttk.Label(tab_files,           text="Path to leansdr : ")
-    ent_leansdr_file    = ttk.Entry(tab_files, width=40, textvariable=padlean)
-    lbl_ldpchelper_file = ttk.Label(tab_files,           text="LDPC helper : ")
-    ent_ldpchelper_file = ttk.Entry(tab_files, width=40, textvariable=ldpc_helper)
+    tab_files.columnconfigure((0,1),   pad=4, weight=1)
+    tab_files.rowconfigure   ((0,1),   pad=4, weight=0)
+    tab_files.rowconfigure   ((2,3,4), pad=4, weight=1)
+
+        #----- label -----
+    lbl_files = ttk.Label(tab_files, text="Setting of files and directories")
+    lbl_files.grid (row=0, column=0, columnspan=2)
+
+    lbl_files_separator = Frame (tab_files, height=1, bg="grey")
+    lbl_files_separator.grid (row=1, column=0, columnspan=4, sticky=EW)
+
+        #----- frame leandvb -----
+    frm_files_leandvb = ttk.LabelFrame (tab_files, text="leandvb", borderwidth=2, padding=4)
+    frm_files_leandvb.grid (row=2, column=0)
+
+    lbl_leandvb_path = ttk.Label(frm_files_leandvb, text="Path : ")
+    ent_leandvb_path = ttk.Entry(frm_files_leandvb, width=30, textvariable=leandvb_path)
+    btn_leandvb_path = Button(frm_files_leandvb, padx=0, pady=0, text="...", command=on_leandvb_path)
+    lbl_leandvb_path.grid (row=0, column=0, sticky=W)
+    ent_leandvb_path.grid (row=0, column=1, sticky=W)
+    btn_leandvb_path.grid (row=0, column=2)
+
+    lbl_leandvb_file = ttk.Label(frm_files_leandvb, text="File : ")
+    ent_leandvb_file = ttk.Entry(frm_files_leandvb, width=30, textvariable=leandvb_file)
+    btn_leandvb_file = Button(frm_files_leandvb, padx=0, pady=0, text="...", command=on_leandvb_file)
+    lbl_leandvb_file.grid (row=1, column=0, sticky=W)
+    ent_leandvb_file.grid (row=1, column=1, sticky=W)
+    btn_leandvb_file.grid (row=1, column=2)
+
+        #----- frame LDCP helper -----
+    frm_files_ldcphelper = ttk.LabelFrame (tab_files, text="LDCP helper", borderwidth=2, padding=4)
+    frm_files_ldcphelper.grid (row=3, column=0)
+
+    lbl_ldpchelper_path = ttk.Label(frm_files_ldcphelper, text="Path : ")
+    ent_ldpchelper_path = ttk.Entry(frm_files_ldcphelper, width=30, textvariable=ldpchelper_path)
+    btn_ldpchelper_path = Button(frm_files_ldcphelper, padx=0, pady=0, text="...", command=on_ldpchelper_path)
+    lbl_ldpchelper_path.grid (row=0, column=0, sticky=W)
+    ent_ldpchelper_path.grid (row=0, column=1, sticky=W)
+    btn_ldpchelper_path.grid (row=0, column=2)
+
+    lbl_ldpchelper_file = ttk.Label(frm_files_ldcphelper, text="File : ")
+    ent_ldpchelper_file = ttk.Entry(frm_files_ldcphelper, width=30, textvariable=ldpchelper_file)
+    btn_ldpchelper_file = Button(frm_files_ldcphelper, padx=0, pady=0, text="...", command=on_ldpchelper_file)
+    lbl_ldpchelper_file.grid (row=1, column=0, sticky=W)
+    ent_ldpchelper_file.grid (row=1, column=1, sticky=W)
+    btn_ldpchelper_file.grid (row=1, column=2)
+
+        #----- frame rtl_sdr -----
+    frm_files_rtlsdr = ttk.LabelFrame (tab_files, text="rtl_sdr", borderwidth=2, padding=4)
+    frm_files_rtlsdr.grid (row=2, column=1)
+
+    lbl_rtlsdr_path = ttk.Label(frm_files_rtlsdr, text="Path : ")
+    ent_rtlsdr_path = ttk.Entry(frm_files_rtlsdr, width=30, textvariable=rtlsdr_path)
+    btn_rtlsdr_path = Button(frm_files_rtlsdr, padx=0, pady=0, text="...", command=on_rtlsdr_path)
+    lbl_rtlsdr_path.grid (row=0, column=0, sticky=W)
+    ent_rtlsdr_path.grid (row=0, column=1, sticky=W)
+    btn_rtlsdr_path.grid (row=0, column=2)
+
+    lbl_rtlsdr_file = ttk.Label(frm_files_rtlsdr, text="File : ")
+    ent_rtlsdr_file = ttk.Entry(frm_files_rtlsdr, width=30, textvariable=rtlsdr_file)
+    btn_rtlsdr_file = Button(frm_files_rtlsdr, padx=0, pady=0, text="...", command=on_rtlsdr_file)
+    lbl_rtlsdr_file.grid (row=1, column=0, sticky=W)
+    ent_rtlsdr_file.grid (row=1, column=1, sticky=W)
+    btn_rtlsdr_file.grid (row=1, column=2)
+
+        #----- frame viewer -----
+    frm_files_viewer = ttk.LabelFrame (tab_files, text="viewer", borderwidth=2, padding=4)
+    frm_files_viewer.grid (row=3, column=1)
+
+    lbl_viewer_path = ttk.Label(frm_files_viewer, text="Path : ")
+    ent_viewer_path = ttk.Entry(frm_files_viewer, width=30, textvariable=viewer_path)
+    btn_viewer_path = Button(frm_files_viewer, padx=0, pady=0, text="...", command=on_viewer_path)
+    lbl_viewer_path.grid (row=0, column=0, sticky=W)
+    ent_viewer_path.grid (row=0, column=1, sticky=W)
+    btn_viewer_path.grid (row=0, column=2)
+
+    lbl_viewer_file = ttk.Label(frm_files_viewer, text="File : ")
+    ent_viewer_file = ttk.Entry(frm_files_viewer, width=30, textvariable=viewer_file)
+    btn_viewer_file = Button(frm_files_viewer, padx=0, pady=0, text="...", command=on_viewer_file)
+    lbl_viewer_file.grid (row=1, column=0, sticky=W)
+    ent_viewer_file.grid (row=1, column=1, sticky=W)
+    btn_viewer_file.grid (row=1, column=2)
 
      #----- tab_rtlsdr -----
     lbl_rtlsdr    = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
@@ -377,18 +504,8 @@ def dlg_settings():
     tab_general.columnconfigure((0,1),   pad=4, weight=1)
     tab_general.rowconfigure   ((0,1,2), pad=4, weight=0)
     lbl_general.grid(row=0, column=0, sticky=N, columnspan=4, pady=6)
-    lbl_viewer .grid (row=1, column=0, sticky=E)
-    ent_viewer .grid (row=1, column=1, sticky=W)
-    lbl_lnblo  .grid (row=2, column=0, sticky=E)
-    ent_lnblo  .grid (row=2, column=1, sticky=W)
-
-    tab_files.columnconfigure((0,1,2), pad=4, weight=1)
-    tab_files.rowconfigure   ((0,1,2), pad=4, weight=0)
-    lbl_files          .grid (row=0, column=0, sticky=N, columnspan=4, pady=6)
-    lbl_leansdr_file   .grid (row=1, column=0, sticky=E)
-    ent_leansdr_file   .grid (row=1, column=1, sticky=W)
-    lbl_ldpchelper_file.grid (row=2, column=0, sticky=E)
-    ent_ldpchelper_file.grid (row=2, column=1, sticky=W)
+    lbl_lnblo  .grid (row=1, column=0, sticky=E)
+    ent_lnblo  .grid (row=1, column=1, sticky=W)
 
     tab_rtlsdr.columnconfigure((0,2,3),     pad=4, weight=1)
     tab_rtlsdr.rowconfigure   ((0,1,2,3,4), pad=4, weight=0)
@@ -425,36 +542,42 @@ else:
     parameters_default()
 
 #----- user interface variables -----
-fastlock       = IntVar()
-viterbi        = IntVar()
-hardmetric     = IntVar()
-gui            = IntVar()
-maxsens        = IntVar()
-rolloff        = DoubleVar()
-rrcrej         = DoubleVar()
-nhelpers       = IntVar()
-inpipe         = IntVar()
-modcods        = StringVar()
-framesizes     = StringVar()
-fec            = StringVar()
-tune           = IntVar()
-bandwidth      = IntVar()
-standard       = StringVar()
-sampler        = StringVar()
-strongpls      = IntVar()
-fastdrift      = IntVar()
-ldpc_bf        = IntVar()
-ldpc_helper    = StringVar()
-const          = StringVar()
-debug          = StringVar()
-ppm            = IntVar()
-padlean        = StringVar()
-gain           = IntVar()
-rtldongle      = IntVar()
-frequency      = DoubleVar()
-symbolrate     = IntVar()
-lnblo          = DoubleVar()
-viewer         = StringVar()
+fastlock        = IntVar()
+viterbi         = IntVar()
+hardmetric      = IntVar()
+gui             = IntVar()
+maxsens         = IntVar()
+rolloff         = DoubleVar()
+rrcrej          = DoubleVar()
+nhelpers        = IntVar()
+inpipe          = IntVar()
+modcods         = StringVar()
+framesizes      = StringVar()
+fec             = StringVar()
+tune            = IntVar()
+bandwidth       = IntVar()
+standard        = StringVar()
+sampler         = StringVar()
+strongpls       = IntVar()
+fastdrift       = IntVar()
+ldpc_bf         = IntVar()
+ldpc_helper     = StringVar()
+const           = StringVar()
+debug           = StringVar()
+ppm             = IntVar()
+leandvb_path    = StringVar()
+leandvb_file    = StringVar()
+ldpchelper_path = StringVar()
+ldpchelper_file = StringVar()
+rtlsdr_path     = StringVar()
+rtlsdr_file     = StringVar()
+gain            = IntVar()
+rtldongle       = IntVar()
+frequency       = DoubleVar()
+symbolrate      = IntVar()
+lnblo           = DoubleVar()
+viewer_path     = StringVar()
+viewer_file     = StringVar()
 
 #----- user interface action functions -----
 def on_start():
@@ -479,25 +602,34 @@ def on_start():
     opt_fastdrift  = " --fastdrift" if fastdrift.get() == True and standard.get() == "DVB-S2" else ""
     opt_ldpc_bf    = (" --ldpc-bf " + str(ldpc_bf.get()))       if standard.get() == "DVB-S2" else ""
     opt_nhelpers   = (" --nhelpers " + str(nhelpers.get()))     if standard.get() == "DVB-S2" else ""
-    opt_ldpc_helper= " --ldpc-helper " + padlean.get() + ldpc_helper.get()
+    opt_ldpc_helper= " --ldpc-helper " + "\"" + ldpchelper_path.get() + ldpchelper_file.get() + "\""
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
 
-    if (viewer.get() == "ffplay"):
-        view = "ffplay -v 0"
-    else:
-        view = "mplayer"
-
-    opt_leandvb = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
+    leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
                 + opt_fastlock + opt_gui + opt_maxsens \
                 + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
                 + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
                 + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
                 + opt_debug_v + opt_debug_d
-    print "opt leandvb:" + opt_leandvb
+    leandvb_sub = "\"" + leandvb_path.get() + leandvb_file.get() + "\"" + leandvb_opt
 
-    sub = "rtl_sdr" + \
+    rtlsdr_opt = ""
+    rtlsdr_sub = "\"" + rtlsdr_path.get()  + rtlsdr_file.get()  + "\"" + rtlsdr_opt
+
+    viewer_opt = " -"
+    viewer_sub = "\"" + viewer_path.get() + "\"" + viewer_file.get()  + viewer_opt
+
+    print
+    print "leandvb:", leandvb_sub
+    print
+    print "rtlsdr:", rtlsdr_sub
+    print
+    print "viewer:", viewer_sub
+    print
+
+    sub = rtlsdr_sub + \
           " -d " + str( rtldongle.get() ) + \
           " -f " + str( int( ( float(frequency.get()) - float(lnblo.get()) ) * 1000000 ) ) + \
           " -g " + str( gain.get() ) +  \
@@ -505,9 +637,9 @@ def on_start():
           " -p " + str( ppm.get() ) + \
           " -" + \
           " | " + \
-          padlean.get() + "leandvb" + opt_leandvb + \
+          leandvb_sub + \
           " | " + \
-          view + " -" + \
+          viewer_sub + \
           " \n"
 
     parameters_save()
@@ -592,36 +724,41 @@ btn_settings  .grid (row=6, column=3, columnspan=2)
 
 cmb_frequency.focus_set()
 
-bandwidth     .set(parameters["bandwidth"])
-tune          .set(parameters["tune"])
-fec           .set(parameters["fec"])
-symbolrate    .set(parameters["symbolrate"])
-frequency     .set(parameters["frequency"])
-ppm           .set(parameters["ppm"])
-padlean       .set(parameters["leanpad"])
-gain          .set(parameters["gain"])
-rtldongle     .set(parameters["rtldongle"])
-fastlock      .set(parameters["fastlock"])
-viterbi       .set(parameters["viterbi"])
-hardmetric    .set(parameters["hardmetric"])
-gui           .set(parameters["gui"])
-maxsens       .set(parameters["maxsens"])
-viewer        .set(parameters["viewer"])
-rolloff       .set(parameters["rolloff"])
-rrcrej        .set(parameters["rrcrej"])
-nhelpers      .set(parameters["nhelpers"])
-inpipe        .set(parameters["inpipe"])
-modcods       .set(parameters["modcods"])
-framesizes    .set(parameters["framesizes"])
-lnblo         .set(parameters["lnb_lo"])
-standard      .set(parameters["standard"])
-sampler       .set(parameters["sampler"])
-strongpls     .set(parameters["strongpls"])
-fastdrift     .set(parameters["fastdrift"])
-ldpc_bf       .set(parameters["ldpc_bf"])
-ldpc_helper   .set(parameters["ldpc_helper"])
-const         .set(parameters["constellation"])
-debug         .set(parameters["debug"])
+bandwidth      .set(parameters["bandwidth"])
+tune           .set(parameters["tune"])
+fec            .set(parameters["fec"])
+symbolrate     .set(parameters["symbolrate"])
+frequency      .set(parameters["frequency"])
+ppm            .set(parameters["ppm"])
+leandvb_path   .set(parameters["leandvb_path"])
+leandvb_file   .set(parameters["leandvb_file"])
+gain           .set(parameters["gain"])
+rtldongle      .set(parameters["rtldongle"])
+fastlock       .set(parameters["fastlock"])
+viterbi        .set(parameters["viterbi"])
+hardmetric     .set(parameters["hardmetric"])
+gui            .set(parameters["gui"])
+maxsens        .set(parameters["maxsens"])
+viewer_path    .set(parameters["viewer_path"])
+viewer_file    .set(parameters["viewer_file"])
+rolloff        .set(parameters["rolloff"])
+rrcrej         .set(parameters["rrcrej"])
+nhelpers       .set(parameters["nhelpers"])
+inpipe         .set(parameters["inpipe"])
+modcods        .set(parameters["modcods"])
+framesizes     .set(parameters["framesizes"])
+lnblo          .set(parameters["lnb_lo"])
+standard       .set(parameters["standard"])
+sampler        .set(parameters["sampler"])
+strongpls      .set(parameters["strongpls"])
+fastdrift      .set(parameters["fastdrift"])
+ldpc_bf        .set(parameters["ldpc_bf"])
+ldpchelper_path.set(parameters["ldpchelper_path"])
+ldpchelper_file.set(parameters["ldpchelper_file"])
+const          .set(parameters["constellation"])
+debug          .set(parameters["debug"])
+rtlsdr_path    .set(parameters["rtlsdr_path"])
+rtlsdr_file    .set(parameters["rtlsdr_file"])
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
