@@ -170,6 +170,17 @@ def dlg_settings():
             f = os.path.basename(f)
             leandvb_file.set(f)
 
+    def on_ldpchelper_path():
+        d = askdirectory(parent=dlg, initialdir=ldpchelper_path.get())
+        if len(d) > 0:
+            ldpchelper_path.set(d)
+
+    def on_ldpchelper_file():
+        f = askopenfilename(parent=dlg, initialdir=ldpchelper_path.get(), initialfile=ldpchelper_file.get())
+        if len(f) > 0:
+            f = os.path.basename(f)
+            ldpchelper_file.set(f)
+
     def on_save():
         parameters_save()
         dlg.destroy()
@@ -238,13 +249,17 @@ def dlg_settings():
 
     lbl_ldpchelper_path = ttk.Label(frm_files_ldcphelper, text="Path : ")
     ent_ldpchelper_path = ttk.Entry(frm_files_ldcphelper, width=30, textvariable=ldpchelper_path)
+    btn_ldpchelper_path = Button(frm_files_ldcphelper, padx=0, pady=0, text="...", command=on_ldpchelper_path)
     lbl_ldpchelper_path.grid (row=0, column=0, sticky=W)
     ent_ldpchelper_path.grid (row=0, column=1, sticky=W)
+    btn_ldpchelper_path.grid (row=0, column=2)
 
     lbl_ldpchelper_file = ttk.Label(frm_files_ldcphelper, text="File : ")
-    ent_ldpchelper_file = ttk.Entry(frm_files_ldcphelper, width=15, textvariable=ldpchelper_file)
+    ent_ldpchelper_file = ttk.Entry(frm_files_ldcphelper, width=30, textvariable=ldpchelper_file)
+    btn_ldpchelper_file = Button(frm_files_ldcphelper, padx=0, pady=0, text="...", command=on_ldpchelper_file)
     lbl_ldpchelper_file.grid (row=1, column=0, sticky=W)
     ent_ldpchelper_file.grid (row=1, column=1, sticky=W)
+    btn_ldpchelper_file.grid (row=1, column=2)
 
         #----- frame rtl_sdr -----
     frm_files_rtlsdr = ttk.LabelFrame (tab_files, text="rtl_sdr", borderwidth=2, padding=4)
