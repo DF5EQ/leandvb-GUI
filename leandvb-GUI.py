@@ -563,7 +563,6 @@ sampler         = StringVar()
 strongpls       = IntVar()
 fastdrift       = IntVar()
 ldpc_bf         = IntVar()
-ldpc_helper     = StringVar()
 const           = StringVar()
 debug           = StringVar()
 ppm             = IntVar()
@@ -604,7 +603,7 @@ def on_start():
     opt_fastdrift  = " --fastdrift" if fastdrift.get() == True and standard.get() == "DVB-S2" else ""
     opt_ldpc_bf    = (" --ldpc-bf " + str(ldpc_bf.get()))       if standard.get() == "DVB-S2" else ""
     opt_nhelpers   = (" --nhelpers " + str(nhelpers.get()))     if standard.get() == "DVB-S2" else ""
-    opt_ldpc_helper= " --ldpc-helper " + "\"" + ldpchelper_path.get() + ldpchelper_file.get() + "\""
+    opt_ldpc_helper= " --ldpc-helper " + "\"" + ldpchelper_path.get() + "/" + ldpchelper_file.get() + "\""
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
 
@@ -615,7 +614,7 @@ def on_start():
                 + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
                 + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
                 + opt_debug_v + opt_debug_d
-    leandvb_sub = "\"" + leandvb_path.get() + leandvb_file.get() + "\"" + leandvb_opt
+    leandvb_sub = "\"" + leandvb_path.get() + "/" + leandvb_file.get() + "\"" + leandvb_opt
 
     rtlsdr_opt = ""
     rtlsdr_sub = "\"" + rtlsdr_path.get()  + rtlsdr_file.get()  + "\"" + rtlsdr_opt
