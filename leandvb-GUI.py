@@ -250,6 +250,9 @@ def dlg_settings():
     def on_cancel():
         dlg.destroy()
 
+    def on_default():
+        parameters_default()
+
     #----- dialog properties -----
     dlg = Toplevel(root, borderwidth=4)
     dlg.title("Settings")
@@ -533,15 +536,17 @@ def dlg_settings():
     options_dvbs2.append(ent_nhelpers)
 
     #----- buttons -----
-    btn_save   = ttk.Button (dlg, text="save",   command=on_save)
-    btn_cancel = ttk.Button (dlg, text="cancel", command=on_cancel)
+    btn_save    = ttk.Button (dlg, text="save",     command=on_save)
+    btn_cancel  = ttk.Button (dlg, text="cancel",   command=on_cancel)
+    btn_default = ttk.Button (dlg, text="defaults", command=on_default)
 
     #----- packing of widgets -----
-    dlg.columnconfigure((0,1), pad=4, weight=1)
-    dlg.rowconfigure   ((0,1), pad=4, weight=0)
-    ntb       .grid (row=0, column=0, columnspan=2)
-    btn_save  .grid (row=1, column=0)
-    btn_cancel.grid (row=1, column=1)
+    dlg.columnconfigure((0,1,2), pad=4, weight=1)
+    dlg.rowconfigure   ((0,1,2), pad=4, weight=0)
+    ntb        .grid (row=0, column=0, columnspan=3)
+    btn_save   .grid (row=1, column=0)
+    btn_cancel .grid (row=1, column=1)
+    btn_default.grid (row=1, column=2)
 
     tab_general.columnconfigure((0,1),   pad=4, weight=1)
     tab_general.rowconfigure   ((0,1,2), pad=4, weight=0)
