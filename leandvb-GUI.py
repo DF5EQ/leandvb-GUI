@@ -8,10 +8,8 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO improve entries for path and filenames in settings
 # TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
-# TODO streamline usage of viewer ffplay and mplayer
 # TODO 'cancel' in settings not working propperly
 
 from Tkinter import *
