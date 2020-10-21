@@ -7,9 +7,9 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
+# TODO 'cancel' in settings not working propperly
 # TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
-# TODO 'cancel' in settings not working propperly
 
 from Tkinter import *
 from tkFileDialog import *
