@@ -774,9 +774,16 @@ else:
 lbl_logo = Label(frm_root, image=img_logo)
 lbl_logo.grid (row=0, column=3, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
 
-terminal = Text(frm_root, width=40, height=0)
-terminal.grid (row=0, column=4, rowspan=6, padx=4, pady=4, sticky=NS)
-terminal.insert(END, "Hello World!\n")
+txt_terminal = Text(frm_root, width=40, height=0)
+txt_terminal.grid (row=0, column=4, rowspan=6, padx=4, pady=4, sticky=NS)
+scb_terminal = Scrollbar(frm_root)
+scb_terminal.grid (row=0, column=5, rowspan=6, pady=4, sticky=NS)
+scb_terminal.config(command=txt_terminal.yview)
+txt_terminal.config(yscrollcommand=scb_terminal.set)
+
+txt_terminal.insert(END, "Hello World!\n")
+txt_terminal.insert(END, "This is a long text with more than 40 characters\n")
+txt_terminal.insert(END, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29")
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
