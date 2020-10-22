@@ -368,8 +368,8 @@ def dlg_settings():
     btn_viewer_file.grid (row=1, column=2)
 
      #----- tab_rtlsdr -----
-    tab_rtlsdr.columnconfigure((0,1),       pad=4, weight=1)
-    tab_rtlsdr.rowconfigure   ((0,1,2,3,4), pad=4, weight=0)
+    tab_rtlsdr.columnconfigure((0,1),   pad=4, weight=1)
+    tab_rtlsdr.rowconfigure   ((0,1,2), pad=4, weight=0)
 
         #----- label -----
     lbl_rtlsdr = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
@@ -378,21 +378,25 @@ def dlg_settings():
     lbl_rtlsdr_separator = Frame (tab_rtlsdr, height=1, bg="grey")
     lbl_rtlsdr_separator.grid (row=1, column=0, columnspan=2, sticky=EW)
 
+        #----- frame options -----
+    frm_rtlsdr = ttk.Frame(tab_rtlsdr, borderwidth=4, padding=4)
+    frm_rtlsdr.grid (row=2, column=0, columnspan=2)
+
         #----- options -----
-    lbl_ppm = ttk.Label(tab_rtlsdr, text="ppm-error")
-    ent_ppm = ttk.Entry(tab_rtlsdr, width=10, textvariable=ppm)
-    lbl_ppm.grid (row=2, column=0, sticky=W)
-    ent_ppm.grid (row=2, column=1, sticky=W)
+    lbl_ppm = ttk.Label(frm_rtlsdr, text="ppm-error")
+    ent_ppm = ttk.Entry(frm_rtlsdr, width=10, textvariable=ppm)
+    lbl_ppm.grid (row=0, column=0, sticky=W)
+    ent_ppm.grid (row=0, column=1, sticky=W)
 
-    lbl_gain = ttk.Label(tab_rtlsdr, text="gain")
-    ent_gain = ttk.Entry(tab_rtlsdr, width=10, textvariable=gain)
-    lbl_gain.grid (row=3, column=0, sticky=W)
-    ent_gain.grid (row=3, column=1, sticky=W)
+    lbl_gain = ttk.Label(frm_rtlsdr, text="gain")
+    ent_gain = ttk.Entry(frm_rtlsdr, width=10, textvariable=gain)
+    lbl_gain.grid (row=1, column=0, sticky=W)
+    ent_gain.grid (row=1, column=1, sticky=W)
 
-    lbl_rtldongle = ttk.Label(tab_rtlsdr, text="rtldongle")
-    ent_rtldongle = ttk.Entry(tab_rtlsdr, width=10, textvariable=rtldongle)
-    lbl_rtldongle.grid (row=4, column=0, sticky=W)
-    ent_rtldongle.grid (row=4, column=1, sticky=W)
+    lbl_rtldongle = ttk.Label(frm_rtlsdr, text="rtldongle")
+    ent_rtldongle = ttk.Entry(frm_rtlsdr, width=10, textvariable=rtldongle)
+    lbl_rtldongle.grid (row=2, column=0, sticky=W)
+    ent_rtldongle.grid (row=2, column=1, sticky=W)
 
     #----- tab_leandvb -----
     tab_leandvb.columnconfigure((0,1),   pad=4, weight=1)
