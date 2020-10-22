@@ -269,22 +269,16 @@ def dlg_settings():
     ntb = ttk.Notebook (dlg)
     ntb.grid (row=0, column=0, columnspan=3)
 
-    tab_general = ttk.Frame (ntb, padding=10)
-    tab_files   = ttk.Frame (ntb, padding=10)
-    tab_rtlsdr  = ttk.Frame (ntb, padding=10)
     tab_leandvb = ttk.Frame (ntb, padding=10)
-
-    ntb.add(tab_general, text="general")
-    ntb.add(tab_files,   text="files")
-    ntb.add(tab_rtlsdr,  text="rtl_sdr")
     ntb.add(tab_leandvb, text="leandvb")
 
-    #----- tab_general -----
-    tab_general.columnconfigure((0,1),   pad=4, weight=1)
-    tab_general.rowconfigure   ((0,1,2), pad=4, weight=0)
-    lbl_general = ttk.Label(tab_general, text="General settings")
+    tab_rtlsdr = ttk.Frame (ntb, padding=10)
+    ntb.add(tab_rtlsdr, text="rtl_sdr")
 
-    #----- tab_files -----
+    tab_files = ttk.Frame (ntb, padding=10)
+    ntb.add(tab_files, text="files")
+
+   #----- tab_files -----
     tab_files.columnconfigure((0,1),   pad=4, weight=1)
     tab_files.rowconfigure   ((0,1),   pad=4, weight=0)
     tab_files.rowconfigure   ((2,3,4), pad=4, weight=1)
