@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO move LNB local oscillator to main dialog
 # TODO redirect stdout to test-widget
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
@@ -267,23 +266,18 @@ def dlg_settings():
 
     #----- tabs container -----
     ntb = ttk.Notebook (dlg)
+    ntb.grid (row=0, column=0, columnspan=3)
 
-    tab_general = ttk.Frame (ntb, padding=10)
-    tab_files   = ttk.Frame (ntb, padding=10)
-    tab_rtlsdr  = ttk.Frame (ntb, padding=10)
     tab_leandvb = ttk.Frame (ntb, padding=10)
-
-    ntb.add(tab_general, text="general")
-    ntb.add(tab_files,   text="files")
-    ntb.add(tab_rtlsdr,  text="rtl_sdr")
     ntb.add(tab_leandvb, text="leandvb")
 
-    #----- tab_general -----
-    lbl_general = ttk.Label(tab_general, text="General settings")
-    lbl_lnblo   = ttk.Label(tab_general,           text="LNB LO : ")
-    ent_lnblo   = ttk.Entry(tab_general, width=10, textvariable=lnblo)
+    tab_rtlsdr = ttk.Frame (ntb, padding=10)
+    ntb.add(tab_rtlsdr, text="rtl_sdr")
 
-    #----- tab_files -----
+    tab_files = ttk.Frame (ntb, padding=10)
+    ntb.add(tab_files, text="files")
+
+   #----- tab_files -----
     tab_files.columnconfigure((0,1),   pad=4, weight=1)
     tab_files.rowconfigure   ((0,1),   pad=4, weight=0)
     tab_files.rowconfigure   ((2,3,4), pad=4, weight=1)
@@ -558,22 +552,13 @@ def dlg_settings():
 
     #----- buttons -----
     btn_save    = ttk.Button (dlg, text="save",     command=on_save)
-    btn_cancel  = ttk.Button (dlg, text="cancel",   command=on_cancel)
-    btn_default = ttk.Button (dlg, text="defaults", command=on_default)
-
-    #----- packing of widgets -----
-    dlg.columnconfigure((0,1,2), pad=4, weight=1)
-    dlg.rowconfigure   ((0,1,2), pad=4, weight=0)
-    ntb        .grid (row=0, column=0, columnspan=3)
     btn_save   .grid (row=1, column=0)
-    btn_cancel .grid (row=1, column=1)
-    btn_default.grid (row=1, column=2)
 
-    tab_general.columnconfigure((0,1),   pad=4, weight=1)
-    tab_general.rowconfigure   ((0,1,2), pad=4, weight=0)
-    lbl_general.grid(row=0, column=0, sticky=N, columnspan=4, pady=6)
-    lbl_lnblo  .grid (row=1, column=0, sticky=E)
-    ent_lnblo  .grid (row=1, column=1, sticky=W)
+    btn_cancel  = ttk.Button (dlg, text="cancel",   command=on_cancel)
+    btn_cancel .grid (row=1, column=1)
+
+    btn_default = ttk.Button (dlg, text="defaults", command=on_default)
+    btn_default.grid (row=1, column=2)
 
     set_visibility_dvb_options(None)
 
@@ -720,58 +705,72 @@ def on_exit():
     on_stop()
     root.destroy()
 
-#----- user interface content -----
-lbl_frequency  = ttk.Label   (frm_root, text="Frequency")
-cmb_frequency  = ttk.Combobox(frm_root, width=10, textvariable=frequency)
-cmb_frequency  ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
-lb2_frequency  = ttk.Label   (frm_root, text="MHz")
-lbl_symbolrate = ttk.Label   (frm_root, text="Symbolrate")
-cmb_symbolrate = ttk.Combobox(frm_root, width=10, textvariable=symbolrate)
+#----- user interface -----
+lbl_frequency = ttk.Label (frm_root, text="Frequency")
+cmb_frequency = ttk.Combobox (frm_root, width=10, textvariable=frequency)
+cmb_frequency ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
+lb2_frequency = ttk.Label (frm_root, text="MHz")
+lbl_frequency.grid (row=0, column=0, sticky=W, padx=5)
+cmb_frequency.grid (row=0, column=1, sticky=W)
+lb2_frequency.grid (row=0, column=2, sticky=W, padx=5)
+
+lbl_symbolrate = ttk.Label (frm_root, text="Symbolrate")
+cmb_symbolrate = ttk.Combobox (frm_root, width=10, textvariable=symbolrate)
 cmb_symbolrate ["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
-lb2_symbolrate = ttk.Label   (frm_root, text="kHz")
-lbl_fec        = ttk.Label   (frm_root, text="FEC")
-cmb_fec        = ttk.Combobox(frm_root, width=10, textvariable=fec)
-cmb_fec        ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
-lb2_fec        = ttk.Label   (frm_root, text="Div")
-lbl_tune       = ttk.Label   (frm_root, text="Tune")
-cmb_tune       = ttk.Combobox(frm_root, width=10, textvariable=tune)
-cmb_tune       ["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
-lb2_tune       = ttk.Label   (frm_root, text="Hz")
-lbl_bandwidth  = ttk.Label   (frm_root, text="Bandwidth")
-cmb_bandwidth  = ttk.Combobox(frm_root, width=10, textvariable=bandwidth)
-cmb_bandwidth  ["values"] = ("2400","2000","1000","500")
-lb2_bandwidth  = ttk.Label   (frm_root, text="kHz")
-lbl_separator  = Frame       (frm_root, height=1, bg="grey")
-btn_start      = ttk.Button  (frm_root, text='START',         command=on_start)
-btn_settings   = ttk.Button  (frm_root, text='Settings',      command=dlg_settings)
-btn_stop       = ttk.Button  (frm_root, text='STOP',          command=on_stop)
+lb2_symbolrate = ttk.Label (frm_root, text="kHz")
+lbl_symbolrate.grid (row=1, column=0, sticky=W, padx=5)
+cmb_symbolrate.grid (row=1, column=1, sticky=W)
+lb2_symbolrate.grid (row=1, column=2, sticky=W, padx=5)
+
+lbl_fec = ttk.Label (frm_root, text="FEC")
+cmb_fec = ttk.Combobox (frm_root, width=10, textvariable=fec)
+cmb_fec ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
+lb2_fec = ttk.Label (frm_root, text="Div")
+lbl_fec.grid (row=2, column=0, sticky=W, padx=5)
+cmb_fec.grid (row=2, column=1, sticky=W)
+lb2_fec.grid (row=2, column=2, sticky=W, padx=5)
+
+lbl_tune = ttk.Label (frm_root, text="Tune")
+cmb_tune = ttk.Combobox (frm_root, width=10, textvariable=tune)
+cmb_tune ["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
+lb2_tune = ttk.Label (frm_root, text="Hz")
+lbl_tune.grid (row=3, column=0, sticky=W, padx=5)
+cmb_tune.grid (row=3, column=1, sticky=W)
+lb2_tune.grid (row=3, column=2, sticky=W, padx=5)
+
+lbl_bandwidth = ttk.Label (frm_root, text="Bandwidth")
+cmb_bandwidth = ttk.Combobox (frm_root, width=10, textvariable=bandwidth)
+cmb_bandwidth ["values"] = ("2400","2000","1000","500")
+lb2_bandwidth = ttk.Label (frm_root, text="kHz")
+lbl_bandwidth.grid (row=4, column=0, sticky=W, padx=5)
+cmb_bandwidth.grid (row=4, column=1, sticky=W)
+lb2_bandwidth.grid (row=4, column=2, sticky=W, padx=5)
+
+lbl_lnblo = ttk.Label (frm_root, text="LNB LO")
+ent_lnblo = ttk.Entry (frm_root, width=10, textvariable=lnblo)
+lb2_lnblo = ttk.Label (frm_root, text="MHz")
+lbl_lnblo.grid (row=5, column=0, sticky=W)
+ent_lnblo.grid (row=5, column=1, sticky=W)
+lb2_lnblo.grid (row=5, column=2, sticky=W, padx=5)
+
+lbl_separator = Frame (frm_root, height=1, bg="grey")
+lbl_separator.grid (row=6, column=0, sticky=EW, columnspan=6, pady=6)
+
+btn_start = ttk.Button (frm_root, text='START', command=on_start)
+btn_start.grid (row=7, column=0)
+
+btn_stop = ttk.Button (frm_root, text='STOP', command=on_stop)
+btn_stop.grid (row=7, column=1)
+
+btn_settings = ttk.Button (frm_root, text='Settings', command=dlg_settings)
+btn_settings.grid (row=7, column=3, columnspan=2)
+
 if os.path.isfile("logo.png"):
     img_logo = PhotoImage(file="logo.png")
 else:
     img_logo = None
 lbl_logo = Label(frm_root, image=img_logo)
-
-#----- user interface packing -----
-lbl_frequency .grid (row=0, column=0, sticky=W, padx=5)
-cmb_frequency .grid (row=0, column=1, sticky=W)
-lb2_frequency .grid (row=0, column=2, sticky=W, padx=5)
-lbl_logo      .grid (row=0, column=3, sticky=W+E+N+S, columnspan=2, rowspan=5, padx=5, pady=5)
-lbl_symbolrate.grid (row=1, column=0, sticky=W, padx=5)
-cmb_symbolrate.grid (row=1, column=1, sticky=W)
-lb2_symbolrate.grid (row=1, column=2, sticky=W, padx=5)
-lbl_fec       .grid (row=2, column=0, sticky=W, padx=5)
-cmb_fec       .grid (row=2, column=1, sticky=W)
-lb2_fec       .grid (row=2, column=2, sticky=W, padx=5)
-lbl_tune      .grid (row=3, column=0, sticky=W, padx=5)
-cmb_tune      .grid (row=3, column=1, sticky=W)
-lb2_tune      .grid (row=3, column=2, sticky=W, padx=5)
-lbl_bandwidth .grid (row=4, column=0, sticky=W, padx=5)
-cmb_bandwidth .grid (row=4, column=1, sticky=W)
-lb2_bandwidth .grid (row=4, column=2, sticky=W, padx=5)
-lbl_separator .grid (row=5, column=0, sticky=EW, columnspan=6, pady=6)
-btn_start     .grid (row=6, column=0)
-btn_stop      .grid (row=6, column=1)
-btn_settings  .grid (row=6, column=3, columnspan=2)
+lbl_logo.grid (row=0, column=3, sticky=W+E+N+S, columnspan=2, rowspan=6, padx=5, pady=5)
 
 cmb_frequency.focus_set()
 
