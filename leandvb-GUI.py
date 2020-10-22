@@ -7,6 +7,7 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
+# TODO move LNB local oscillator to main dialog
 # TODO redirect stdout to test-widget
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
