@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO review rtl_sdr options
 # TODO redirect stdout to test-widget
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
@@ -368,30 +367,46 @@ def dlg_settings():
     btn_viewer_file.grid (row=1, column=2)
 
      #----- tab_rtlsdr -----
-    lbl_rtlsdr    = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
-    lbl_ppm       = ttk.Label(tab_rtlsdr,           text="ppm-error")
-    lb2_ppm       = ttk.Label(tab_rtlsdr,           text=" (-p) : ")
-    ent_ppm       = ttk.Entry(tab_rtlsdr, width=10, textvariable=ppm)
-    lb3_ppm       = ttk.Label(tab_rtlsdr,           text="default 0")
-    lbl_gain      = ttk.Label(tab_rtlsdr,           text="gain")
-    lb2_gain      = ttk.Label(tab_rtlsdr,           text=" (-g) : ")
-    ent_gain      = ttk.Entry(tab_rtlsdr, width=10, textvariable=gain)
-    lb3_gain      = ttk.Label(tab_rtlsdr,           text="default 0 = Auto")
-    lbl_rtldongle = ttk.Label(tab_rtlsdr,           text="rtldongle")
-    lb2_rtldongle = ttk.Label(tab_rtlsdr,           text=" (-d) : ")
-    ent_rtldongle = ttk.Entry(tab_rtlsdr, width=10, textvariable=rtldongle)
-    lb3_rtldongle = ttk.Label(tab_rtlsdr,           text="default 0")
+    tab_rtlsdr.columnconfigure((0,1),   pad=4, weight=1)
+    tab_rtlsdr.rowconfigure   ((0,1,2), pad=4, weight=0)
+
+        #----- label -----
+    lbl_rtlsdr = ttk.Label(tab_rtlsdr, text="Settings for rtl_sdr program")
+    lbl_rtlsdr.grid (row=0, column=0, columnspan=2)
+
+    lbl_rtlsdr_separator = Frame (tab_rtlsdr, height=1, bg="grey")
+    lbl_rtlsdr_separator.grid (row=1, column=0, columnspan=2, sticky=EW)
+
+        #----- frame options -----
+    frm_rtlsdr = ttk.Frame(tab_rtlsdr, borderwidth=4, padding=4)
+    frm_rtlsdr.grid (row=2, column=0, columnspan=2)
+
+        #----- options -----
+    lbl_ppm = ttk.Label(frm_rtlsdr, text="ppm-error")
+    ent_ppm = ttk.Entry(frm_rtlsdr, width=10, textvariable=ppm)
+    lbl_ppm.grid (row=0, column=0, sticky=W)
+    ent_ppm.grid (row=0, column=1, sticky=W)
+
+    lbl_gain = ttk.Label(frm_rtlsdr, text="gain")
+    ent_gain = ttk.Entry(frm_rtlsdr, width=10, textvariable=gain)
+    lbl_gain.grid (row=1, column=0, sticky=W)
+    ent_gain.grid (row=1, column=1, sticky=W)
+
+    lbl_rtldongle = ttk.Label(frm_rtlsdr, text="rtldongle")
+    ent_rtldongle = ttk.Entry(frm_rtlsdr, width=10, textvariable=rtldongle)
+    lbl_rtldongle.grid (row=2, column=0, sticky=W)
+    ent_rtldongle.grid (row=2, column=1, sticky=W)
 
     #----- tab_leandvb -----
-    tab_leandvb.columnconfigure((0,1,2),   pad=4, weight=1)
-    tab_leandvb.rowconfigure   ((0,1,2,3), pad=4, weight=0)
+    tab_leandvb.columnconfigure((0,1),   pad=4, weight=1)
+    tab_leandvb.rowconfigure   ((0,1,2), pad=4, weight=0)
 
         #----- label -----
     lbl_leandvb = ttk.Label (tab_leandvb, text="Settings for leandvb program")
-    lbl_leandvb.grid (row=0, column=0, columnspan=3)
+    lbl_leandvb.grid (row=0, column=0, columnspan=2)
 
     lbl_leandvb_separator = Frame (tab_leandvb, height=1, bg="grey")
-    lbl_leandvb_separator.grid (row=1, column=0, columnspan=3, sticky=EW)
+    lbl_leandvb_separator.grid (row=1, column=0, columnspan=2, sticky=EW)
 
         #----- frame 'common options' -----
     frm_common_options = ttk.Frame (tab_leandvb, borderwidth=4, padding=4)
@@ -558,22 +573,6 @@ def dlg_settings():
     lbl_general.grid(row=0, column=0, sticky=N, columnspan=4, pady=6)
     lbl_lnblo  .grid (row=1, column=0, sticky=E)
     ent_lnblo  .grid (row=1, column=1, sticky=W)
-
-    tab_rtlsdr.columnconfigure((0,2,3),     pad=4, weight=1)
-    tab_rtlsdr.rowconfigure   ((0,1,2,3,4), pad=4, weight=0)
-    lbl_rtlsdr   .grid (row=0, column=0, sticky=N, columnspan=4, pady=6)
-    lbl_ppm      .grid (row=1, column=0, sticky=E)
-    lb2_ppm      .grid (row=1, column=1, sticky=E)
-    ent_ppm      .grid (row=1, column=2, sticky=W)
-    lb3_ppm      .grid (row=1, column=3, sticky=W)
-    lbl_gain     .grid (row=2, column=0, sticky=E)
-    lb2_gain     .grid (row=2, column=1, sticky=E)
-    ent_gain     .grid (row=2, column=2, sticky=W)
-    lb3_gain     .grid (row=2, column=3, sticky=W)
-    lbl_rtldongle.grid (row=3, column=0, sticky=E)
-    lb2_rtldongle.grid (row=3, column=1, sticky=E)
-    ent_rtldongle.grid (row=3, column=2, sticky=W)
-    lb3_rtldongle.grid (row=3, column=3, sticky=W)
 
     set_visibility_dvb_options(None)
 
