@@ -774,12 +774,15 @@ else:
 lbl_logo = Label(frm_root, image=img_logo)
 lbl_logo.grid (row=0, column=3, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
 
-txt_terminal = Text(frm_root, width=40, height=0)
-txt_terminal.grid (row=0, column=4, rowspan=6, padx=4, pady=4, sticky=NS)
-scb_terminal = Scrollbar(frm_root)
-scb_terminal.grid (row=0, column=5, rowspan=6, pady=4, sticky=NS)
-scb_terminal.config(command=txt_terminal.yview)
+    #----- terminal -----
+frm_terminal = ttk.Frame(frm_root)
+frm_terminal.grid (row=0, column=4, rowspan=6, sticky=NS)
+txt_terminal = Text(frm_terminal, width=40, height=0)
+scb_terminal = Scrollbar(frm_terminal)
 txt_terminal.config(yscrollcommand=scb_terminal.set)
+scb_terminal.config(command=txt_terminal.yview)
+txt_terminal.pack (side=LEFT, fill=Y)
+scb_terminal.pack (side=RIGHT, fill=Y)
 
 txt_terminal.insert(END, "Hello World!\n")
 txt_terminal.insert(END, "This is a long text with more than 40 characters\n")
