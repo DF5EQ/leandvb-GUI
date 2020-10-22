@@ -20,6 +20,7 @@ from tkFileDialog import *
 import ttk
 import os
 import json
+import ScrolledText
 
 # settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
@@ -709,6 +710,7 @@ def on_exit():
 lbl_frequency = ttk.Label (frm_root, text="Frequency")
 cmb_frequency = ttk.Combobox (frm_root, width=10, textvariable=frequency)
 cmb_frequency ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
+cmb_frequency.focus_set()
 lb2_frequency = ttk.Label (frm_root, text="MHz")
 lbl_frequency.grid (row=0, column=0, sticky=W, padx=5)
 cmb_frequency.grid (row=0, column=1, sticky=W)
@@ -763,16 +765,18 @@ btn_stop = ttk.Button (frm_root, text='STOP', command=on_stop)
 btn_stop.grid (row=7, column=1)
 
 btn_settings = ttk.Button (frm_root, text='Settings', command=dlg_settings)
-btn_settings.grid (row=7, column=3, columnspan=2)
+btn_settings.grid (row=7, column=3)
 
 if os.path.isfile("logo.png"):
     img_logo = PhotoImage(file="logo.png")
 else:
     img_logo = None
 lbl_logo = Label(frm_root, image=img_logo)
-lbl_logo.grid (row=0, column=3, sticky=W+E+N+S, columnspan=2, rowspan=6, padx=5, pady=5)
+lbl_logo.grid (row=0, column=3, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
 
-cmb_frequency.focus_set()
+terminal = Text(frm_root, width=40, height=0)
+terminal.grid (row=0, column=4, rowspan=6, padx=4, pady=4, sticky=NS)
+terminal.insert(END, "Hello World!\n")
 
 #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
