@@ -709,7 +709,7 @@ def on_exit():
 #----- user interface -----
     #----- terminal -----
 frm_terminal = ttk.Frame(frm_root)
-frm_terminal.grid (row=0, column=0, rowspan=6, sticky=NS)
+frm_terminal.grid (row=0, column=0, rowspan=8, sticky=NS)
 txt_terminal = Text(frm_terminal, width=40, height=0)
 scb_terminal = Scrollbar(frm_terminal)
 txt_terminal.config(yscrollcommand=scb_terminal.set)
@@ -766,7 +766,7 @@ cmb_fec.grid (row=5, column=2, sticky=W)
 lb2_fec.grid (row=5, column=3, sticky=W, padx=5)
 
 lbl_separator = Frame (frm_root, height=1, bg="grey")
-lbl_separator.grid (row=6, column=0, sticky=EW, columnspan=6, pady=6)
+lbl_separator.grid (row=6, column=1, sticky=EW, columnspan=5, pady=6)
 
 btn_start = ttk.Button (frm_root, text='START', command=on_start)
 btn_start.grid (row=7, column=1)
