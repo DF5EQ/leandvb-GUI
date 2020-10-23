@@ -20,7 +20,7 @@ from tkFileDialog import *
 import ttk
 import os
 import json
-import subprocess
+from subprocess import *
 
 # settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
@@ -680,12 +680,7 @@ def on_start():
 
     parameters_save()
 
-    file = open(run_script, "w")
-    file.write("#!/bin/sh \n\n")
-    file.write("\n\n")
-    file.write(sub)
-    file.close()
-    subprocess.call(sub +" &", shell=True)
+    Popen(["/bin/sh","-c",sub])
 
 def on_stop():
     file = open(stop_script, "w")
