@@ -20,7 +20,7 @@ from tkFileDialog import *
 import ttk
 import os
 import json
-import ScrolledText
+import subprocess
 
 # settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
@@ -676,8 +676,7 @@ def on_start():
           " | " + \
           leandvb_sub + \
           " | " + \
-          viewer_sub + \
-          " \n"
+          viewer_sub
 
     parameters_save()
 
@@ -686,7 +685,7 @@ def on_start():
     file.write("\n\n")
     file.write(sub)
     file.close()
-    os.system("sh " + run_script + " &")
+    subprocess.call(sub +" &", shell=True)
 
 def on_stop():
     file = open(stop_script, "w")
