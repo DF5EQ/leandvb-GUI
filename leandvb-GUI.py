@@ -706,6 +706,9 @@ def on_exit():
     on_stop()
     root.destroy()
 
+    #----- stop user interface -----
+root.protocol("WM_DELETE_WINDOW", on_exit)
+
 #----- user interface -----
     #----- terminal -----
 frm_terminal = ttk.Frame(frm_root)
@@ -717,6 +720,7 @@ scb_terminal.config(command=txt_terminal.yview)
 txt_terminal.pack (side=LEFT, fill=Y)
 scb_terminal.pack (side=RIGHT, fill=Y)
 
+    #----- controls -----
 lbl_frequency = ttk.Label (frm_root, text="Frequency")
 cmb_frequency = ttk.Combobox (frm_root, width=10, textvariable=frequency)
 cmb_frequency ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
@@ -765,9 +769,11 @@ lbl_fec.grid (row=5, column=1, sticky=W, padx=5)
 cmb_fec.grid (row=5, column=2, sticky=W)
 lb2_fec.grid (row=5, column=3, sticky=W, padx=5)
 
+    #----- separator -----
 lbl_separator = Frame (frm_root, height=1, bg="grey")
 lbl_separator.grid (row=6, column=1, sticky=EW, columnspan=5, pady=6)
 
+    #----- buttons -----
 btn_start = ttk.Button (frm_root, text='START', command=on_start)
 btn_start.grid (row=7, column=1)
 
@@ -777,6 +783,7 @@ btn_stop.grid (row=7, column=2)
 btn_settings = ttk.Button (frm_root, text='Settings', command=dlg_settings)
 btn_settings.grid (row=7, column=4)
 
+    #----- logo -----
 if os.path.isfile("logo.png"):
     img_logo = PhotoImage(file="logo.png")
 else:
@@ -787,9 +794,6 @@ lbl_logo.grid (row=0, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
 txt_terminal.insert(END, "Hello World!\n")
 txt_terminal.insert(END, "This is a long text with more than 40 characters\n")
 txt_terminal.insert(END, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29")
-
-#----- stop user interface -----
-root.protocol("WM_DELETE_WINDOW", on_exit)
 
 #----- start user interface -----
 mainloop()
