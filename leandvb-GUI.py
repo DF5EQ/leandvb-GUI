@@ -21,6 +21,7 @@ import ttk
 import os
 import json
 from subprocess import *
+import select
 
 # settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
@@ -629,9 +630,10 @@ def on_start():
 
     parameters_save()
 
-    proc_leandvb = Popen(["/bin/sh","-c",sub])
+    global proc_leandvb
+    proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE)
 
-    on_timeout()
+    root.after(1000, on_timeout)
 
 def on_stop():
     global timeout
@@ -656,12 +658,21 @@ def on_exit():
 
 def on_timeout():
     global timeout
-    txt_terminal.insert(END, "hallo")
-    txt_terminal.see(END)
-    timeout = root.after(1000, on_timeout)
+    global proc_leandvb
+    # non-blocking read of stderr from external procedure (proc_leandvb)
+    if proc_leandvb.stderr in select.select([proc_leandvb.stderr], [], [], 0)[0]:
+        print proc_leandvb.stderr
+        line = proc_leandvb.stderr.readline()
+        txt_terminal.insert(END, line)
+        txt_terminal.see(END)
+    else:
+        sys.stdout.write(".")
+        sys.stdout.flush()
+    timeout = root.after(100, on_timeout)
 
-#----- global variables +++++
+#----- global variables -----
 timeout = None
+proc_leandvb = 0
 
 #----- create root window -----
 root = Tk()
