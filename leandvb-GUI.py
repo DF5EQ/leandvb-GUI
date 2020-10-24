@@ -680,9 +680,12 @@ def on_start():
 
     parameters_save()
 
-    Popen(["/bin/sh","-c",sub])
+    proc_leandvb = Popen(["/bin/sh","-c",sub])
+
+    on_timeout()
 
 def on_stop():
+    global timeout
     file = open(stop_script, "w")
     file.write("#!/bin/sh \n")
     file.write("\n")
@@ -694,11 +697,21 @@ def on_stop():
     file.write("exit 0\n")
     file.close()
     os.system("sh " + stop_script)
+    if timeout :
+        root.after_cancel(timeout)
 
 def on_exit():
     parameters_save()
     on_stop()
     root.destroy()
+
+def on_timeout():
+    global timeout
+    txt_terminal.insert(END, "hallo")
+    txt_terminal.see(END)
+    timeout = root.after(1000, on_timeout)
+
+timeout = None
 
     #----- stop user interface -----
 root.protocol("WM_DELETE_WINDOW", on_exit)
@@ -788,6 +801,7 @@ lbl_logo.grid (row=0, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
 txt_terminal.insert(END, "Hello World!\n")
 txt_terminal.insert(END, "This is a long text with more than 40 characters\n")
 txt_terminal.insert(END, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29")
+txt_terminal.see(END)
 
 #----- start user interface -----
 mainloop()
