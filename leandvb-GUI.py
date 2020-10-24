@@ -565,57 +565,6 @@ def dlg_settings():
 
 #===== root window ============================================================
 
-root = Tk()
-
-#----- window properties -----
-root.title('LeanDVB DVBS + DVBS2 interface')
-root.resizable(height = False, width = False)
-frm_root = ttk.Frame(root, borderwidth=8)
-frm_root.pack()
-
-#----- 'declare' user interface variables -----
-bandwidth       = IntVar()
-const           = StringVar()
-debug           = StringVar()
-fastdrift       = IntVar()
-fastlock        = IntVar()
-fec             = StringVar()
-framesizes      = StringVar()
-frequency       = DoubleVar()
-gain            = IntVar()
-gui             = IntVar()
-hardmetric      = IntVar()
-inpipe          = IntVar()
-ldpc_bf         = IntVar()
-ldpchelper_file = StringVar()
-ldpchelper_path = StringVar()
-leandvb_file    = StringVar()
-leandvb_path    = StringVar()
-lnblo           = DoubleVar()
-maxsens         = IntVar()
-modcods         = StringVar()
-nhelpers        = IntVar()
-ppm             = IntVar()
-rolloff         = DoubleVar()
-rrcrej          = DoubleVar()
-rtldongle       = IntVar()
-rtlsdr_file     = StringVar()
-rtlsdr_path     = StringVar()
-sampler         = StringVar()
-standard        = StringVar()
-strongpls       = IntVar()
-symbolrate      = IntVar()
-tune            = IntVar()
-viewer_file     = StringVar()
-viewer_path     = StringVar()
-viterbi         = IntVar()
-
-#----- initialize parameters dictionary -----
-if os.path.isfile(parameters_file):
-    parameters_load()
-else:
-    parameters_default()
-
 #----- user interface action functions -----
 def on_start():
     opt_inpipe     = " --inpipe "   + str(inpipe.get())
@@ -711,12 +660,61 @@ def on_timeout():
     txt_terminal.see(END)
     timeout = root.after(1000, on_timeout)
 
+#----- global variables +++++
 timeout = None
 
-    #----- stop user interface -----
+#----- create root window -----
+root = Tk()
+root.title('LeanDVB DVBS + DVBS2 interface')
+root.resizable(height = False, width = False)
+frm_root = ttk.Frame(root, borderwidth=8)
+frm_root.pack()
 root.protocol("WM_DELETE_WINDOW", on_exit)
 
-#----- user interface -----
+#----- 'declare' user interface variables -----
+bandwidth       = IntVar()
+const           = StringVar()
+debug           = StringVar()
+fastdrift       = IntVar()
+fastlock        = IntVar()
+fec             = StringVar()
+framesizes      = StringVar()
+frequency       = DoubleVar()
+gain            = IntVar()
+gui             = IntVar()
+hardmetric      = IntVar()
+inpipe          = IntVar()
+ldpc_bf         = IntVar()
+ldpchelper_file = StringVar()
+ldpchelper_path = StringVar()
+leandvb_file    = StringVar()
+leandvb_path    = StringVar()
+lnblo           = DoubleVar()
+maxsens         = IntVar()
+modcods         = StringVar()
+nhelpers        = IntVar()
+ppm             = IntVar()
+rolloff         = DoubleVar()
+rrcrej          = DoubleVar()
+rtldongle       = IntVar()
+rtlsdr_file     = StringVar()
+rtlsdr_path     = StringVar()
+sampler         = StringVar()
+standard        = StringVar()
+strongpls       = IntVar()
+symbolrate      = IntVar()
+tune            = IntVar()
+viewer_file     = StringVar()
+viewer_path     = StringVar()
+viterbi         = IntVar()
+
+#----- initialize parameters dictionary -----
+if os.path.isfile(parameters_file):
+    parameters_load()
+else:
+    parameters_default()
+
+#----- create user interface -----
     #----- terminal -----
 frm_terminal = ttk.Frame(frm_root)
 frm_terminal.grid (row=0, column=0, rowspan=8, sticky=NS)
