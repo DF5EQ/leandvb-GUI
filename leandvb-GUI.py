@@ -632,8 +632,7 @@ def on_start():
 
     global proc_leandvb
     proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE)
-
-    root.after(1000, on_timeout)
+    on_timeout()
 
 def on_stop():
     global timeout
@@ -659,20 +658,18 @@ def on_exit():
 def on_timeout():
     global timeout
     global proc_leandvb
-    # non-blocking read of stderr from external procedure (proc_leandvb)
-    if proc_leandvb.stderr in select.select([proc_leandvb.stderr], [], [], 0)[0]:
-        print proc_leandvb.stderr
-        line = proc_leandvb.stderr.readline()
-        txt_terminal.insert(END, line)
+    msg = ""
+    # non-blocking read of stderr from proc_leandvb
+    pipe = proc_leandvb.stderr
+    while pipe in select.select([pipe], [], [], 0)[0]:
+        msg = msg + pipe.read(1)
+    if len(msg) > 0 :
+        txt_terminal.insert(END, msg)
         txt_terminal.see(END)
-    else:
-        sys.stdout.write(".")
-        sys.stdout.flush()
     timeout = root.after(100, on_timeout)
 
 #----- global variables -----
 timeout = None
-proc_leandvb = 0
 
 #----- create root window -----
 root = Tk()
@@ -806,11 +803,6 @@ else:
     img_logo = None
 lbl_logo = Label(frm_root, image=img_logo)
 lbl_logo.grid (row=0, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
-
-txt_terminal.insert(END, "Hello World!\n")
-txt_terminal.insert(END, "This is a long text with more than 40 characters\n")
-txt_terminal.insert(END, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29")
-txt_terminal.see(END)
 
 #----- start user interface -----
 mainloop()
