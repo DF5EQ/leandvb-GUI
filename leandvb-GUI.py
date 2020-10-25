@@ -7,11 +7,8 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO redirect stdout to text-widget
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
-# TODO don't kill not existend processes (avoid failure messages)
-# TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO provide fast switching between sets of changable favorite settings
 
