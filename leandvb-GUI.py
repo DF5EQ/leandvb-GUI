@@ -22,19 +22,15 @@ import os
 import json
 from subprocess import *
 import select
-import signal
+from signal import *
 
 # settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
 parameters_file = parameters_path + "parameters.json"
-run_script      = parameters_path + "run.sh"
-stop_script     = parameters_path + "stop.sh"
 
 # show settings for auxiliary files (parameters, run, stop)
 print "parameters path:", parameters_path
 print "parameters file:",  parameters_file
-print "run script     :",  run_script
-print "stop script    :",  stop_script
 
 # create parameters path if not existend
 if not os.path.exists(parameters_path):
@@ -642,7 +638,7 @@ def on_stop():
         root.after_cancel(timeout)
         timeout = None
     if proc_leandvb :
-        os.killpg(proc_leandvb.pid, signal.SIGKILL)
+        os.killpg(proc_leandvb.pid, SIGKILL)
         proc_leandvb = None
 
 def on_exit():
