@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO setup rtl_sdr options like options for leandvb
 # TODO output all 'print' to text-widget, code before root=tk() needs to be placed in GUI
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
@@ -598,10 +597,18 @@ def on_start():
                 + opt_debug_v + opt_debug_d
     leandvb_sub = "\"" + leandvb_path.get() + "/" + leandvb_file.get() + "\"" + leandvb_opt
 
-    rtlsdr_opt = ""
+    opt_frequency  = " -f " + str(int((float(frequency.get()) - float(lnblo.get())) * 1000000))
+    opt_samplerate = " -s " + str(bandwidth.get() * 1000)
+    opt_device     = " -d " + str(rtldongle.get())
+    opt_gain       = " -g " + str(gain.get())
+    opt_ppm_error  = " -p " + str(ppm.get())
+    opt_outfile    = " -"
+
+    rtlsdr_opt = opt_frequency + opt_samplerate + opt_device + opt_gain + opt_ppm_error + opt_outfile
     rtlsdr_sub = "\"" + rtlsdr_path.get()  + rtlsdr_file.get()  + "\"" + rtlsdr_opt
 
-    viewer_opt = " -"
+    opt_infile = " -"
+    viewer_opt = opt_infile
     viewer_sub = "\"" + viewer_path.get() + "\"" + viewer_file.get()  + viewer_opt
 
     print
