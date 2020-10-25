@@ -22,6 +22,7 @@ import os
 import json
 from subprocess import *
 import select
+import signal
 
 # settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
@@ -631,29 +632,17 @@ def on_start():
     parameters_save()
 
     global proc_leandvb
-    proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE)
+    proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE, preexec_fn=os.setsid)
     on_timeout()
 
 def on_stop():
     global timeout
     global proc_leandvb
-    file = open(stop_script, "w")
-    file.write("#!/bin/sh \n")
-    file.write("\n")
-    file.write("killall rtl_sdr\n")
-    file.write("killall ffplay\n")
-    file.write("killall leandvb\n")
-    file.write("killall basicRX\n")
-    file.write("\n")
-    file.write("exit 0\n")
-    file.close()
-    os.system("sh " + stop_script)
     if timeout :
         root.after_cancel(timeout)
         timeout = None
     if proc_leandvb :
-        print proc_leandvb
-        proc_leandvb.terminate()
+        os.killpg(proc_leandvb.pid, signal.SIGKILL)
         proc_leandvb = None
 
 def on_exit():
