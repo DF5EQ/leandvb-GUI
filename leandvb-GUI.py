@@ -7,11 +7,8 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO redirect stdout to test-widget
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
-# TODO don't kill not existend processes (avoid failure messages)
-# TODO leandvb-run as function like leandvb-stop
 # TODO leandvb: --tune is broken, use --derotate instead
 # TODO provide fast switching between sets of changable favorite settings
 
@@ -20,18 +17,17 @@ from tkFileDialog import *
 import ttk
 import os
 import json
+from subprocess import *
+import select
+from signal import *
 
 # settings for auxiliary files (parameters, run, stop)
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
 parameters_file = parameters_path + "parameters.json"
-run_script      = parameters_path + "run.sh"
-stop_script     = parameters_path + "stop.sh"
 
 # show settings for auxiliary files (parameters, run, stop)
 print "parameters path:", parameters_path
 print "parameters file:",  parameters_file
-print "run script     :",  run_script
-print "stop script    :",  stop_script
 
 # create parameters path if not existend
 if not os.path.exists(parameters_path):
@@ -564,57 +560,6 @@ def dlg_settings():
 
 #===== root window ============================================================
 
-root = Tk()
-
-#----- window properties -----
-root.title('LeanDVB DVBS + DVBS2 interface')
-root.resizable(height = False, width = False)
-frm_root = ttk.Frame(root, borderwidth=8)
-frm_root.pack()
-
-#----- 'declare' user interface variables -----
-bandwidth       = IntVar()
-const           = StringVar()
-debug           = StringVar()
-fastdrift       = IntVar()
-fastlock        = IntVar()
-fec             = StringVar()
-framesizes      = StringVar()
-frequency       = DoubleVar()
-gain            = IntVar()
-gui             = IntVar()
-hardmetric      = IntVar()
-inpipe          = IntVar()
-ldpc_bf         = IntVar()
-ldpchelper_file = StringVar()
-ldpchelper_path = StringVar()
-leandvb_file    = StringVar()
-leandvb_path    = StringVar()
-lnblo           = DoubleVar()
-maxsens         = IntVar()
-modcods         = StringVar()
-nhelpers        = IntVar()
-ppm             = IntVar()
-rolloff         = DoubleVar()
-rrcrej          = DoubleVar()
-rtldongle       = IntVar()
-rtlsdr_file     = StringVar()
-rtlsdr_path     = StringVar()
-sampler         = StringVar()
-standard        = StringVar()
-strongpls       = IntVar()
-symbolrate      = IntVar()
-tune            = IntVar()
-viewer_file     = StringVar()
-viewer_path     = StringVar()
-viterbi         = IntVar()
-
-#----- initialize parameters dictionary -----
-if os.path.isfile(parameters_file):
-    parameters_load()
-else:
-    parameters_default()
-
 #----- user interface action functions -----
 def on_start():
     opt_inpipe     = " --inpipe "   + str(inpipe.get())
@@ -675,107 +620,178 @@ def on_start():
           " | " + \
           leandvb_sub + \
           " | " + \
-          viewer_sub + \
-          " \n"
+          viewer_sub
 
     parameters_save()
 
-    file = open(run_script, "w")
-    file.write("#!/bin/sh \n\n")
-    file.write("\n\n")
-    file.write(sub)
-    file.close()
-    os.system("sh " + run_script + " &")
+    global proc_leandvb
+    proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE, preexec_fn=os.setsid)
+    on_timeout()
 
 def on_stop():
-    file = open(stop_script, "w")
-    file.write("#!/bin/sh \n")
-    file.write("\n")
-    file.write("killall rtl_sdr\n")
-    file.write("killall ffplay\n")
-    file.write("killall leandvb\n")
-    file.write("killall basicRX\n")
-    file.write("\n")
-    file.write("exit 0\n")
-    file.close()
-    os.system("sh " + stop_script)
+    global timeout
+    global proc_leandvb
+    if timeout :
+        root.after_cancel(timeout)
+        timeout = None
+    if proc_leandvb :
+        os.killpg(proc_leandvb.pid, SIGKILL)
+        proc_leandvb = None
 
 def on_exit():
     parameters_save()
     on_stop()
     root.destroy()
 
-#----- user interface -----
+def on_timeout():
+    global timeout
+    global proc_leandvb
+    msg = ""
+    # non-blocking read of stderr from proc_leandvb
+    pipe = proc_leandvb.stderr
+    while pipe in select.select([pipe], [], [], 0)[0]:
+        msg = msg + pipe.read(1)
+    if len(msg) > 0 :
+        txt_terminal.insert(END, msg)
+        txt_terminal.see(END)
+    timeout = root.after(100, on_timeout)
+
+#----- global variables -----
+timeout = None
+proc_leandvb = None
+
+#----- create root window -----
+root = Tk()
+root.title('LeanDVB DVBS + DVBS2 interface')
+root.resizable(height = False, width = False)
+frm_root = ttk.Frame(root, borderwidth=8)
+frm_root.pack()
+root.protocol("WM_DELETE_WINDOW", on_exit)
+
+#----- 'declare' user interface variables -----
+bandwidth       = IntVar()
+const           = StringVar()
+debug           = StringVar()
+fastdrift       = IntVar()
+fastlock        = IntVar()
+fec             = StringVar()
+framesizes      = StringVar()
+frequency       = DoubleVar()
+gain            = IntVar()
+gui             = IntVar()
+hardmetric      = IntVar()
+inpipe          = IntVar()
+ldpc_bf         = IntVar()
+ldpchelper_file = StringVar()
+ldpchelper_path = StringVar()
+leandvb_file    = StringVar()
+leandvb_path    = StringVar()
+lnblo           = DoubleVar()
+maxsens         = IntVar()
+modcods         = StringVar()
+nhelpers        = IntVar()
+ppm             = IntVar()
+rolloff         = DoubleVar()
+rrcrej          = DoubleVar()
+rtldongle       = IntVar()
+rtlsdr_file     = StringVar()
+rtlsdr_path     = StringVar()
+sampler         = StringVar()
+standard        = StringVar()
+strongpls       = IntVar()
+symbolrate      = IntVar()
+tune            = IntVar()
+viewer_file     = StringVar()
+viewer_path     = StringVar()
+viterbi         = IntVar()
+
+#----- initialize parameters dictionary -----
+if os.path.isfile(parameters_file):
+    parameters_load()
+else:
+    parameters_default()
+
+#----- create user interface -----
+    #----- terminal -----
+frm_terminal = ttk.Frame(frm_root)
+frm_terminal.grid (row=0, column=0, rowspan=8, sticky=NS)
+txt_terminal = Text(frm_terminal, width=40, height=0)
+scb_terminal = Scrollbar(frm_terminal)
+txt_terminal.config(yscrollcommand=scb_terminal.set)
+scb_terminal.config(command=txt_terminal.yview)
+txt_terminal.pack (side=LEFT, fill=Y)
+scb_terminal.pack (side=RIGHT, fill=Y)
+
+    #----- controls -----
 lbl_frequency = ttk.Label (frm_root, text="Frequency")
 cmb_frequency = ttk.Combobox (frm_root, width=10, textvariable=frequency)
 cmb_frequency ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
+cmb_frequency.focus_set()
 lb2_frequency = ttk.Label (frm_root, text="MHz")
-lbl_frequency.grid (row=0, column=0, sticky=W, padx=5)
-cmb_frequency.grid (row=0, column=1, sticky=W)
-lb2_frequency.grid (row=0, column=2, sticky=W, padx=5)
+lbl_frequency.grid (row=0, column=1, sticky=W, padx=5)
+cmb_frequency.grid (row=0, column=2, sticky=W)
+lb2_frequency.grid (row=0, column=3, sticky=W, padx=5)
 
 lbl_symbolrate = ttk.Label (frm_root, text="Symbolrate")
 cmb_symbolrate = ttk.Combobox (frm_root, width=10, textvariable=symbolrate)
 cmb_symbolrate ["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
 lb2_symbolrate = ttk.Label (frm_root, text="kHz")
-lbl_symbolrate.grid (row=1, column=0, sticky=W, padx=5)
-cmb_symbolrate.grid (row=1, column=1, sticky=W)
-lb2_symbolrate.grid (row=1, column=2, sticky=W, padx=5)
+lbl_symbolrate.grid (row=1, column=1, sticky=W, padx=5)
+cmb_symbolrate.grid (row=1, column=2, sticky=W)
+lb2_symbolrate.grid (row=1, column=3, sticky=W, padx=5)
 
 lbl_bandwidth = ttk.Label (frm_root, text="Bandwidth")
 cmb_bandwidth = ttk.Combobox (frm_root, width=10, textvariable=bandwidth)
 cmb_bandwidth ["values"] = ("2400","2000","1000","500")
 lb2_bandwidth = ttk.Label (frm_root, text="kHz")
-lbl_bandwidth.grid (row=2, column=0, sticky=W, padx=5)
-cmb_bandwidth.grid (row=2, column=1, sticky=W)
-lb2_bandwidth.grid (row=2, column=2, sticky=W, padx=5)
+lbl_bandwidth.grid (row=2, column=1, sticky=W, padx=5)
+cmb_bandwidth.grid (row=2, column=2, sticky=W)
+lb2_bandwidth.grid (row=2, column=3, sticky=W, padx=5)
 
 lbl_tune = ttk.Label (frm_root, text="Tune")
 cmb_tune = ttk.Combobox (frm_root, width=10, textvariable=tune)
 cmb_tune ["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
 lb2_tune = ttk.Label (frm_root, text="Hz")
-lbl_tune.grid (row=3, column=0, sticky=W, padx=5)
-cmb_tune.grid (row=3, column=1, sticky=W)
-lb2_tune.grid (row=3, column=2, sticky=W, padx=5)
+lbl_tune.grid (row=3, column=1, sticky=W, padx=5)
+cmb_tune.grid (row=3, column=2, sticky=W)
+lb2_tune.grid (row=3, column=3, sticky=W, padx=5)
 
 lbl_lnblo = ttk.Label (frm_root, text="LNB LO")
 ent_lnblo = ttk.Entry (frm_root, width=10, textvariable=lnblo)
 lb2_lnblo = ttk.Label (frm_root, text="MHz")
-lbl_lnblo.grid (row=4, column=0, sticky=W)
-ent_lnblo.grid (row=4, column=1, sticky=W)
-lb2_lnblo.grid (row=4, column=2, sticky=W, padx=5)
+lbl_lnblo.grid (row=4, column=1, sticky=W)
+ent_lnblo.grid (row=4, column=2, sticky=W)
+lb2_lnblo.grid (row=4, column=3, sticky=W, padx=5)
 
 lbl_fec = ttk.Label (frm_root, text="FEC")
 cmb_fec = ttk.Combobox (frm_root, width=10, textvariable=fec)
 cmb_fec ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
 lb2_fec = ttk.Label (frm_root, text="Div")
-lbl_fec.grid (row=5, column=0, sticky=W, padx=5)
-cmb_fec.grid (row=5, column=1, sticky=W)
-lb2_fec.grid (row=5, column=2, sticky=W, padx=5)
+lbl_fec.grid (row=5, column=1, sticky=W, padx=5)
+cmb_fec.grid (row=5, column=2, sticky=W)
+lb2_fec.grid (row=5, column=3, sticky=W, padx=5)
 
+    #----- separator -----
 lbl_separator = Frame (frm_root, height=1, bg="grey")
-lbl_separator.grid (row=6, column=0, sticky=EW, columnspan=6, pady=6)
+lbl_separator.grid (row=6, column=1, sticky=EW, columnspan=5, pady=6)
 
+    #----- buttons -----
 btn_start = ttk.Button (frm_root, text='START', command=on_start)
-btn_start.grid (row=7, column=0)
+btn_start.grid (row=7, column=1)
 
 btn_stop = ttk.Button (frm_root, text='STOP', command=on_stop)
-btn_stop.grid (row=7, column=1)
+btn_stop.grid (row=7, column=2)
 
 btn_settings = ttk.Button (frm_root, text='Settings', command=dlg_settings)
-btn_settings.grid (row=7, column=3, columnspan=2)
+btn_settings.grid (row=7, column=4)
 
+    #----- logo -----
 if os.path.isfile("logo.png"):
     img_logo = PhotoImage(file="logo.png")
 else:
     img_logo = None
 lbl_logo = Label(frm_root, image=img_logo)
-lbl_logo.grid (row=0, column=3, sticky=W+E+N+S, columnspan=2, rowspan=6, padx=5, pady=5)
-
-cmb_frequency.focus_set()
-
-#----- stop user interface -----
-root.protocol("WM_DELETE_WINDOW", on_exit)
+lbl_logo.grid (row=0, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
 
 #----- start user interface -----
 mainloop()
