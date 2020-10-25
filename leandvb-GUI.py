@@ -636,6 +636,7 @@ def on_start():
 
 def on_stop():
     global timeout
+    global proc_leandvb
     file = open(stop_script, "w")
     file.write("#!/bin/sh \n")
     file.write("\n")
@@ -649,6 +650,11 @@ def on_stop():
     os.system("sh " + stop_script)
     if timeout :
         root.after_cancel(timeout)
+        timeout = None
+    if proc_leandvb :
+        print proc_leandvb
+        proc_leandvb.terminate()
+        proc_leandvb = None
 
 def on_exit():
     parameters_save()
@@ -670,6 +676,7 @@ def on_timeout():
 
 #----- global variables -----
 timeout = None
+proc_leandvb = None
 
 #----- create root window -----
 root = Tk()
