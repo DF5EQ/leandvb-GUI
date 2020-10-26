@@ -22,40 +22,12 @@ from subprocess import *
 import select
 from signal import *
 
-# settings for auxiliary files (parameters, run, stop)
-parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
-parameters_file = parameters_path + "parameters.json"
-
-# show settings for auxiliary files (parameters, run, stop)
-print "parameters path:", parameters_path
-print "parameters file:",  parameters_file
-
-# create parameters path if not existend
-if not os.path.exists(parameters_path):
-    print "create " + parameters_path
-    os.mkdir(parameters_path)
-
-# check max pipe size and adjust if needed
-
-max_needed = 32000000
-
-fd = open("/proc/sys/fs/pipe-max-size", "r")
-max_current = int(fd.readline())
-fd.close()
-
-if (max_current < max_needed):
-    print "max pipe size  :", max_current, ", will be set to", max_needed
-    cmd = "bash -c 'echo " + str(max_needed) + " > /proc/sys/fs/pipe-max-size'"
-    os.system("pkexec " + cmd)
-else:
-    print "max pipe size  :", max_current, ", this is ok"
-
 #===== handle parameters (save, load, default) ================================
 
 parameters = dict()
 
 def parameters_save():
-    print "save parameters to file"
+    print_terminal("save parameters to file \n")
     parameters["frequency"      ] = float(frequency.get())
     parameters["symbolrate"     ] = int(symbolrate.get())
     parameters["fec"            ] = fec.get()
@@ -98,14 +70,14 @@ def parameters_save():
 
 def parameters_load():
     global parameters
-    print "load parameters from file"
+    print_terminal("load parameters from file\n")
     file = open(parameters_file, "r")
     parameters = json.load(file)
     file.close()
     guivars_init()
 
 def parameters_default():
-    print "load parameters with defaults"
+    print_terminal("load parameters with defaults\n")
     parameters["frequency"      ] = 10491.500
     parameters["symbolrate"     ] = 1500
     parameters["fec"            ] = "1/2"
@@ -144,7 +116,7 @@ def parameters_default():
     guivars_init()
 
 def guivars_init():
-    print "initialize GUI variables"
+    print_terminal("initialize GUI variables\n")
     bandwidth      .set(parameters["bandwidth"])
     const          .set(parameters["constellation"])
     debug          .set(parameters["debug"])
@@ -611,13 +583,13 @@ def on_start():
     viewer_opt = opt_infile
     viewer_sub = "\"" + viewer_path.get() + "\"" + viewer_file.get()  + viewer_opt
 
-    print
-    print "leandvb:", leandvb_sub
-    print
-    print "rtlsdr:", rtlsdr_sub
-    print
-    print "viewer:", viewer_sub
-    print
+    print_terminal("\n")
+    print_terminal("leandvb: " + leandvb_sub + "\n")
+    print_terminal("\n")
+    print_terminal("rtlsdr: " + rtlsdr_sub + "\n")
+    print_terminal("\n")
+    print_terminal("viewer: " + viewer_sub + "\n")
+    print_terminal("\n")
 
     sub = rtlsdr_sub + \
           " -d " + str( rtldongle.get() ) + \
@@ -717,12 +689,6 @@ viewer_file     = StringVar()
 viewer_path     = StringVar()
 viterbi         = IntVar()
 
-#----- initialize parameters dictionary -----
-if os.path.isfile(parameters_file):
-    parameters_load()
-else:
-    parameters_default()
-
 #----- create user interface -----
     #----- terminal -----
 frm_terminal = ttk.Frame(frm_root)
@@ -820,6 +786,38 @@ root_y = screen_height - root_height
 
 root.geometry("+%d+%d" % (root_x, root_y))
 root.deiconify() # now we can show root
+
+#----- settings file -----
+parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
+parameters_file = parameters_path + "parameters.json"
+print_terminal("parameters path:" + parameters_path + "\n")
+print_terminal("parameters file:" + parameters_file + "\n")
+
+# create path if not existend
+if not os.path.exists(parameters_path):
+    print_terminal("create " + parameters_path + "\n")
+    os.mkdir(parameters_path)
+
+#----- initialize parameters dictionary -----
+if os.path.isfile(parameters_file):
+    parameters_load()
+else:
+    parameters_default()
+
+#----- check max pipe size and adjust if needed -----
+
+max_needed = 32000000
+
+fd = open("/proc/sys/fs/pipe-max-size", "r")
+max_current = int(fd.readline())
+fd.close()
+
+if (max_current < max_needed):
+    print_terminal("max pipe size  : " + str(max_current) + ", will be set to", str(max_needed) + "\n")
+    cmd = "bash -c 'echo " + str(max_needed) + " > /proc/sys/fs/pipe-max-size'"
+    os.system("pkexec " + cmd)
+else:
+    print_terminal("max pipe size  : " + str(max_current) + ", this is ok\n")
 
 #----- start user interface -----
 mainloop()
