@@ -661,9 +661,12 @@ def on_timeout():
     while pipe in select.select([pipe], [], [], 0)[0]:
         msg = msg + pipe.read(1)
     if len(msg) > 0 :
-        txt_terminal.insert(END, msg)
-        txt_terminal.see(END)
+        print_terminal(msg)
     timeout = root.after(100, on_timeout)
+
+def print_terminal(str):
+        txt_terminal.insert(END, str)
+        txt_terminal.see(END)
 
 #----- global variables -----
 timeout = None
