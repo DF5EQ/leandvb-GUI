@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO output all 'print' to text-widget, code before root=tk() needs to be placed in GUI
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
 # TODO leandvb: --tune is broken, use --derotate instead
@@ -805,7 +804,6 @@ else:
     parameters_default()
 
 #----- check max pipe size and adjust if needed -----
-
 max_needed = 32000000
 
 fd = open("/proc/sys/fs/pipe-max-size", "r")
