@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO START and STOP buttons as radiobutton
 # TODO output all 'print' to text-widget, code before root=tk() needs to be placed in GUI
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
@@ -786,11 +785,12 @@ lbl_separator = Frame (frm_root, height=1, bg="grey")
 lbl_separator.grid (row=6, column=1, sticky=EW, columnspan=5, pady=6)
 
     #----- buttons -----
-btn_start = ttk.Button (frm_root, text='START', command=on_start)
-btn_start.grid (row=7, column=1)
-
-btn_stop = ttk.Button (frm_root, text='STOP', command=on_stop)
-btn_stop.grid (row=7, column=2)
+rdb_dummy = StringVar()
+rdb_dummy.set("stop")
+rdb_start = Radiobutton (frm_root, text="START", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="start", command=on_start)
+rdb_start.grid (row=7, column=1)
+rdb_stop = Radiobutton (frm_root, text="STOP", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="stop", command=on_stop)
+rdb_stop.grid (row=7, column=2)
 
 btn_settings = ttk.Button (frm_root, text='Settings', command=dlg_settings)
 btn_settings.grid (row=7, column=4)
