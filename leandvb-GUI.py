@@ -7,6 +7,7 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
+# TODO place main window on bottom right of screen
 # TODO output all 'print' to text-widget, code before root=tk() needs to be placed in GUI
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
