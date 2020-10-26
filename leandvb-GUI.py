@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO place main window on bottom right of screen
 # TODO output all 'print' to text-widget, code before root=tk() needs to be placed in GUI
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
@@ -803,6 +802,21 @@ else:
     img_logo = None
 lbl_logo = Label(frm_root, image=img_logo)
 lbl_logo.grid (row=0, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
+
+#----- position the root window in bottom right corner of screen -----
+root.withdraw() # don't show root during positioning
+root.update() # update geometrie values
+
+screen_width  = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+root_width    = root.winfo_width()
+root_height   = root.winfo_height()
+
+root_x = screen_width - root_width
+root_y = screen_height - root_height
+
+root.geometry("+%d+%d" % (root_x, root_y))
+root.deiconify() # now we can show root
 
 #----- start user interface -----
 mainloop()
