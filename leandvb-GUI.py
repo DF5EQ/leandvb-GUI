@@ -7,6 +7,9 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
+# TODO replace os.system with subprocess call
+# TODO add confirmation after settings->default
+# TODO button for STOP/START (to start with changed settings)
 # TODO remember last 10 frequencies
 # TODO remember last 10 sybolrates
 # TODO leandvb: --tune is broken, use --derotate instead
@@ -702,7 +705,7 @@ scb_terminal.pack (side=RIGHT, fill=Y)
     #----- controls -----
 lbl_frequency = ttk.Label (frm_root, text="Frequency")
 cmb_frequency = ttk.Combobox (frm_root, width=10, textvariable=frequency)
-cmb_frequency ["values"] = ("10491.500","1252","1257","1260","436","437","1255","1252.600","1280","1250","1253")
+cmb_frequency ["values"] = ("10491.500","10492.000","10492.500","10493.000","10493.500","10494.000")
 cmb_frequency.focus_set()
 lb2_frequency = ttk.Label (frm_root, text="MHz")
 lbl_frequency.grid (row=0, column=1, sticky=W, padx=5)
@@ -711,7 +714,7 @@ lb2_frequency.grid (row=0, column=3, sticky=W, padx=5)
 
 lbl_symbolrate = ttk.Label (frm_root, text="Symbolrate")
 cmb_symbolrate = ttk.Combobox (frm_root, width=10, textvariable=symbolrate)
-cmb_symbolrate ["values"] = ("33","66","125","150","250","333","400","500","600","750","1000","1500","2000","2083","3000","4000","4340","5000")
+cmb_symbolrate ["values"] = ("2000","1500","1000","500","250","333","125")
 lb2_symbolrate = ttk.Label (frm_root, text="kHz")
 lbl_symbolrate.grid (row=1, column=1, sticky=W, padx=5)
 cmb_symbolrate.grid (row=1, column=2, sticky=W)
@@ -742,7 +745,7 @@ lb2_lnblo.grid (row=4, column=3, sticky=W, padx=5)
 
 lbl_fec = ttk.Label (frm_root, text="FEC")
 cmb_fec = ttk.Combobox (frm_root, width=10, textvariable=fec)
-cmb_fec ["values"] = ("1/2","2/3","3/4","5/6","6/7","7/8")
+cmb_fec ["values"] = ("1/2","2/3","3/4","4/5","5/6","6/7","7/8")
 lb2_fec = ttk.Label (frm_root, text="Div")
 lbl_fec.grid (row=5, column=1, sticky=W, padx=5)
 cmb_fec.grid (row=5, column=2, sticky=W)
@@ -771,21 +774,6 @@ else:
 lbl_logo = Label(frm_root, image=img_logo)
 lbl_logo.grid (row=0, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
 
-#----- position the root window in bottom right corner of screen -----
-root.withdraw() # don't show root during positioning
-root.update() # update geometrie values
-
-screen_width  = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-root_width    = root.winfo_width()
-root_height   = root.winfo_height()
-
-root_x = screen_width - root_width
-root_y = screen_height - root_height
-
-root.geometry("+%d+%d" % (root_x, root_y))
-root.deiconify() # now we can show root
-
 #----- settings file -----
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
 parameters_file = parameters_path + "parameters.json"
@@ -811,11 +799,26 @@ max_current = int(fd.readline())
 fd.close()
 
 if (max_current < max_needed):
-    print_terminal("max pipe size  : " + str(max_current) + ", will be set to", str(max_needed) + "\n")
+    print_terminal("max pipe size  : " + str(max_current) + ", will be set to" + str(max_needed) + "\n")
     cmd = "bash -c 'echo " + str(max_needed) + " > /proc/sys/fs/pipe-max-size'"
     os.system("pkexec " + cmd)
 else:
     print_terminal("max pipe size  : " + str(max_current) + ", this is ok\n")
+
+#----- position the root window in bottom right corner of screen -----
+root.withdraw() # don't show root during positioning
+root.update() # update geometrie values
+
+screen_width  = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+root_width    = root.winfo_width()
+root_height   = root.winfo_height()
+
+root_x = screen_width - root_width
+root_y = screen_height - root_height
+
+root.geometry("+%d+%d" % (root_x, root_y))
+root.deiconify() # now we can show root
 
 #----- start user interface -----
 mainloop()
