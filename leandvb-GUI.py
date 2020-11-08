@@ -7,6 +7,7 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
+# TODO bring 'timeline' window of leandvb to GUI
 # TODO replace os.system with subprocess call
 # TODO add confirmation after settings->default
 # TODO button for STOP/START (to start with changed settings)
