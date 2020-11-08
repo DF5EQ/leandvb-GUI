@@ -28,15 +28,22 @@ import threading
 import time
 
 #===== threads functions ======================================================
+leandvb_info = {
+    "filename"              : "info",
+    "filedescriptor"        : None,
+    "standard"              : "",
+    "symbolrate"            : 0,
+    "framelock"             : False,
+    "frequency"             : 0,
+    "signalstrength"        : 0,
+    "modulation_error_ratio": 0
+}
 
-n=0
-
-def test():
-   global n
+def leandvb_info_thread():
    while True:
-        print "test:", n
         time.sleep(1)
-        n = n+1
+        leandvb_info["frequency"     ] += 1
+        leandvb_info["signalstrength"] += 1
 
 #===== handle parameters (save, load, default) ================================
 
@@ -650,6 +657,7 @@ def on_timeout():
         msg = msg + pipe.read(1)
     if len(msg) > 0 :
         print_terminal(msg)
+    print leandvb_info.values()
     timeout = root.after(100, on_timeout)
 
 def print_terminal(str):
@@ -835,7 +843,7 @@ root.geometry("+%d+%d" % (root_x, root_y))
 root.deiconify() # now we can show root
 
 #----- start background tasks (threads) -----
-testthread = threading.Thread(target=test)
+testthread = threading.Thread(target=leandvb_info_thread)
 testthread.setDaemon(True)
 testthread.start()
 
