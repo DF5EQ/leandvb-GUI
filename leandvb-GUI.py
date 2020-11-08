@@ -24,6 +24,19 @@ import json
 from subprocess import *
 import select
 from signal import *
+import threading
+import time
+
+#===== threads functions ======================================================
+
+n=0
+
+def test():
+   global n
+   while True:
+        print "test:", n
+        time.sleep(1)
+        n = n+1
 
 #===== handle parameters (save, load, default) ================================
 
@@ -820,6 +833,11 @@ root_y = screen_height - root_height
 
 root.geometry("+%d+%d" % (root_x, root_y))
 root.deiconify() # now we can show root
+
+#----- start background tasks (threads) -----
+testthread = threading.Thread(target=test)
+testthread.setDaemon(True)
+testthread.start()
 
 #----- start user interface -----
 mainloop()
