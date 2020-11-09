@@ -28,9 +28,11 @@ import threading
 import time
 
 #===== threads functions ======================================================
+
 leandvb_info = {
-    "filename"              : "info",
-    "filedescriptor"        : None,
+    "pipename"              : "info",
+    "pipeobject"            : None,
+    "pipenumber"            : None,
     "standard"              : "",
     "symbolrate"            : 0,
     "framelock"             : False,
@@ -40,10 +42,19 @@ leandvb_info = {
 }
 
 def leandvb_info_thread():
-   while True:
-        time.sleep(1)
-        leandvb_info["frequency"     ] += 1
-        leandvb_info["signalstrength"] += 1
+    pipe = leandvb_info["pipename"]
+    if not os.path.exists(pipe):
+        os.mkfifo(pipe)
+    leandvb_info["pipeobject"] = open(pipe, "r+")
+    leandvb_info["pipenumber"] = leandvb_info["pipeobject"].fileno()
+    while True:
+        data = leandvb_info["pipeobject"].readline().strip()
+        print data
+
+def leandvb_info_thread_start():
+    t = threading.Thread(target=leandvb_info_thread)
+    t.setDaemon(True)
+    t.start()
 
 #===== handle parameters (save, load, default) ================================
 
@@ -582,6 +593,7 @@ def on_start():
     opt_ldpc_helper= " --ldpc-helper " + "\"" + ldpchelper_path.get() + "/" + ldpchelper_file.get() + "\""
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
+    opt_fd_info    = " --fd-info " + str(leandvb_info["pipenumber"])
 
     leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
@@ -589,7 +601,8 @@ def on_start():
                 + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
                 + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
                 + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
-                + opt_debug_v + opt_debug_d
+                + opt_debug_v + opt_debug_d \
+                + opt_fd_info
     leandvb_sub = "\"" + leandvb_path.get() + "/" + leandvb_file.get() + "\"" + leandvb_opt
 
     opt_frequency  = " -f " + str(int((float(frequency.get()) - float(lnblo.get())) * 1000000))
@@ -657,7 +670,6 @@ def on_timeout():
         msg = msg + pipe.read(1)
     if len(msg) > 0 :
         print_terminal(msg)
-    print leandvb_info.values()
     timeout = root.after(100, on_timeout)
 
 def print_terminal(str):
@@ -843,9 +855,7 @@ root.geometry("+%d+%d" % (root_x, root_y))
 root.deiconify() # now we can show root
 
 #----- start background tasks (threads) -----
-testthread = threading.Thread(target=leandvb_info_thread)
-testthread.setDaemon(True)
-testthread.start()
+leandvb_info_thread_start()
 
 #----- start user interface -----
 mainloop()
