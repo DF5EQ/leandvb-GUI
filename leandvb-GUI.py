@@ -33,12 +33,12 @@ leandvb_info = {
     "pipename"              : "info",
     "pipeobject"            : None,
     "pipenumber"            : None,
-    "standard"              : "",
-    "symbolrate"            : 0,
-    "framelock"             : False,
-    "frequency"             : 0,
-    "signalstrength"        : 0,
-    "modulation_error_ratio": 0
+    "standard"              : "",    # STANDARD
+    "symbolrate"            : 0,     # SR
+    "framelock"             : False, # FRAMELOCK
+    "frequency"             : 0,     # FREQ
+    "signalstrength"        : 0,     # SS
+    "modulation_error_ratio": 0      # MER
 }
 
 def leandvb_info_thread():
@@ -48,8 +48,20 @@ def leandvb_info_thread():
     leandvb_info["pipeobject"] = open(pipe, "r+")
     leandvb_info["pipenumber"] = leandvb_info["pipeobject"].fileno()
     while True:
-        data = leandvb_info["pipeobject"].readline().strip()
-        print data
+        info = leandvb_info["pipeobject"].readline().strip().split()
+        if   info[0] == "STANDARD"  : leandvb_info["standard"              ] =   str(info[1])
+        elif info[0] == "SR"        : leandvb_info["symbolrate"            ] = float(info[1])
+        elif info[0] == "FRAMELOCK" : leandvb_info["framelock"             ] =  bool(info[1])
+        elif info[0] == "FREQ"      : leandvb_info["frequency"             ] =   int(info[1])
+        elif info[0] == "SS"        : leandvb_info["signalstrength"        ] = float(info[1])
+        elif info[0] == "MER"       : leandvb_info["modulation_error_ratio"] = float(info[1])
+        print ("STD: %6s   SR: %7.0f   FRML: %d   FREQ: %6d   SS: %6.2f   MER: %6.2f\r" \
+        % ( leandvb_info["standard"              ], \
+            leandvb_info["symbolrate"            ], \
+            leandvb_info["framelock"             ], \
+            leandvb_info["frequency"             ], \
+            leandvb_info["signalstrength"        ], \
+            leandvb_info["modulation_error_ratio"] ) ),
 
 def leandvb_info_thread_start():
     t = threading.Thread(target=leandvb_info_thread)
