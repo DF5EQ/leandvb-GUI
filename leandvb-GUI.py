@@ -55,13 +55,13 @@ def leandvb_info_thread():
         elif info[0] == "FREQ"      : leandvb_info["frequency"             ] =   int(info[1])
         elif info[0] == "SS"        : leandvb_info["signalstrength"        ] = float(info[1])
         elif info[0] == "MER"       : leandvb_info["modulation_error_ratio"] = float(info[1])
-        print ("STD: %6s   SR: %7.0f   FRML: %d   FREQ: %6d   SS: %6.2f   MER: %6.2f\r" \
+        print ("STD: %6s   SR: %7.0f   FRML: %d   FREQ: %7d   SS: %6.2f   MER: %6.2f" \
         % ( leandvb_info["standard"              ], \
             leandvb_info["symbolrate"            ], \
             leandvb_info["framelock"             ], \
             leandvb_info["frequency"             ], \
             leandvb_info["signalstrength"        ], \
-            leandvb_info["modulation_error_ratio"] ) ),
+            leandvb_info["modulation_error_ratio"] ) )
 
 def leandvb_info_thread_start():
     t = threading.Thread(target=leandvb_info_thread)
