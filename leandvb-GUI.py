@@ -740,6 +740,12 @@ viterbi         = IntVar()
 #----- create user interface -----
 frm_root_row = 0
 
+    #----- timeline -----
+lbl_timeline = ttk.Label (frm_root, relief=RIDGE, borderwidth=4, text="timeline")
+lbl_timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
+
+frm_root_row +=1
+
     #----- terminal -----
 frm_terminal = ttk.Frame(frm_root)
 frm_terminal.grid (row=frm_root_row, column=0, rowspan=8, sticky=NS)
@@ -834,7 +840,7 @@ frm_root_row +=1
 rdb_dummy = StringVar()
 rdb_dummy.set("stop")
 rdb_start = Radiobutton (frm_root, text="START", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="start", command=on_start)
-rdb_start.grid (row=7, column=1)
+rdb_start.grid (row=frm_root_row, column=1)
 rdb_stop = Radiobutton (frm_root, text="STOP", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="stop", command=on_stop)
 rdb_stop.grid (row=frm_root_row, column=2)
 
