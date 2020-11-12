@@ -741,7 +741,8 @@ viterbi         = IntVar()
 frm_root_row = 0
 
     #----- timeline -----
-lbl_timeline = ttk.Label (frm_root, relief=RIDGE, borderwidth=4, text="timeline")
+h = root.winfo_screenheight()
+lbl_timeline = Canvas (frm_root, height=h/5, relief=SUNKEN, borderwidth=1)
 lbl_timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
 
 frm_root_row +=1
