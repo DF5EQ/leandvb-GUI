@@ -26,6 +26,7 @@ import select
 from signal import *
 import threading
 import time
+import random
 
 #===== threads functions ======================================================
 
@@ -682,6 +683,13 @@ def on_timeout():
         msg = msg + pipe.read(1)
     if len(msg) > 0 :
         print_terminal(msg)
+
+    # update can_timeline
+    x = random.randint(can_timeline_xmin, can_timeline_xmax)
+    y = random.randint(can_timeline_ymin, can_timeline_ymax)
+    can_timeline.create_oval([x,y,x,y], width=1, outline="red")
+
+    # re-arm timeout
     timeout = root.after(100, on_timeout)
 
 def print_terminal(str):
@@ -741,9 +749,9 @@ viterbi         = IntVar()
 frm_root_row = 0
 
     #----- timeline -----
-h = root.winfo_screenheight()
-lbl_timeline = Canvas (frm_root, height=h/5, relief=SUNKEN, borderwidth=1)
-lbl_timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
+h = root.winfo_screenheight()/5
+can_timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1)
+can_timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
 
 frm_root_row +=1
 
@@ -897,6 +905,13 @@ root.deiconify() # now we can show root
 
 #----- start background tasks (threads) -----
 leandvb_info_thread_start()
+
+#----- calculate some geometry values -----
+root.update() # update geometrie values
+can_timeline_xmin = 2
+can_timeline_ymin = 2
+can_timeline_xmax = can_timeline.winfo_width()-3
+can_timeline_ymax = can_timeline.winfo_height()-3
 
 #----- start user interface -----
 mainloop()
