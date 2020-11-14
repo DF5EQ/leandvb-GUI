@@ -704,16 +704,16 @@ def on_timeline_timeout():
     global timeline_timeout
 
     # update can_timeline
-    y = random.randint(can_timeline_ymin, can_timeline_ymax)
-    can_timeline.create_oval([timeline_x,y,timeline_x,y], width=5, outline="red")
+    x = timeline_x
+    y = (can_timeline_ymax - can_timeline_ymin) / 2 - leandvb_info["modulation_error_ratio"] * 3
+    can_timeline.create_oval([x,y,x,y], width=1, outline="red")
 
     # next timepoint
-    #timeline_x = timeline_x + (can_timeline_xmax - can_timeline_xmin) / 60
     timeline_x += 1
     timeline_x = timeline_x % (can_timeline_xmax - can_timeline_xmin)
 
     # re-arm timeline_timeout
-    timeline_timeout = root.after(100, on_timeline_timeout)
+    timeline_timeout = root.after(300, on_timeline_timeout)
 
 def print_terminal(str):
         txt_terminal.insert(END, str)
