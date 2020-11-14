@@ -706,6 +706,8 @@ def on_timeline_timeout():
     # update can_timeline
     x = timeline_x
     y = (can_timeline_ymax - can_timeline_ymin) / 2 - leandvb_info["modulation_error_ratio"] * 3
+    can_timeline.create_oval([x,y,x,y], width=1, outline="magenta")
+    y = can_timeline_ymax - leandvb_info["signalstrength"] * 3
     can_timeline.create_oval([x,y,x,y], width=1, outline="red")
 
     # next timepoint
@@ -713,7 +715,7 @@ def on_timeline_timeout():
     timeline_x = timeline_x % (can_timeline_xmax - can_timeline_xmin)
 
     # re-arm timeline_timeout
-    timeline_timeout = root.after(300, on_timeline_timeout)
+    timeline_timeout = root.after(100, on_timeline_timeout)
 
 def print_terminal(str):
         txt_terminal.insert(END, str)
