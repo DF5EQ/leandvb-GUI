@@ -656,14 +656,19 @@ def on_start():
 
     global proc_leandvb
     proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE, preexec_fn=os.setsid)
-    on_timeout()
+    on_terminal_timeout()
+    on_timeline_timeout()
 
 def on_stop():
-    global timeout
+    global terminal_timeout
+    global timeline_timeout
     global proc_leandvb
-    if timeout :
-        root.after_cancel(timeout)
-        timeout = None
+    if terminal_timeout :
+        root.after_cancel(terminal_timeout)
+        terminal_timeout = None
+    if timeline_timeout :
+        root.after_cancel(timeline_timeout)
+        timeline_timeout = None
     if proc_leandvb :
         os.killpg(proc_leandvb.pid, SIGKILL)
         proc_leandvb = None
@@ -673,8 +678,8 @@ def on_exit():
     on_stop()
     root.destroy()
 
-def on_timeout():
-    global timeout
+def on_terminal_timeout():
+    global terminal_timeout
     global proc_leandvb
     msg = ""
     # non-blocking read of stderr from proc_leandvb
@@ -684,20 +689,25 @@ def on_timeout():
     if len(msg) > 0 :
         print_terminal(msg)
 
+    # re-arm terminal_timeout
+    terminal_timeout = root.after(100, on_terminal_timeout)
+
+def on_timeline_timeout():
     # update can_timeline
     x = random.randint(can_timeline_xmin, can_timeline_xmax)
     y = random.randint(can_timeline_ymin, can_timeline_ymax)
     can_timeline.create_oval([x,y,x,y], width=1, outline="red")
 
-    # re-arm timeout
-    timeout = root.after(100, on_timeout)
+    # re-arm timeline_timeout
+    timeline_timeout = root.after(1000, on_timeline_timeout)
 
 def print_terminal(str):
         txt_terminal.insert(END, str)
         txt_terminal.see(END)
 
 #----- global variables -----
-timeout = None
+terminal_timeout = None
+timeline_timeout = None
 proc_leandvb = None
 
 #----- create root window -----
