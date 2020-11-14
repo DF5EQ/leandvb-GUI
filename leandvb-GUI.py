@@ -28,6 +28,13 @@ import threading
 import time
 import random
 
+#===== global variables =======================================================
+
+proc_leandvb = None
+terminal_timeout = None
+timeline_x = 0
+timeline_timeout = None
+
 #===== threads functions ======================================================
 
 leandvb_info = {
@@ -693,22 +700,24 @@ def on_terminal_timeout():
     terminal_timeout = root.after(100, on_terminal_timeout)
 
 def on_timeline_timeout():
+    global timeline_x
+    global timeline_timeout
+
     # update can_timeline
-    x = random.randint(can_timeline_xmin, can_timeline_xmax)
     y = random.randint(can_timeline_ymin, can_timeline_ymax)
-    can_timeline.create_oval([x,y,x,y], width=1, outline="red")
+    can_timeline.create_oval([timeline_x,y,timeline_x,y], width=5, outline="red")
+
+    # next timepoint
+    #timeline_x = timeline_x + (can_timeline_xmax - can_timeline_xmin) / 60
+    timeline_x += 1
+    timeline_x = timeline_x % (can_timeline_xmax - can_timeline_xmin)
 
     # re-arm timeline_timeout
-    timeline_timeout = root.after(1000, on_timeline_timeout)
+    timeline_timeout = root.after(100, on_timeline_timeout)
 
 def print_terminal(str):
         txt_terminal.insert(END, str)
         txt_terminal.see(END)
-
-#----- global variables -----
-terminal_timeout = None
-timeline_timeout = None
-proc_leandvb = None
 
 #----- create root window -----
 root = Tk()
