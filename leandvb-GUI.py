@@ -704,9 +704,12 @@ def on_terminal_timeout():
 
 def on_timeline_timeout():
     global timeline_x
+    global timeline_x_len
     global timeline_timeout
 
     # update timeline
+    if timeline_x == 0:
+        timeline.delete(ALL)
     x = timeline_x
     y = timeline_y_max + timeline_mer_slope * (leandvb_info["modulation_error_ratio"] - timeline_mer_min)
     timeline.create_oval([x,y,x,y], width=1, outline="magenta")
@@ -936,8 +939,10 @@ leandvb_info_thread_start()
 root.update() # update geometry values
 timeline_x_min = 2
 timeline_x_max = timeline.winfo_width()-3
+timeline_x_len = timeline_x_max - timeline_x_min
 timeline_y_min = 2
 timeline_y_max = timeline.winfo_height()-3
+timeline_y_len = timeline_y_max - timeline_y_min
 timeline_mer_min = -20.0
 timeline_mer_max =  20.0
 timeline_mer_slope = (timeline_y_min-timeline_y_max)/(timeline_mer_max-timeline_mer_min)
