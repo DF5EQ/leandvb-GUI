@@ -663,8 +663,11 @@ def on_start():
 
     global proc_leandvb
     proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE, preexec_fn=os.setsid)
-    on_terminal_timeout()
+    global timeline_x
+    timeline.delete(ALL)
+    timeline_x = 0
     on_timeline_timeout()
+    on_terminal_timeout()
 
 def on_stop():
     global terminal_timeout
@@ -703,16 +706,16 @@ def on_timeline_timeout():
     global timeline_x
     global timeline_timeout
 
-    # update can_timeline
+    # update timeline
     x = timeline_x
-    y = (can_timeline_ymax - can_timeline_ymin) / 2 - leandvb_info["modulation_error_ratio"] * 3
-    can_timeline.create_oval([x,y,x,y], width=1, outline="magenta")
-    y = can_timeline_ymax - leandvb_info["signalstrength"] * 3
-    can_timeline.create_oval([x,y,x,y], width=1, outline="red")
+    y = timeline_y_max + timeline_mer_slope * (leandvb_info["modulation_error_ratio"] - timeline_mer_min)
+    timeline.create_oval([x,y,x,y], width=1, outline="magenta")
+    y = timeline_y_max + timeline_ss_slope * (leandvb_info["signalstrength"] - timeline_ss_min)
+    timeline.create_oval([x,y,x,y], width=1, outline="red")
 
     # next timepoint
     timeline_x += 1
-    timeline_x = timeline_x % (can_timeline_xmax - can_timeline_xmin)
+    timeline_x = timeline_x % (timeline_x_max - timeline_x_min)
 
     # re-arm timeline_timeout
     timeline_timeout = root.after(100, on_timeline_timeout)
@@ -771,8 +774,8 @@ frm_root_row = 0
 
     #----- timeline -----
 h = root.winfo_screenheight()/5
-can_timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1)
-can_timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
+timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1)
+timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
 
 frm_root_row +=1
 
@@ -911,7 +914,7 @@ else:
 
 #----- position the root window in bottom right corner of screen -----
 root.withdraw() # don't show root during positioning
-root.update() # update geometrie values
+root.update() # update geometry values
 
 screen_width  = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -928,11 +931,17 @@ root.deiconify() # now we can show root
 leandvb_info_thread_start()
 
 #----- calculate some geometry values -----
-root.update() # update geometrie values
-can_timeline_xmin = 2
-can_timeline_ymin = 2
-can_timeline_xmax = can_timeline.winfo_width()-3
-can_timeline_ymax = can_timeline.winfo_height()-3
+root.update() # update geometry values
+timeline_x_min = 2
+timeline_x_max = timeline.winfo_width()-3
+timeline_y_min = 2
+timeline_y_max = timeline.winfo_height()-3
+timeline_mer_min = -20
+timeline_mer_max =  20
+timeline_mer_slope = (timeline_y_min-timeline_y_max)/(timeline_mer_max-timeline_mer_min)
+timeline_ss_min = 0
+timeline_ss_max = 50
+timeline_ss_slope = (timeline_y_min-timeline_y_max)/(timeline_ss_max-timeline_ss_min)
 
 #----- start user interface -----
 mainloop()
