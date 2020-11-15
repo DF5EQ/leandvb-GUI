@@ -712,6 +712,8 @@ def on_timeline_timeout():
     timeline.create_oval([x,y,x,y], width=1, outline="magenta")
     y = timeline_y_max + timeline_ss_slope * (leandvb_info["signalstrength"] - timeline_ss_min)
     timeline.create_oval([x,y,x,y], width=1, outline="red")
+    y = timeline_y_max + timeline_freq_slope * (leandvb_info["frequency"] - timeline_freq_min)
+    timeline.create_oval([x,y,x,y], width=1, outline="cyan")
 
     # next timepoint
     timeline_x += 1
@@ -936,12 +938,15 @@ timeline_x_min = 2
 timeline_x_max = timeline.winfo_width()-3
 timeline_y_min = 2
 timeline_y_max = timeline.winfo_height()-3
-timeline_mer_min = -20
-timeline_mer_max =  20
+timeline_mer_min = -20.0
+timeline_mer_max =  20.0
 timeline_mer_slope = (timeline_y_min-timeline_y_max)/(timeline_mer_max-timeline_mer_min)
-timeline_ss_min = 0
-timeline_ss_max = 50
+timeline_ss_min = 0.0
+timeline_ss_max = 50.0
 timeline_ss_slope = (timeline_y_min-timeline_y_max)/(timeline_ss_max-timeline_ss_min)
+timeline_freq_min = -500000.0
+timeline_freq_max = 500000.0
+timeline_freq_slope = (timeline_y_min-timeline_y_max)/(timeline_freq_max-timeline_freq_min)
 
 #----- start user interface -----
 mainloop()
