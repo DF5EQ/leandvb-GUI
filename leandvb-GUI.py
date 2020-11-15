@@ -32,7 +32,6 @@ import random
 
 proc_leandvb = None
 terminal_timeout = None
-timeline_x = 0
 timeline_timeout = None
 
 #===== threads functions ======================================================
@@ -702,14 +701,34 @@ def on_terminal_timeout():
     # re-arm terminal_timeout
     terminal_timeout = root.after(100, on_terminal_timeout)
 
+timeline_x = 0
+timeline_mer_text = ""
+timeline_ss_text = ""
+timeline_freq_text = ""
 def on_timeline_timeout():
     global timeline_x
     global timeline_x_len
     global timeline_timeout
+    global timeline_mer_text
+    global timeline_ss_text
+    global timeline_freq_text
 
-    # update timeline
+    # clear timeline canvas
     if timeline_x == 0:
         timeline.delete(ALL)
+        timeline.create_text(5, 20, text="MER", fill="magenta", anchor=SW)
+        timeline.create_text(5, 35, text="SS",  fill="red",     anchor=SW)
+        timeline.create_text(5, 50, text="FREQ",fill="cyan",    anchor=SW)
+        timeline_mer_text  = timeline.create_text(50, 20, fill="magenta", anchor=SW)
+        timeline_ss_text   = timeline.create_text(50, 35, fill="red",     anchor=SW)
+        timeline_freq_text = timeline.create_text(50, 50, fill="cyan",    anchor=SW)
+
+    # update text values
+    timeline.itemconfigure(timeline_mer_text,  text=str(leandvb_info["modulation_error_ratio"]))
+    timeline.itemconfigure(timeline_ss_text,   text=str(leandvb_info["signalstrength"]))
+    timeline.itemconfigure(timeline_freq_text, text=str(leandvb_info["frequency"]))
+
+    # update timeline
     x = timeline_x
     y = timeline_y_max + timeline_mer_slope * (leandvb_info["modulation_error_ratio"] - timeline_mer_min)
     timeline.create_oval([x,y,x,y], width=1, outline="magenta")
@@ -723,7 +742,7 @@ def on_timeline_timeout():
     timeline_x = timeline_x % (timeline_x_max - timeline_x_min)
 
     # re-arm timeline_timeout
-    timeline_timeout = root.after(100, on_timeline_timeout)
+    timeline_timeout = root.after(300, on_timeline_timeout)
 
 def print_terminal(str):
         txt_terminal.insert(END, str)
