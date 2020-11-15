@@ -56,13 +56,13 @@ def leandvb_info_thread():
     leandvb_info["pipenumber"] = leandvb_info["pipeobject"].fileno()
     while True:
         info = leandvb_info["pipeobject"].readline().strip().split()
-        if   info[0] == "STANDARD"  : leandvb_info["standard"              ] =   str(info[1])
-        elif info[0] == "SR"        : leandvb_info["symbolrate"            ] = float(info[1])
-        elif info[0] == "FRAMELOCK" : leandvb_info["framelock"             ] =  bool(info[1])
-        elif info[0] == "FREQ"      : leandvb_info["frequency"             ] =   int(info[1])
-        elif info[0] == "SS"        : leandvb_info["signalstrength"        ] = float(info[1])
-        elif info[0] == "MER"       : leandvb_info["modulation_error_ratio"] = float(info[1])
-        print ("STD: %6s   SR: %7.0f   FRML: %d   FREQ: %7d   SS: %6.2f   MER: %6.2f" \
+        if   info[0] == "STANDARD"  : leandvb_info["standard"              ] = str(info[1])
+        elif info[0] == "SR"        : leandvb_info["symbolrate"            ] = round(float(info[1])/1000, 0)
+        elif info[0] == "FRAMELOCK" : leandvb_info["framelock"             ] = bool(info[1])
+        elif info[0] == "FREQ"      : leandvb_info["frequency"             ] = round(float(info[1])/1000, 1)
+        elif info[0] == "SS"        : leandvb_info["signalstrength"        ] = round(float(info[1]), 1)
+        elif info[0] == "MER"       : leandvb_info["modulation_error_ratio"] = round(float(info[1]), 1)
+        print ("STD: %6s   SR: %f   FRML: %d   FREQ: %f   SS: %f   MER: %f" \
         % ( leandvb_info["standard"              ], \
             leandvb_info["symbolrate"            ], \
             leandvb_info["framelock"             ], \
@@ -719,9 +719,9 @@ def on_timeline_timeout():
         timeline.create_text(5, 20, text="MER", fill="magenta", anchor=SW)
         timeline.create_text(5, 35, text="SS",  fill="red",     anchor=SW)
         timeline.create_text(5, 50, text="FREQ",fill="cyan",    anchor=SW)
-        timeline_mer_text  = timeline.create_text(50, 20, fill="magenta", anchor=SW)
-        timeline_ss_text   = timeline.create_text(50, 35, fill="red",     anchor=SW)
-        timeline_freq_text = timeline.create_text(50, 50, fill="cyan",    anchor=SW)
+        timeline_mer_text  = timeline.create_text(80, 20, fill="magenta", anchor=SE)
+        timeline_ss_text   = timeline.create_text(80, 35, fill="red",     anchor=SE)
+        timeline_freq_text = timeline.create_text(80, 50, fill="cyan",    anchor=SE)
 
     # update text values
     timeline.itemconfigure(timeline_mer_text,  text=str(leandvb_info["modulation_error_ratio"]))
@@ -968,8 +968,8 @@ timeline_mer_slope = (timeline_y_min-timeline_y_max)/(timeline_mer_max-timeline_
 timeline_ss_min = 0.0
 timeline_ss_max = 50.0
 timeline_ss_slope = (timeline_y_min-timeline_y_max)/(timeline_ss_max-timeline_ss_min)
-timeline_freq_min = -500000.0
-timeline_freq_max = 500000.0
+timeline_freq_min = -500.0
+timeline_freq_max = 500.0
 timeline_freq_slope = (timeline_y_min-timeline_y_max)/(timeline_freq_max-timeline_freq_min)
 
 #----- start user interface -----
