@@ -709,10 +709,10 @@ def on_timeline_timeout():
     # clear timeline canvas
     if timeline_x == 0:
         timeline.delete(ALL)
-        timeline.create_text(5, 20, text="MER", fill="magenta", anchor=SW)
+        timeline.create_text(5, 20, text="MER", fill="yellow", anchor=SW)
         timeline.create_text(5, 35, text="SS",  fill="red",     anchor=SW)
         timeline.create_text(5, 50, text="FREQ",fill="cyan",    anchor=SW)
-        timeline_mer_text  = timeline.create_text(80, 20, fill="magenta", anchor=SE)
+        timeline_mer_text  = timeline.create_text(80, 20, fill="yellow", anchor=SE)
         timeline_ss_text   = timeline.create_text(80, 35, fill="red",     anchor=SE)
         timeline_freq_text = timeline.create_text(80, 50, fill="cyan",    anchor=SE)
 
@@ -724,7 +724,7 @@ def on_timeline_timeout():
     # update timeline
     x = timeline_x
     y = timeline_y_max + timeline_mer_slope * (leandvb_info["modulation_error_ratio"] - timeline_mer_min)
-    timeline.create_oval([x,y,x,y], width=1, outline="magenta")
+    timeline.create_oval([x,y,x,y], width=1, outline="yellow")
     y = timeline_y_max + timeline_ss_slope * (leandvb_info["signalstrength"] - timeline_ss_min)
     timeline.create_oval([x,y,x,y], width=1, outline="red")
     y = timeline_y_max + timeline_freq_slope * (leandvb_info["frequency"] - timeline_freq_min)
@@ -791,7 +791,7 @@ frm_root_row = 0
 
     #----- timeline -----
 h = root.winfo_screenheight()/5
-timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1, background="dimgrey")
+timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1, background="black")
 timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
 
 frm_root_row +=1
