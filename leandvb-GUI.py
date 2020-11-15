@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO bring 'timeline' window of leandvb to GUI
 # TODO replace os.system with subprocess call
 # TODO add confirmation after settings->default
 # TODO button for STOP/START (to start with changed settings)
@@ -24,6 +23,49 @@ import json
 from subprocess import *
 import select
 from signal import *
+import threading
+import time
+import random
+
+#===== global variables =======================================================
+
+proc_leandvb = None
+terminal_timeout = None
+timeline_timeout = None
+
+#===== threads functions ======================================================
+
+leandvb_info = {
+    "pipename"              : "info",
+    "pipeobject"            : None,
+    "pipenumber"            : None,
+    "standard"              : "",    # STANDARD
+    "symbolrate"            : 0,     # SR
+    "framelock"             : False, # FRAMELOCK
+    "frequency"             : 0,     # FREQ
+    "signalstrength"        : 0,     # SS
+    "modulation_error_ratio": 0      # MER
+}
+
+def leandvb_info_thread():
+    pipe = leandvb_info["pipename"]
+    if not os.path.exists(pipe):
+        os.mkfifo(pipe)
+    leandvb_info["pipeobject"] = open(pipe, "r+")
+    leandvb_info["pipenumber"] = leandvb_info["pipeobject"].fileno()
+    while True:
+        info = leandvb_info["pipeobject"].readline().strip().split()
+        if   info[0] == "STANDARD"  : leandvb_info["standard"              ] = str(info[1])
+        elif info[0] == "SR"        : leandvb_info["symbolrate"            ] = round(float(info[1])/1000, 0)
+        elif info[0] == "FRAMELOCK" : leandvb_info["framelock"             ] = bool(info[1])
+        elif info[0] == "FREQ"      : leandvb_info["frequency"             ] = round(float(info[1])/1000, 1)
+        elif info[0] == "SS"        : leandvb_info["signalstrength"        ] = round(float(info[1]), 1)
+        elif info[0] == "MER"       : leandvb_info["modulation_error_ratio"] = round(float(info[1]), 1)
+
+def leandvb_info_thread_start():
+    t = threading.Thread(target=leandvb_info_thread)
+    t.setDaemon(True)
+    t.start()
 
 #===== handle parameters (save, load, default) ================================
 
@@ -562,6 +604,7 @@ def on_start():
     opt_ldpc_helper= " --ldpc-helper " + "\"" + ldpchelper_path.get() + "/" + ldpchelper_file.get() + "\""
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
+    opt_fd_info    = " --fd-info " + str(leandvb_info["pipenumber"])
 
     leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
@@ -569,7 +612,8 @@ def on_start():
                 + opt_const + opt_fec + opt_viterbi + opt_hardmetric \
                 + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
                 + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
-                + opt_debug_v + opt_debug_d
+                + opt_debug_v + opt_debug_d \
+                + opt_fd_info
     leandvb_sub = "\"" + leandvb_path.get() + "/" + leandvb_file.get() + "\"" + leandvb_opt
 
     opt_frequency  = " -f " + str(int((float(frequency.get()) - float(lnblo.get())) * 1000000))
@@ -610,14 +654,22 @@ def on_start():
 
     global proc_leandvb
     proc_leandvb = Popen(["/bin/sh","-c",sub], stderr=PIPE, preexec_fn=os.setsid)
-    on_timeout()
+    global timeline_x
+    timeline.delete(ALL)
+    timeline_x = 0
+    on_timeline_timeout()
+    on_terminal_timeout()
 
 def on_stop():
-    global timeout
+    global terminal_timeout
+    global timeline_timeout
     global proc_leandvb
-    if timeout :
-        root.after_cancel(timeout)
-        timeout = None
+    if terminal_timeout :
+        root.after_cancel(terminal_timeout)
+        terminal_timeout = None
+    if timeline_timeout :
+        root.after_cancel(timeline_timeout)
+        timeline_timeout = None
     if proc_leandvb :
         os.killpg(proc_leandvb.pid, SIGKILL)
         proc_leandvb = None
@@ -627,8 +679,8 @@ def on_exit():
     on_stop()
     root.destroy()
 
-def on_timeout():
-    global timeout
+def on_terminal_timeout():
+    global terminal_timeout
     global proc_leandvb
     msg = ""
     # non-blocking read of stderr from proc_leandvb
@@ -637,15 +689,56 @@ def on_timeout():
         msg = msg + pipe.read(1)
     if len(msg) > 0 :
         print_terminal(msg)
-    timeout = root.after(100, on_timeout)
+
+    # re-arm terminal_timeout
+    terminal_timeout = root.after(100, on_terminal_timeout)
+
+timeline_x = 0
+timeline_mer_text = ""
+timeline_ss_text = ""
+timeline_freq_text = ""
+def on_timeline_timeout():
+    global timeline_x
+    global timeline_x_len
+    global timeline_timeout
+    global timeline_mer_text
+    global timeline_ss_text
+    global timeline_freq_text
+
+    # clear timeline canvas
+    if timeline_x == 0:
+        timeline.delete(ALL)
+        timeline.create_text(5, 20, text="MER", fill="yellow", anchor=SW)
+        timeline.create_text(5, 35, text="SS",  fill="red",     anchor=SW)
+        timeline.create_text(5, 50, text="FREQ",fill="cyan",    anchor=SW)
+        timeline_mer_text  = timeline.create_text(80, 20, fill="yellow", anchor=SE)
+        timeline_ss_text   = timeline.create_text(80, 35, fill="red",     anchor=SE)
+        timeline_freq_text = timeline.create_text(80, 50, fill="cyan",    anchor=SE)
+
+    # update text values
+    timeline.itemconfigure(timeline_mer_text,  text=str(leandvb_info["modulation_error_ratio"]))
+    timeline.itemconfigure(timeline_ss_text,   text=str(leandvb_info["signalstrength"]))
+    timeline.itemconfigure(timeline_freq_text, text=str(leandvb_info["frequency"]))
+
+    # update timeline
+    x = timeline_x
+    y = timeline_y_max + timeline_mer_slope * (leandvb_info["modulation_error_ratio"] - timeline_mer_min)
+    timeline.create_oval([x,y,x,y], width=1, outline="yellow")
+    y = timeline_y_max + timeline_ss_slope * (leandvb_info["signalstrength"] - timeline_ss_min)
+    timeline.create_oval([x,y,x,y], width=1, outline="red")
+    y = timeline_y_max + timeline_freq_slope * (leandvb_info["frequency"] - timeline_freq_min)
+    timeline.create_oval([x,y,x,y], width=1, outline="cyan")
+
+    # next timepoint
+    timeline_x += 1
+    timeline_x = timeline_x % (timeline_x_max - timeline_x_min)
+
+    # re-arm timeline_timeout
+    timeline_timeout = root.after(300, on_timeline_timeout)
 
 def print_terminal(str):
         txt_terminal.insert(END, str)
         txt_terminal.see(END)
-
-#----- global variables -----
-timeout = None
-proc_leandvb = None
 
 #----- create root window -----
 root = Tk()
@@ -693,9 +786,18 @@ viewer_path     = StringVar()
 viterbi         = IntVar()
 
 #----- create user interface -----
+frm_root_row = 0
+
+    #----- timeline -----
+h = root.winfo_screenheight()/5
+timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1, background="black")
+timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
+
+frm_root_row +=1
+
     #----- terminal -----
 frm_terminal = ttk.Frame(frm_root)
-frm_terminal.grid (row=0, column=0, rowspan=8, sticky=NS)
+frm_terminal.grid (row=frm_root_row, column=0, rowspan=8, sticky=NS)
 txt_terminal = Text(frm_terminal, width=40, height=0)
 scb_terminal = Scrollbar(frm_terminal)
 txt_terminal.config(yscrollcommand=scb_terminal.set)
@@ -703,69 +805,15 @@ scb_terminal.config(command=txt_terminal.yview)
 txt_terminal.pack (side=LEFT, fill=Y)
 scb_terminal.pack (side=RIGHT, fill=Y)
 
-    #----- controls -----
+    #----- control frequency -----
 lbl_frequency = ttk.Label (frm_root, text="Frequency")
 cmb_frequency = ttk.Combobox (frm_root, width=10, textvariable=frequency)
 cmb_frequency ["values"] = ("10491.500","10492.000","10492.500","10493.000","10493.500","10494.000")
 cmb_frequency.focus_set()
 lb2_frequency = ttk.Label (frm_root, text="MHz")
-lbl_frequency.grid (row=0, column=1, sticky=W, padx=5)
-cmb_frequency.grid (row=0, column=2, sticky=W)
-lb2_frequency.grid (row=0, column=3, sticky=W, padx=5)
-
-lbl_symbolrate = ttk.Label (frm_root, text="Symbolrate")
-cmb_symbolrate = ttk.Combobox (frm_root, width=10, textvariable=symbolrate)
-cmb_symbolrate ["values"] = ("2000","1500","1000","500","250","333","125")
-lb2_symbolrate = ttk.Label (frm_root, text="kHz")
-lbl_symbolrate.grid (row=1, column=1, sticky=W, padx=5)
-cmb_symbolrate.grid (row=1, column=2, sticky=W)
-lb2_symbolrate.grid (row=1, column=3, sticky=W, padx=5)
-
-lbl_bandwidth = ttk.Label (frm_root, text="Bandwidth")
-cmb_bandwidth = ttk.Combobox (frm_root, width=10, textvariable=bandwidth)
-cmb_bandwidth ["values"] = ("2400","2000","1000","500")
-lb2_bandwidth = ttk.Label (frm_root, text="kHz")
-lbl_bandwidth.grid (row=2, column=1, sticky=W, padx=5)
-cmb_bandwidth.grid (row=2, column=2, sticky=W)
-lb2_bandwidth.grid (row=2, column=3, sticky=W, padx=5)
-
-lbl_tune = ttk.Label (frm_root, text="Tune")
-cmb_tune = ttk.Combobox (frm_root, width=10, textvariable=tune)
-cmb_tune ["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
-lb2_tune = ttk.Label (frm_root, text="Hz")
-lbl_tune.grid (row=3, column=1, sticky=W, padx=5)
-cmb_tune.grid (row=3, column=2, sticky=W)
-lb2_tune.grid (row=3, column=3, sticky=W, padx=5)
-
-lbl_lnblo = ttk.Label (frm_root, text="LNB LO")
-ent_lnblo = ttk.Entry (frm_root, width=10, textvariable=lnblo)
-lb2_lnblo = ttk.Label (frm_root, text="MHz")
-lbl_lnblo.grid (row=4, column=1, sticky=W)
-ent_lnblo.grid (row=4, column=2, sticky=W)
-lb2_lnblo.grid (row=4, column=3, sticky=W, padx=5)
-
-lbl_fec = ttk.Label (frm_root, text="FEC")
-cmb_fec = ttk.Combobox (frm_root, width=10, textvariable=fec)
-cmb_fec ["values"] = ("1/2","2/3","3/4","4/5","5/6","6/7","7/8")
-lb2_fec = ttk.Label (frm_root, text="Div")
-lbl_fec.grid (row=5, column=1, sticky=W, padx=5)
-cmb_fec.grid (row=5, column=2, sticky=W)
-lb2_fec.grid (row=5, column=3, sticky=W, padx=5)
-
-    #----- separator -----
-lbl_separator = Frame (frm_root, height=1, bg="grey")
-lbl_separator.grid (row=6, column=1, sticky=EW, columnspan=5, pady=6)
-
-    #----- buttons -----
-rdb_dummy = StringVar()
-rdb_dummy.set("stop")
-rdb_start = Radiobutton (frm_root, text="START", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="start", command=on_start)
-rdb_start.grid (row=7, column=1)
-rdb_stop = Radiobutton (frm_root, text="STOP", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="stop", command=on_stop)
-rdb_stop.grid (row=7, column=2)
-
-btn_settings = ttk.Button (frm_root, text='Settings', command=dlg_settings)
-btn_settings.grid (row=7, column=4)
+lbl_frequency.grid (row=frm_root_row, column=1, sticky=W, padx=5)
+cmb_frequency.grid (row=frm_root_row, column=2, sticky=W)
+lb2_frequency.grid (row=frm_root_row, column=3, sticky=W, padx=5)
 
     #----- logo -----
 if os.path.isfile("logo.png"):
@@ -773,7 +821,81 @@ if os.path.isfile("logo.png"):
 else:
     img_logo = None
 lbl_logo = Label(frm_root, image=img_logo)
-lbl_logo.grid (row=0, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
+lbl_logo.grid (row=frm_root_row, column=4, sticky=W+E+N+S, rowspan=6, padx=5, pady=5)
+
+frm_root_row +=1
+
+    #----- control symbolrate -----
+lbl_symbolrate = ttk.Label (frm_root, text="Symbolrate")
+cmb_symbolrate = ttk.Combobox (frm_root, width=10, textvariable=symbolrate)
+cmb_symbolrate ["values"] = ("2000","1500","1000","500","250","333","125")
+lb2_symbolrate = ttk.Label (frm_root, text="kHz")
+lbl_symbolrate.grid (row=frm_root_row, column=1, sticky=W, padx=5)
+cmb_symbolrate.grid (row=frm_root_row, column=2, sticky=W)
+lb2_symbolrate.grid (row=frm_root_row, column=3, sticky=W, padx=5)
+
+frm_root_row +=1
+
+    #----- control bandwidth -----
+lbl_bandwidth = ttk.Label (frm_root, text="Bandwidth")
+cmb_bandwidth = ttk.Combobox (frm_root, width=10, textvariable=bandwidth)
+cmb_bandwidth ["values"] = ("2400","2000","1000","500")
+lb2_bandwidth = ttk.Label (frm_root, text="kHz")
+lbl_bandwidth.grid (row=frm_root_row, column=1, sticky=W, padx=5)
+cmb_bandwidth.grid (row=frm_root_row, column=2, sticky=W)
+lb2_bandwidth.grid (row=frm_root_row, column=3, sticky=W, padx=5)
+
+frm_root_row +=1
+
+    #----- control tune -----
+lbl_tune = ttk.Label (frm_root, text="Tune")
+cmb_tune = ttk.Combobox (frm_root, width=10, textvariable=tune)
+cmb_tune ["values"] = ("100","500","1000","2000","5000","10000","-100","-500","-1000","-2000","-5000","-10000")
+lb2_tune = ttk.Label (frm_root, text="Hz")
+lbl_tune.grid (row=frm_root_row, column=1, sticky=W, padx=5)
+cmb_tune.grid (row=frm_root_row, column=2, sticky=W)
+lb2_tune.grid (row=frm_root_row, column=3, sticky=W, padx=5)
+
+frm_root_row +=1
+
+    #----- control lnb-lo -----
+lbl_lnblo = ttk.Label (frm_root, text="LNB LO")
+ent_lnblo = ttk.Entry (frm_root, width=10, textvariable=lnblo)
+lb2_lnblo = ttk.Label (frm_root, text="MHz")
+lbl_lnblo.grid (row=frm_root_row, column=1, sticky=W)
+ent_lnblo.grid (row=frm_root_row, column=2, sticky=W)
+lb2_lnblo.grid (row=frm_root_row, column=3, sticky=W, padx=5)
+
+frm_root_row +=1
+
+    #----- control fec -----
+lbl_fec = ttk.Label (frm_root, text="FEC")
+cmb_fec = ttk.Combobox (frm_root, width=10, textvariable=fec)
+cmb_fec ["values"] = ("1/2","2/3","3/4","4/5","5/6","6/7","7/8")
+lb2_fec = ttk.Label (frm_root, text="Div")
+lbl_fec.grid (row=frm_root_row, column=1, sticky=W, padx=5)
+cmb_fec.grid (row=frm_root_row, column=2, sticky=W)
+lb2_fec.grid (row=frm_root_row, column=3, sticky=W, padx=5)
+
+frm_root_row +=1
+
+    #----- separator -----
+lbl_separator = Frame (frm_root, height=1, bg="grey")
+lbl_separator.grid (row=frm_root_row, column=1, sticky=EW, columnspan=5, pady=6)
+
+frm_root_row +=1
+
+    #----- button start/stop -----
+rdb_dummy = StringVar()
+rdb_dummy.set("stop")
+rdb_start = Radiobutton (frm_root, text="START", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="start", command=on_start)
+rdb_start.grid (row=frm_root_row, column=1)
+rdb_stop = Radiobutton (frm_root, text="STOP", indicatoron=0, width=10, pady=4, variable=rdb_dummy, value="stop", command=on_stop)
+rdb_stop.grid (row=frm_root_row, column=2)
+
+    #----- button settings -----
+btn_settings = ttk.Button (frm_root, text='Settings', command=dlg_settings)
+btn_settings.grid (row=frm_root_row, column=4)
 
 #----- settings file -----
 parameters_path = os.path.expanduser("~/") + ".leandvb-GUI/"
@@ -808,7 +930,7 @@ else:
 
 #----- position the root window in bottom right corner of screen -----
 root.withdraw() # don't show root during positioning
-root.update() # update geometrie values
+root.update() # update geometry values
 
 screen_width  = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -820,6 +942,27 @@ root_y = screen_height - root_height
 
 root.geometry("+%d+%d" % (root_x, root_y))
 root.deiconify() # now we can show root
+
+#----- start background tasks (threads) -----
+leandvb_info_thread_start()
+
+#----- calculate some geometry values -----
+root.update() # update geometry values
+timeline_x_min = 2
+timeline_x_max = timeline.winfo_width()-3
+timeline_x_len = timeline_x_max - timeline_x_min
+timeline_y_min = 2
+timeline_y_max = timeline.winfo_height()-3
+timeline_y_len = timeline_y_max - timeline_y_min
+timeline_mer_min = -20.0
+timeline_mer_max =  20.0
+timeline_mer_slope = (timeline_y_min-timeline_y_max)/(timeline_mer_max-timeline_mer_min)
+timeline_ss_min = 0.0
+timeline_ss_max = 50.0
+timeline_ss_slope = (timeline_y_min-timeline_y_max)/(timeline_ss_max-timeline_ss_min)
+timeline_freq_min = -500.0
+timeline_freq_max = 500.0
+timeline_freq_slope = (timeline_y_min-timeline_y_max)/(timeline_freq_max-timeline_freq_min)
 
 #----- start user interface -----
 mainloop()
