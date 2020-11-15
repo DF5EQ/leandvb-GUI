@@ -776,7 +776,7 @@ frm_root_row = 0
 
     #----- timeline -----
 h = root.winfo_screenheight()/5
-timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1)
+timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1, background="dimgrey")
 timeline.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
 
 frm_root_row +=1
