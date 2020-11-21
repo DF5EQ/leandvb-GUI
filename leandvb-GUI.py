@@ -88,7 +88,7 @@ def leandvb_spectrum_thread():
     leandvb_spectrum["pipenumber"] = leandvb_spectrum["pipeobject"].fileno()
     while True:
         spectrum = leandvb_spectrum["pipeobject"].readline().strip().split()
-        leandvb_spectrum["spectrum"][512] = spectrum[512]
+        leandvb_spectrum["spectrum"] = spectrum[-1024:1026]
 
 def leandvb_spectrum_thread_start():
     t = threading.Thread(target=leandvb_spectrum_thread)
@@ -778,7 +778,7 @@ def on_spectrum_timeout():
     global spectrum_timeout
 
     # just a first test TODO remove it
-    print_terminal("spectrum[512]: " + str(leandvb_spectrum["spectrum"][512]) + "\n")
+    print_terminal("spectrum: " + str(leandvb_spectrum["spectrum"]) + "\n")
 
     # re-arm spectrum_timeout
     spectrum_timeout = root.after(300, on_spectrum_timeout)
