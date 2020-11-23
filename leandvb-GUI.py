@@ -779,11 +779,11 @@ def on_spectrum_timeout():
 
     # update spectrum
     spectrum.delete(ALL)
-    x1 = spectrum_x_min
+    x = spectrum_x_min
     y1 = spectrum_y_max
-    x2 = spectrum_x_min
-    y2 = spectrum_y_min + random.randint(0, spectrum_y_len)
-    spectrum.create_line([x1,y1,x2,y2], width=1, fill="cyan")
+    for i in range(spectrum_x_min, spectrum_x_max):
+        y2 = spectrum_y_min + random.randint(0, spectrum_y_len)
+        spectrum.create_line([x+i,y1,x+i,y2], width=1, fill="lime")
 
     # re-arm spectrum_timeout
     spectrum_timeout = root.after(300, on_spectrum_timeout)
@@ -1006,10 +1006,10 @@ leandvb_spectrum_thread_start()
 root.update() # update geometry values
 
 timeline_x_min = 2
-timeline_x_max = timeline.winfo_width()-3
+timeline_x_max = timeline.winfo_width()-4
 timeline_x_len = timeline_x_max - timeline_x_min
 timeline_y_min = 2
-timeline_y_max = timeline.winfo_height()-3
+timeline_y_max = timeline.winfo_height()-4
 timeline_y_len = timeline_y_max - timeline_y_min
 timeline_mer_min = -20.0
 timeline_mer_max =  20.0
@@ -1022,10 +1022,10 @@ timeline_freq_max = 500.0
 timeline_freq_slope = (timeline_y_min-timeline_y_max)/(timeline_freq_max-timeline_freq_min)
 
 spectrum_x_min = 2
-spectrum_x_max = spectrum.winfo_width()-3
+spectrum_x_max = spectrum.winfo_width()-4
 spectrum_x_len = spectrum_x_max - spectrum_x_min
 spectrum_y_min = 2
-spectrum_y_max = spectrum.winfo_height()-3
+spectrum_y_max = spectrum.winfo_height()-4
 spectrum_y_len = spectrum_y_max - spectrum_y_min
 
 #----- start user interface -----
