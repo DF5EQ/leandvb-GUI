@@ -831,6 +831,13 @@ viterbi         = IntVar()
 #----- create user interface -----
 frm_root_row = 0
 
+    #----- spectrum -----
+h = root.winfo_screenheight()/5
+spectrum = Canvas (frm_root, height=h, relief="sunken", borderwidth=1, background="black")
+spectrum.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
+
+frm_root_row +=1
+
     #----- timeline -----
 h = root.winfo_screenheight()/5
 timeline = Canvas (frm_root, height=h, relief="sunken", borderwidth=1, background="black")
