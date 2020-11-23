@@ -777,8 +777,13 @@ def print_terminal(str):
 def on_spectrum_timeout():
     global spectrum_timeout
 
-    # just a first test TODO remove it
-    print_terminal("spectrum: " + str(leandvb_spectrum["spectrum"]) + "\n")
+    # update spectrum
+    spectrum.delete(ALL)
+    x1 = spectrum_x_min
+    y1 = spectrum_y_max
+    x2 = spectrum_x_min
+    y2 = spectrum_y_min + random.randint(0, spectrum_y_len)
+    spectrum.create_line([x1,y1,x2,y2], width=1, fill="cyan")
 
     # re-arm spectrum_timeout
     spectrum_timeout = root.after(300, on_spectrum_timeout)
@@ -999,6 +1004,7 @@ leandvb_spectrum_thread_start()
 
 #----- calculate some geometry values -----
 root.update() # update geometry values
+
 timeline_x_min = 2
 timeline_x_max = timeline.winfo_width()-3
 timeline_x_len = timeline_x_max - timeline_x_min
@@ -1014,6 +1020,13 @@ timeline_ss_slope = (timeline_y_min-timeline_y_max)/(timeline_ss_max-timeline_ss
 timeline_freq_min = -500.0
 timeline_freq_max = 500.0
 timeline_freq_slope = (timeline_y_min-timeline_y_max)/(timeline_freq_max-timeline_freq_min)
+
+spectrum_x_min = 2
+spectrum_x_max = spectrum.winfo_width()-3
+spectrum_x_len = spectrum_x_max - spectrum_x_min
+spectrum_y_min = 2
+spectrum_y_max = spectrum.winfo_height()-3
+spectrum_y_len = spectrum_y_max - spectrum_y_min
 
 #----- start user interface -----
 mainloop()
