@@ -779,11 +779,11 @@ def on_spectrum_timeout():
 
     # update spectrum
     spectrum.delete(ALL)
-    x = spectrum_x_min
     y1 = spectrum_y_max
-    for i in range(spectrum_x_min, spectrum_x_max):
-        y2 = spectrum_y_max - int(float(leandvb_spectrum["spectrum"][i]))
-        spectrum.create_line([x+i,y1,x+i,y2], width=1, fill="lime")
+    for i in range(0, spectrum_x_len):
+        x = spectrum_x_min + i
+        y2 = spectrum_y_max - int(float(leandvb_spectrum["spectrum"][i*1024/spectrum_x_len]))
+        spectrum.create_line([x,y1,x,y2], width=1, fill="lime")
 
     # re-arm spectrum_timeout
     spectrum_timeout = root.after(300, on_spectrum_timeout)
