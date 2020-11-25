@@ -77,7 +77,7 @@ leandvb_spectrum = {
     "pipename"  : "spectrum",
     "pipeobject": None,
     "pipenumber": None,
-    "spectrum"  : 1024*[0]
+    "spectrum"  : 1024*[-float("inf")]
 }
 
 def leandvb_spectrum_thread():
@@ -781,8 +781,12 @@ def on_spectrum_timeout():
     spectrum.delete(ALL)
     y1 = spectrum_y_max
     for i in range(0, spectrum_x_len):
+        s = float(leandvb_spectrum["spectrum"][i*1024/spectrum_x_len])
+        s = pow(10,s/10)
+        s = s * 30
+        s = int(s)
         x = spectrum_x_min + i
-        y2 = spectrum_y_max - int(float(leandvb_spectrum["spectrum"][i*1024/spectrum_x_len]))
+        y2 = spectrum_y_max - s
         spectrum.create_line([x,y1,x,y2], width=1, fill="lime")
 
     # re-arm spectrum_timeout
