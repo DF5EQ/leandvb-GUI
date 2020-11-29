@@ -783,11 +783,22 @@ def on_spectrum_timeout():
     for i in range(0, spectrum_x_len):
         s = float(leandvb_spectrum["spectrum"][i*1024/spectrum_x_len])
         s = pow(10,s/10)
-        s = s * 30
+        s = s * 30 # amplify to make it more visible in GUI
         s = int(s)
         x = spectrum_x_min + i
         y2 = spectrum_y_max - s
         spectrum.create_line([x,y1,x,y2], width=1, fill="lime")
+
+    # show marker
+    y2= spectrum_y_min
+    x = spectrum_x_min + spectrum_x_len/2
+    spectrum.create_line([x,y1,x,y2], width=1, fill="white")
+    bw = float(parameters["bandwidth"])
+    sr = float(parameters["symbolrate"])
+    x = spectrum_x_min + spectrum_x_len / 2 + spectrum_x_len * sr / bw / 2
+    spectrum.create_line([x,y1,x,y2], width=1, fill="red")
+    x = spectrum_x_min + spectrum_x_len / 2 - spectrum_x_len * sr / bw / 2
+    spectrum.create_line([x,y1,x,y2], width=1, fill="red")
 
     # re-arm spectrum_timeout
     spectrum_timeout = root.after(300, on_spectrum_timeout)
