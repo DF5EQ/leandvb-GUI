@@ -7,7 +7,6 @@
 # Leandvb by F4DAV (github leansdr)
 # Wrapper by pe2jko@540.org
 
-# TODO bring 'spectrum' window of leandvb to GUI
 # TODO replace os.system with subprocess call
 # TODO add confirmation after settings->default
 # TODO button for STOP/START (to start with changed settings)
@@ -33,8 +32,11 @@ import random
 proc_leandvb = None
 terminal_timeout = None
 timeline_timeout = None
+spectrum_timeout = None
 
 #===== threads functions ======================================================
+
+#----- info output to terminal window -----
 
 leandvb_info = {
     "pipename"              : "info",
@@ -65,6 +67,30 @@ def leandvb_info_thread():
 
 def leandvb_info_thread_start():
     t = threading.Thread(target=leandvb_info_thread)
+    t.setDaemon(True)
+    t.start()
+
+#----- spectrum output to window -----
+
+leandvb_spectrum = {
+    "pipename"  : "spectrum",
+    "pipeobject": None,
+    "pipenumber": None,
+    "spectrum"  : 1024*[-float("inf")]
+}
+
+def leandvb_spectrum_thread():
+    pipe = leandvb_spectrum["pipename"]
+    if not os.path.exists(pipe):
+        os.mkfifo(pipe)
+    leandvb_spectrum["pipeobject"] = open(pipe, "r+")
+    leandvb_spectrum["pipenumber"] = leandvb_spectrum["pipeobject"].fileno()
+    while True:
+        spectrum = leandvb_spectrum["pipeobject"].readline().strip().split()
+        leandvb_spectrum["spectrum"] = spectrum[-1024:1026]
+
+def leandvb_spectrum_thread_start():
+    t = threading.Thread(target=leandvb_spectrum_thread)
     t.setDaemon(True)
     t.start()
 
@@ -606,6 +632,7 @@ def on_start():
     opt_debug_v    = " -v" if debug.get() == "all" or debug.get() == "startup"   else ""
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
     opt_fd_info    = " --fd-info " + str(leandvb_info["pipenumber"])
+    opt_fd_spectrum= " --fd-spectrum " + str(leandvb_spectrum["pipenumber"])
 
     leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
@@ -614,7 +641,7 @@ def on_start():
                 + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
                 + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
                 + opt_debug_v + opt_debug_d \
-                + opt_fd_info
+                + opt_fd_info + opt_fd_spectrum
     leandvb_sub = "\"" + leandvb_path.get() + "/" + leandvb_file.get() + "\"" + leandvb_opt
 
     opt_frequency  = " -f " + str(int((float(frequency.get()) - float(lnblo.get())) * 1000000))
@@ -660,10 +687,12 @@ def on_start():
     timeline_x = 0
     on_timeline_timeout()
     on_terminal_timeout()
+    on_spectrum_timeout()
 
 def on_stop():
     global terminal_timeout
     global timeline_timeout
+    global spectrum_timeout
     global proc_leandvb
     if terminal_timeout :
         root.after_cancel(terminal_timeout)
@@ -671,6 +700,9 @@ def on_stop():
     if timeline_timeout :
         root.after_cancel(timeline_timeout)
         timeline_timeout = None
+    if spectrum_timeout :
+        root.after_cancel(spectrum_timeout)
+        spectrum_timeout = None
     if proc_leandvb :
         os.killpg(proc_leandvb.pid, SIGKILL)
         proc_leandvb = None
@@ -738,8 +770,37 @@ def on_timeline_timeout():
     timeline_timeout = root.after(300, on_timeline_timeout)
 
 def print_terminal(str):
-        txt_terminal.insert(END, str)
-        txt_terminal.see(END)
+    txt_terminal.insert(END, str)
+    txt_terminal.see(END)
+
+def on_spectrum_timeout():
+    global spectrum_timeout
+
+    # update spectrum
+    spectrum.delete(ALL)
+    y1 = spectrum_y_max
+    for i in range(0, spectrum_x_len):
+        s = float(leandvb_spectrum["spectrum"][i*1024/spectrum_x_len])
+        s = pow(10,s/10)
+        s = s * 30 # amplify to make it more visible in GUI
+        s = int(s)
+        x = spectrum_x_min + i
+        y2 = spectrum_y_max - s
+        spectrum.create_line([x,y1,x,y2], width=1, fill="lime")
+
+    # show marker
+    y2= spectrum_y_min
+    x = spectrum_x_min + spectrum_x_len/2
+    spectrum.create_line([x,y1,x,y2], width=1, fill="white")
+    bw = float(parameters["bandwidth"])
+    sr = float(parameters["symbolrate"])
+    x = spectrum_x_min + spectrum_x_len / 2 + spectrum_x_len * sr / bw / 2
+    spectrum.create_line([x,y1,x,y2], width=1, fill="red")
+    x = spectrum_x_min + spectrum_x_len / 2 - spectrum_x_len * sr / bw / 2
+    spectrum.create_line([x,y1,x,y2], width=1, fill="red")
+
+    # re-arm spectrum_timeout
+    spectrum_timeout = root.after(300, on_spectrum_timeout)
 
 #----- create root window -----
 root = Tk()
@@ -788,6 +849,13 @@ viterbi         = IntVar()
 
 #----- create user interface -----
 frm_root_row = 0
+
+    #----- spectrum -----
+h = root.winfo_screenheight()/5
+spectrum = Canvas (frm_root, height=h, relief="sunken", borderwidth=1, background="black")
+spectrum.grid (row=frm_root_row, column=0, columnspan=5, sticky=EW )
+
+frm_root_row +=1
 
     #----- timeline -----
 h = root.winfo_screenheight()/5
@@ -946,14 +1014,16 @@ root.deiconify() # now we can show root
 
 #----- start background tasks (threads) -----
 leandvb_info_thread_start()
+leandvb_spectrum_thread_start()
 
 #----- calculate some geometry values -----
 root.update() # update geometry values
+
 timeline_x_min = 2
-timeline_x_max = timeline.winfo_width()-3
+timeline_x_max = timeline.winfo_width()-4
 timeline_x_len = timeline_x_max - timeline_x_min
 timeline_y_min = 2
-timeline_y_max = timeline.winfo_height()-3
+timeline_y_max = timeline.winfo_height()-4
 timeline_y_len = timeline_y_max - timeline_y_min
 timeline_mer_min = -20.0
 timeline_mer_max =  20.0
@@ -964,6 +1034,13 @@ timeline_ss_slope = (timeline_y_min-timeline_y_max)/(timeline_ss_max-timeline_ss
 timeline_freq_min = -500.0
 timeline_freq_max = 500.0
 timeline_freq_slope = (timeline_y_min-timeline_y_max)/(timeline_freq_max-timeline_freq_min)
+
+spectrum_x_min = 2
+spectrum_x_max = spectrum.winfo_width()-4
+spectrum_x_len = spectrum_x_max - spectrum_x_min
+spectrum_y_min = 2
+spectrum_y_max = spectrum.winfo_height()-4
+spectrum_y_len = spectrum_y_max - spectrum_y_min
 
 #----- start user interface -----
 mainloop()
