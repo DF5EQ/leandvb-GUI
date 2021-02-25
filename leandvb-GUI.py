@@ -95,6 +95,29 @@ def leandvb_spectrum_thread_start():
     t.setDaemon(True)
     t.start()
 
+#----- rawiq output to complex window -----
+
+leandvb_rawiq = {
+    "pipename"  : "rawiq",
+    "pipeobject": None,
+    "pipenumber": None
+}
+
+def leandvb_rawiq_thread():
+    pipe = leandvb_rawiq["pipename"]
+    if not os.path.exists(pipe):
+        os.mkfifo(pipe)
+    leandvb_rawiq["pipeobject"] = open(pipe, "rb+")
+    leandvb_rawiq["pipenumber"] = leandvb_rawiq["pipeobject"].fileno()
+    while True:
+        rawiq = leandvb_rawiq["pipeobject"].read(20)
+        print (rawiq)
+
+def leandvb_rawiq_thread_start():
+    t = threading.Thread(target=leandvb_rawiq_thread)
+    t.setDaemon(True)
+    t.start()
+
 #===== handle parameters (save, load, default) ================================
 
 parameters = dict()
@@ -634,6 +657,7 @@ def on_start():
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
     opt_fd_info    = " --fd-info " + str(leandvb_info["pipenumber"])
     opt_fd_spectrum= " --fd-spectrum " + str(leandvb_spectrum["pipenumber"])
+    opt_fd_rawiq   = " --fd-rawiq " + str(leandvb_rawiq["pipenumber"])
 
     leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
@@ -642,7 +666,7 @@ def on_start():
                 + opt_strongpls + opt_modcods + opt_framesizes + opt_fastdrift \
                 + opt_ldpc_bf + opt_nhelpers + opt_ldpc_helper \
                 + opt_debug_v + opt_debug_d \
-                + opt_fd_info + opt_fd_spectrum
+                + opt_fd_info + opt_fd_spectrum + opt_fd_rawiq
     leandvb_sub = "\"" + leandvb_path.get() + "/" + leandvb_file.get() + "\"" + leandvb_opt
 
     opt_frequency  = " -f " + str(int((float(frequency.get()) - float(lnblo.get())) * 1000000))
@@ -1016,6 +1040,7 @@ root.deiconify() # now we can show root
 #----- start background tasks (threads) -----
 leandvb_info_thread_start()
 leandvb_spectrum_thread_start()
+leandvb_rawiq_thread_start()
 
 #----- calculate some geometry values -----
 root.update() # update geometry values
