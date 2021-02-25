@@ -27,6 +27,7 @@ from signal import *
 import threading
 import time
 import random
+import struct
 
 #===== global variables =======================================================
 
@@ -110,7 +111,7 @@ def leandvb_rawiq_thread():
     leandvb_rawiq["pipeobject"] = open(pipe, "rb+")
     leandvb_rawiq["pipenumber"] = leandvb_rawiq["pipeobject"].fileno()
     while True:
-        rawiq = leandvb_rawiq["pipeobject"].read(20)
+        rawiq = struct.unpack('f'*2, leandvb_rawiq["pipeobject"].read(4*2))
         print (rawiq)
 
 def leandvb_rawiq_thread_start():
