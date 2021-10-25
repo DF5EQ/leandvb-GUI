@@ -658,7 +658,7 @@ def on_start():
     opt_debug_d    = " -d" if debug.get() == "all" or debug.get() == "operation" else ""
     opt_fd_info    = " --fd-info " + str(leandvb_info["pipenumber"])
     opt_fd_spectrum= " --fd-spectrum " + str(leandvb_spectrum["pipenumber"])
-    opt_fd_rawiq   = " --fd-rawiq " + str(leandvb_rawiq["pipenumber"])
+    opt_fd_rawiq   = ""#" --fd-rawiq " + str(leandvb_rawiq["pipenumber"])
 
     leandvb_opt = opt_inpipe + opt_sampler + opt_rolloff + opt_rrcrej \
                 + opt_bandwidth + opt_symbolrate + opt_tune + opt_standard \
