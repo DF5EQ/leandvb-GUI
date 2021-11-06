@@ -16,10 +16,14 @@
 
 /*===== private variables ===================================================*/
 
-static GtkBuilder*     builder;
-static GtkCssProvider* css_provider;
-static GtkWidget*      window;
-static GtkEntry*       entry;
+static GtkBuilder*      builder;
+static GtkCssProvider*  css_provider;
+static GtkWidget*       window;
+static GtkComboBoxText* fec_combobox;
+
+/* data for comboboxes */
+static gchar* fec_list[]       = { "1/2", "2/3", "3/4", "4/5", "5/6", "6/7", "7/8" };
+static gint   fec_list_default = 3;
 
 /*===== public variables ====================================================*/
 
@@ -51,6 +55,8 @@ void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
 
 void gui_init (void)
 {
+    int i;
+
     /* load gui elements */
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "gui/gui.ui", NULL);
@@ -62,8 +68,15 @@ void gui_init (void)
     gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* expose needed widgets */
-    window = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
-    entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "entry_show" ));
+    window       = GTK_WIDGET         (gtk_builder_get_object (builder, "main_window") );
+    fec_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "fec_combobox"));
+    
+    /* populate comboboxes with data */
+    for( i=0; i<sizeof(fec_list)/sizeof(gchar*); i++ )
+    {
+        gtk_combo_box_text_append_text (fec_combobox, fec_list[i]);
+    }
+    gtk_combo_box_set_active ((GtkComboBox*)fec_combobox, fec_list_default);
 
     gtk_builder_connect_signals(builder, NULL);
  
