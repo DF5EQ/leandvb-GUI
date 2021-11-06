@@ -24,6 +24,7 @@ static GtkEntry*        lnblo_entry;
 static GtkComboBoxText* tune_combobox;
 static GtkComboBoxText* bandwidth_combobox;
 static GtkComboBoxText* symbolrate_combobox;
+static GtkComboBoxText* frequency_combobox;
 
 /* data for entries */
 static gchar* lnblo_value         = "9750.000";
@@ -38,6 +39,8 @@ static gchar* bandwidth_list[]        = { "2400", "2000", "1000", "500" };
 static gint   bandwidth_list_default  = 1;
 static gchar* symbolrate_list[]       = { "2000", "1500", "1000", "500", "250", "333", "125", "65", "33" };
 static gint   symbolrate_list_default = 1;
+static gchar* frequency_list[]        = { "10491.500", "10492.000", "10492.500", "10493.000", "10493.500", "10494.000" };
+static gint   frequency_list_default  = 0;
 
 /*===== public variables ====================================================*/
 
@@ -88,6 +91,7 @@ void gui_init (void)
     tune_combobox       = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "tune_combobox")      );
     bandwidth_combobox  = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "bandwidth_combobox") );
     symbolrate_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "symbolrate_combobox"));
+    frequency_combobox  = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "frequency_combobox"));
     
     /* populate lnblo entry */
     gtk_entry_set_text (lnblo_entry, lnblo_value_default);
@@ -119,6 +123,13 @@ void gui_init (void)
         gtk_combo_box_text_append_text (symbolrate_combobox, symbolrate_list[i]);
     }
     gtk_combo_box_set_active ((GtkComboBox*)symbolrate_combobox, symbolrate_list_default);
+
+    /* populate frequency combobox */
+    for( i=0; i<sizeof(frequency_list)/sizeof(frequency_list[0]); i++ )
+    {
+        gtk_combo_box_text_append_text (frequency_combobox, frequency_list[i]);
+    }
+    gtk_combo_box_set_active ((GtkComboBox*)frequency_combobox, frequency_list_default);
 
     /* connect the signals */
     gtk_builder_connect_signals(builder, NULL);
