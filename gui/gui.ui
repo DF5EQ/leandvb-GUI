@@ -364,24 +364,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">1</property>
                     <property name="has_entry">True</property>
-                    <items>
-                      <item translatable="yes">2000</item>
-                      <item translatable="yes">1500</item>
-                      <item translatable="yes">1000</item>
-                      <item translatable="yes">500</item>
-                      <item translatable="yes">250</item>
-                      <item translatable="yes">333</item>
-                      <item translatable="yes">125</item>
-                    </items>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="symbolrate_entry">
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
-                        <property name="xalign">1</property>
                       </object>
                     </child>
                   </object>

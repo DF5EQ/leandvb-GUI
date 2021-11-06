@@ -23,18 +23,21 @@ static GtkComboBoxText* fec_combobox;
 static GtkEntry*        lnblo_entry;
 static GtkComboBoxText* tune_combobox;
 static GtkComboBoxText* bandwidth_combobox;
+static GtkComboBoxText* symbolrate_combobox;
 
 /* data for entries */
 static gchar* lnblo_value         = "9750.000";
 static gchar* lnblo_value_default = "9750.000";
 
 /* data for comboboxes */
-static gchar* fec_list[]             = { "1/2", "2/3", "3/4", "4/5", "5/6", "6/7", "7/8" };
-static gint   fec_list_default       = 3;
-static gchar* tune_list[]            = { "10000", "5000", "2000", "1000", "500", "100", "0", "-100", "-500", "-1000", "-2000", "-5000", "-10000" };
-static gint   tune_list_default      = 6;
-static gchar* bandwidth_list[]       = { "2400", "2000", "1000", "500" };
-static gint   bandwidth_list_default = 1;
+static gchar* fec_list[]              = { "1/2", "2/3", "3/4", "4/5", "5/6", "6/7", "7/8" };
+static gint   fec_list_default        = 3;
+static gchar* tune_list[]             = { "10000", "5000", "2000", "1000", "500", "100", "0", "-100", "-500", "-1000", "-2000", "-5000", "-10000" };
+static gint   tune_list_default       = 6;
+static gchar* bandwidth_list[]        = { "2400", "2000", "1000", "500" };
+static gint   bandwidth_list_default  = 1;
+static gchar* symbolrate_list[]       = { "2000", "1500", "1000", "500", "250", "333", "125", "65", "33" };
+static gint   symbolrate_list_default = 1;
 
 /*===== public variables ====================================================*/
 
@@ -79,11 +82,12 @@ void gui_init (void)
     gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* expose needed widgets */
-    window             = GTK_WIDGET         (gtk_builder_get_object (builder, "main_window")       );
-    fec_combobox       = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "fec_combobox")      );
-    lnblo_entry        = GTK_ENTRY          (gtk_builder_get_object (builder, "lnblo_entry")       );
-    tune_combobox      = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "tune_combobox")     );
-    bandwidth_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "bandwidth_combobox"));
+    window              = GTK_WIDGET         (gtk_builder_get_object (builder, "main_window")        );
+    fec_combobox        = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "fec_combobox")       );
+    lnblo_entry         = GTK_ENTRY          (gtk_builder_get_object (builder, "lnblo_entry")        );
+    tune_combobox       = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "tune_combobox")      );
+    bandwidth_combobox  = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "bandwidth_combobox") );
+    symbolrate_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "symbolrate_combobox"));
     
     /* populate lnblo entry */
     gtk_entry_set_text (lnblo_entry, lnblo_value_default);
@@ -108,6 +112,13 @@ void gui_init (void)
         gtk_combo_box_text_append_text (bandwidth_combobox, bandwidth_list[i]);
     }
     gtk_combo_box_set_active ((GtkComboBox*)bandwidth_combobox, bandwidth_list_default);
+
+    /* populate symbolrate combobox */
+    for( i=0; i<sizeof(symbolrate_list)/sizeof(symbolrate_list[0]); i++ )
+    {
+        gtk_combo_box_text_append_text (symbolrate_combobox, symbolrate_list[i]);
+    }
+    gtk_combo_box_set_active ((GtkComboBox*)symbolrate_combobox, symbolrate_list_default);
 
     /* connect the signals */
     gtk_builder_connect_signals(builder, NULL);
