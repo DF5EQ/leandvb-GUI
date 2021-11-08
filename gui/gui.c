@@ -46,8 +46,11 @@ void button_stop_clicked_cb (GtkWidget* widget, gpointer data)
 
 void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
 {
-	/* start the settings dialog */
-    gtk_dialog_run (settings_dialog);                
+	/* show the settings dialog and wait for closing */
+    gtk_dialog_run (settings_dialog);
+
+    /* hide the settingsdialog after it's closing */
+    gtk_widget_hide (GTK_WIDGET(settings_dialog));
 }
 
 /*===== public functions ====================================================*/
