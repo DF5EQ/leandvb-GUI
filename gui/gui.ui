@@ -698,6 +698,12 @@
                       <object class="GtkComboBoxText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="active">2</property>
+                        <items>
+                          <item translatable="yes">nearest</item>
+                          <item translatable="yes">linear</item>
+                          <item translatable="yes">rrc</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -708,6 +714,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">0.35</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -718,6 +725,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">30.0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -759,6 +767,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <child>
                           <placeholder/>
@@ -866,6 +875,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">0x0040</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -876,6 +886,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">0x01</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -901,6 +912,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -911,6 +923,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">6</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -945,6 +958,13 @@
                       <object class="GtkComboBoxText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes">all</item>
+                          <item translatable="yes">operation</item>
+                          <item translatable="yes">startup</item>
+                          <item translatable="yes">none</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -955,6 +975,11 @@
                       <object class="GtkComboBoxText">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes">DVB-S</item>
+                          <item translatable="yes">DVB-S2</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -990,6 +1015,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">32000000</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1115,6 +1141,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1125,6 +1152,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">36</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1135,6 +1163,7 @@
                       <object class="GtkEntry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="text" translatable="yes">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
