@@ -18,8 +18,10 @@
 
 static GtkBuilder*     builder;
 static GtkCssProvider* css_provider;
-static GtkWidget*      window;
-static GtkEntry*       entry;
+
+/* exposed widgets */
+static GtkWidget* window;
+static GtkDialog* settings_dialog;
 
 /*===== public variables ====================================================*/
 
@@ -44,7 +46,8 @@ void button_stop_clicked_cb (GtkWidget* widget, gpointer data)
 
 void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
 {
-	gtk_main_quit();
+	/* start the settings dialog */
+    gtk_dialog_run (settings_dialog);                
 }
 
 /*===== public functions ====================================================*/
@@ -62,13 +65,16 @@ void gui_init (void)
     gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     /* expose needed widgets */
-    window = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
-    entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "entry_show" ));
+    window          = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
+    settings_dialog = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
 
+    /* connect the signals */
     gtk_builder_connect_signals(builder, NULL);
  
+    /* builder not longer needed */ 
     g_object_unref(builder);
  
+    /* start the gui */
     gtk_widget_show(window);                
  }
 
