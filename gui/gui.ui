@@ -655,7 +655,7 @@
                     <property name="column_spacing">5</property>
                     <property name="row_homogeneous">True</property>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="rolloff_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">roll off</property>
@@ -667,7 +667,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="rrcrej_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">rrc rej</property>
@@ -679,7 +679,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="fastlock_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">fastlock</property>
@@ -691,7 +691,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="maxsens_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">max sensitivity</property>
@@ -703,7 +703,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="debug_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">debug info</property>
@@ -728,7 +728,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="modcods_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -741,7 +741,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="framesizes_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -754,7 +754,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="fastdrift_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -767,7 +767,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="ldpcbf_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -780,7 +780,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="nhelpers_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -817,7 +817,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch" id="fastdrift_entry">
+                      <object class="GtkSwitch" id="fastdrift_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
@@ -963,7 +963,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="gui_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">GUI</property>
@@ -983,6 +983,7 @@
                           <item translatable="yes">DVB-S</item>
                           <item translatable="yes">DVB-S2</item>
                         </items>
+                        <signal name="changed" handler="standard_combobox_changed_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -990,7 +991,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="standard_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -1016,7 +1017,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="inpipe_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">inpipe</property>
@@ -1028,7 +1029,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="sampler_label">
                         <property name="name">sampler</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1079,7 +1080,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="coderrate_combobox">
+                      <object class="GtkComboBoxText" id="coderate_combobox">
                         <property name="can_focus">False</property>
                         <property name="active">3</property>
                         <items>
@@ -1106,7 +1107,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
-                        <property name="top_attach">4</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -1116,7 +1117,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
-                        <property name="top_attach">4</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -1128,7 +1129,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
-                        <property name="top_attach">5</property>
+                        <property name="top_attach">4</property>
                       </packing>
                     </child>
                     <child>
@@ -1138,7 +1139,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
-                        <property name="top_attach">5</property>
+                        <property name="top_attach">4</property>
                       </packing>
                     </child>
                     <child>
