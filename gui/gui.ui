@@ -9,6 +9,17 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="inpipe_adjustment">
+    <property name="upper">128000000</property>
+    <property name="value">32000000</property>
+    <property name="step_increment">1000000</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="ldpcbf_adjustment">
+    <property name="upper">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
@@ -510,9 +521,27 @@
       </object>
     </child>
   </object>
+  <object class="GtkAdjustment" id="nhelpers_adjustment">
+    <property name="upper">30</property>
+    <property name="value">6</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="ppm_adjustment">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="rolloff_adjustment">
+    <property name="upper">1</property>
+    <property name="value">0.34999999999999998</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="rrcrej_adjustment">
+    <property name="upper">100</property>
+    <property name="value">30</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="rtldongle_adjustment">
@@ -713,7 +742,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
+                        <property name="margin_left">20</property>
                         <property name="label" translatable="yes">strongpls</property>
                         <property name="xalign">0</property>
                       </object>
@@ -726,7 +755,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
+                        <property name="margin_left">20</property>
                         <property name="label" translatable="yes">modcods</property>
                         <property name="xalign">0</property>
                       </object>
@@ -739,7 +768,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
+                        <property name="margin_left">20</property>
                         <property name="label" translatable="yes">framesizes</property>
                         <property name="xalign">0</property>
                       </object>
@@ -752,7 +781,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
+                        <property name="margin_left">20</property>
                         <property name="label" translatable="yes">fastdrift</property>
                         <property name="xalign">0</property>
                       </object>
@@ -765,7 +794,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
+                        <property name="margin_left">20</property>
                         <property name="label" translatable="yes">max LDPC bitflips</property>
                         <property name="xalign">0</property>
                       </object>
@@ -778,7 +807,7 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
+                        <property name="margin_left">20</property>
                         <property name="label" translatable="yes">number of decoders</property>
                         <property name="xalign">0</property>
                       </object>
@@ -801,34 +830,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="ldpcbf_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="nhelpers_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">6</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">6</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
+                        <property name="margin_left">20</property>
                         <property name="label" translatable="yes">DVB standard</property>
                         <property name="xalign">0</property>
                       </object>
@@ -853,6 +858,7 @@
                       <object class="GtkSwitch" id="strongpls_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -863,6 +869,7 @@
                       <object class="GtkSwitch" id="fastdrift_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -873,6 +880,8 @@
                       <object class="GtkSwitch" id="fastlock_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
+                        <property name="margin_right">53</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -883,34 +892,11 @@
                       <object class="GtkSwitch" id="maxsens_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="rrcrej_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">30.0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="rolloff_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">0.35</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -927,18 +913,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="inpipe_entry">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">32000000</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -962,6 +936,7 @@
                       <object class="GtkSwitch" id="gui_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">start</property>
                         <property name="active">True</property>
                       </object>
                       <packing>
@@ -995,6 +970,73 @@
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">inpipe_adjustment</property>
+                        <property name="snap_to_ticks">True</property>
+                        <property name="numeric">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="rolloff_spinbutton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">rolloff_adjustment</property>
+                        <property name="digits">2</property>
+                        <property name="snap_to_ticks">True</property>
+                        <property name="numeric">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="rrcrej_spinbutton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">rrcrej_adjustment</property>
+                        <property name="digits">1</property>
+                        <property name="snap_to_ticks">True</property>
+                        <property name="numeric">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="ldpcbf_spinbutton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">ldpcbf_adjustment</property>
+                        <property name="snap_to_ticks">True</property>
+                        <property name="numeric">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="nhelpers_spinbutton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">nhelpers_adjustment</property>
+                        <property name="snap_to_ticks">True</property>
+                        <property name="numeric">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">6</property>
                       </packing>
                     </child>
                     <child>
