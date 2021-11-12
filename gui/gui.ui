@@ -3,6 +3,12 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <!-- interface-css-provider-path gui.css -->
+  <object class="GtkAdjustment" id="gain_adjustment">
+    <property name="upper">100</property>
+    <property name="value">36</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
@@ -503,6 +509,16 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="ppm_adjustment">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="rtldongle_adjustment">
+    <property name="upper">10</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="settings_dialog">
     <property name="can_focus">False</property>
@@ -1082,10 +1098,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="ppm_entry">
+                      <object class="GtkSpinButton" id="ppm_spinbutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0</property>
+                        <property name="adjustment">ppm_adjustment</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1093,10 +1109,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="gain_entry">
+                      <object class="GtkSpinButton" id="gain_spinbutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">36</property>
+                        <property name="adjustment">gain_adjustment</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1104,10 +1120,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="rtldongle_entry">
+                      <object class="GtkSpinButton" id="rtldongle_spinbutton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="yes">0</property>
+                        <property name="adjustment">rtldongle_adjustment</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
