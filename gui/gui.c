@@ -53,6 +53,44 @@ void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
     gtk_widget_hide (GTK_WIDGET(settings_dialog));
 }
 
+/*----- settings  files -----*/
+
+gboolean leandvb_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
+{
+    gchar* filename;
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
+    gtk_tooltip_set_text (tooltip, filename);
+    return TRUE;
+}
+
+gboolean ldpchelper_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
+{
+    gchar* filename;
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
+    gtk_tooltip_set_text (tooltip, filename);
+    return TRUE;
+}
+
+gboolean rtlsdr_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
+{
+    gchar* filename;
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
+    gtk_tooltip_set_text (tooltip, filename);
+    return TRUE;
+}
+
+gboolean viewer_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
+{
+    gchar* filename;
+
+    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
+    gtk_tooltip_set_text (tooltip, filename);
+    return TRUE;
+}
+
 /*===== public functions ====================================================*/
 
 void gui_init (void)
