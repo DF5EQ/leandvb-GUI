@@ -832,7 +832,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="margin_right">53</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1472,5 +1471,43 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="leandvb_data_sizegroup">
+    <widgets>
+      <widget name="framesizes_entry"/>
+      <widget name="sampler_combobox"/>
+      <widget name="debug_combobox"/>
+      <widget name="modcods_entry"/>
+      <widget name="rolloff_spinbutton"/>
+      <widget name="rrcrej_spinbutton"/>
+      <widget name="ldpcbf_spinbutton"/>
+      <widget name="nhelpers_spinbutton"/>
+      <widget name="standard_combobox"/>
+      <widget name="inpipe_spinbutton"/>
+      <widget name="constellation_combobox"/>
+      <widget name="coderate_combobox"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="leandvb_label_sizegroup">
+    <widgets>
+      <widget name="rolloff_label"/>
+      <widget name="rrcrej_label"/>
+      <widget name="fastlock_label"/>
+      <widget name="maxsens_label"/>
+      <widget name="debug_label"/>
+      <widget name="strongpls_label"/>
+      <widget name="modcods_label"/>
+      <widget name="framesizes_label"/>
+      <widget name="fastdrift_label"/>
+      <widget name="ldpcbf_label"/>
+      <widget name="nhelpers_label"/>
+      <widget name="gui_label"/>
+      <widget name="inpipe_label"/>
+      <widget name="sampler_label"/>
+      <widget name="constellation_label"/>
+      <widget name="coderate_label"/>
+      <widget name="viterbi_label"/>
+      <widget name="hardmetric_label"/>
+    </widgets>
   </object>
 </interface>
