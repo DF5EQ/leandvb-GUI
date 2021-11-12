@@ -513,7 +513,7 @@
       <placeholder/>
     </child>
     <child internal-child="vbox">
-      <object class="GtkBox">
+      <object class="GtkBox" id="settings_box">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
@@ -523,7 +523,7 @@
             <property name="homogeneous">True</property>
             <property name="layout_style">spread</property>
             <child>
-              <object class="GtkButton" id="settings_save_button">
+              <object class="GtkButton" id="save_button">
                 <property name="label" translatable="yes">save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -536,7 +536,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="settings_cancel_button">
+              <object class="GtkButton" id="cancel_button">
                 <property name="label" translatable="yes">cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -549,7 +549,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="settings_default_button">
+              <object class="GtkButton" id="default_button">
                 <property name="label" translatable="yes">defaults</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -573,7 +573,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <object class="GtkBox" id="settings_box_leandvb">
+              <object class="GtkBox" id="leandvb_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">5</property>
@@ -772,7 +772,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="framesizes_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">empty entry omits parameter</property>
@@ -785,7 +785,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="ldpcbf_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>
@@ -797,7 +797,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="nhelpers_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>
@@ -834,7 +834,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch">
+                      <object class="GtkSwitch" id="strongpls_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -844,7 +844,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch">
+                      <object class="GtkSwitch" id="fastdrift_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -854,7 +854,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch">
+                      <object class="GtkSwitch" id="fastlock_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -864,7 +864,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch">
+                      <object class="GtkSwitch" id="maxsens_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                       </object>
@@ -874,7 +874,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="rrcrej_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>
@@ -886,7 +886,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="rolloff_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>
@@ -898,7 +898,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText">
+                      <object class="GtkComboBoxText" id="sampler_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="active">2</property>
@@ -914,7 +914,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="inpipe_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="width_chars">10</property>
@@ -926,7 +926,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText">
+                      <object class="GtkComboBoxText" id="debug_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="active">0</property>
@@ -943,7 +943,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch">
+                      <object class="GtkSwitch" id="gui_switch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="active">True</property>
@@ -954,7 +954,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText">
+                      <object class="GtkComboBoxText" id="standard_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="active">0</property>
@@ -969,7 +969,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="modcods_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">empty entry omits parameter</property>
@@ -997,7 +997,7 @@
               </object>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="settings_tab_leaddvb">
+              <object class="GtkLabel" id="leaddvb_tab">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="label" translatable="yes">leandvb</property>
@@ -1007,7 +1007,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="settings_box_rtlsdr">
+              <object class="GtkBox" id="rtlsdr_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">5</property>
@@ -1082,7 +1082,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="ppm_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="text" translatable="yes">0</property>
@@ -1093,7 +1093,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="gain_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="text" translatable="yes">36</property>
@@ -1104,7 +1104,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry">
+                      <object class="GtkEntry" id="rtldongle_entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="text" translatable="yes">0</property>
@@ -1127,7 +1127,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="settings_tab_rtlsdr">
+              <object class="GtkLabel" id="rtlsdr_tab">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="label" translatable="yes">rtl_sdr</property>
@@ -1138,7 +1138,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="settings_box_files">
+              <object class="GtkBox" id="files_box">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">5</property>
@@ -1292,7 +1292,7 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="settings_tab_files">
+              <object class="GtkLabel" id="files_tab">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">files</property>
