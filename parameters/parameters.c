@@ -3,6 +3,7 @@
 /*===== includes ============================================================*/
 #include <stdio.h>
 #include <stdlib.h>
+#include <json-c/json.h>
 #include "parameters.h"
 
 /*===== private datatypes ===================================================*/
@@ -107,6 +108,37 @@ void parameters_init (void)
     parameters_default();
     parameters_print();
 
-    exit(0); /* for test */
+    /*--- for testing ---*/
+    char* string        = "{\"name\" : \"programming\"}";
+    json_object* jobj   = json_tokener_parse(string);
+    enum json_type type = json_object_get_type(jobj);
+
+    printf("\ntype: ");
+    switch (type)
+    {
+        case json_type_null:
+            printf("json_type_null\n");
+           break;
+        case json_type_boolean:
+            printf("json_type_boolean\n");
+            break;
+        case json_type_double:
+            printf("json_type_double\n");
+            break;
+        case json_type_int:
+            printf("json_type_int\n");
+            break;
+        case json_type_object:
+            printf("json_type_object\n");
+            break;
+        case json_type_array:
+            printf("json_type_array\n");
+            break;
+        case json_type_string:
+            printf("json_type_string\n");
+            break;
+    }
+
+    exit(0);
 }
 

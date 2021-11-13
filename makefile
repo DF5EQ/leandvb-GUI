@@ -34,7 +34,7 @@ LDFLAGS = -export-dynamic
 
 # include and library directories
 INCS    = $(foreach dir, $(DIRS), -I$(dir))
-LIBS    = -lrt $(shell pkg-config --libs gtk+-3.0)
+LIBS    = -lrt -ljson-c $(shell pkg-config --libs gtk+-3.0)
 
 # search path for targets and prerequisites
 VPATH = $(DIRS)
