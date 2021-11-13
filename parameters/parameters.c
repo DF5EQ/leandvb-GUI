@@ -109,35 +109,44 @@ void parameters_init (void)
     parameters_print();
 
     /*--- for testing ---*/
-    char* string        = "{\"name\" : \"programming\"}";
-    json_object* jobj   = json_tokener_parse(string);
-    enum json_type type = json_object_get_type(jobj);
+  /*Creating a json object*/
+  json_object* jobj = json_object_new_object();
 
-    printf("\ntype: ");
-    switch (type)
-    {
-        case json_type_null:
-            printf("json_type_null\n");
-           break;
-        case json_type_boolean:
-            printf("json_type_boolean\n");
-            break;
-        case json_type_double:
-            printf("json_type_double\n");
-            break;
-        case json_type_int:
-            printf("json_type_int\n");
-            break;
-        case json_type_object:
-            printf("json_type_object\n");
-            break;
-        case json_type_array:
-            printf("json_type_array\n");
-            break;
-        case json_type_string:
-            printf("json_type_string\n");
-            break;
-    }
+  /*Creating a json string*/
+  json_object* jstring = json_object_new_string("Joys of Programming");
+
+  /*Creating a json integer*/
+  json_object* jint = json_object_new_int(10);
+
+  /*Creating a json boolean*/
+  json_object* jboolean = json_object_new_boolean(1);
+
+  /*Creating a json double*/
+  json_object* jdouble = json_object_new_double(2.14);
+
+  /*Creating a json array*/
+  json_object* jarray = json_object_new_array();
+
+  /*Creating json strings*/
+  json_object* jstring1 = json_object_new_string("c");
+  json_object* jstring2 = json_object_new_string("c++");
+  json_object* jstring3 = json_object_new_string("php");
+
+  /*Adding the above created json strings to the array*/
+  json_object_array_add(jarray,jstring1);
+  json_object_array_add(jarray,jstring2);
+  json_object_array_add(jarray,jstring3);
+
+  /*Form the json object*/
+  /*Each of these is like a key value pair*/
+  json_object_object_add(jobj,"Site Name", jstring);
+  json_object_object_add(jobj,"Technical blog", jboolean);
+  json_object_object_add(jobj,"Average posts per day", jdouble);
+  json_object_object_add(jobj,"Number of posts", jint);
+  json_object_object_add(jobj,"Categories", jarray);
+
+  /*Now printing the json object*/
+  printf ("The json object created: %s\n",json_object_to_json_string_ext(jobj, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
 
     exit(0);
 }
