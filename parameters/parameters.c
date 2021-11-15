@@ -132,6 +132,8 @@ static void parameters_from_json_object (void)
 
 void parameters_default(void)
 {
+    printf("load parameters with defaults\n");
+
     parameters.bandwidth       = 2400;
     parameters.constellation   = "QPSK";
     parameters.debug           = "all";
@@ -216,7 +218,8 @@ void parameters_save (void)
 
 void parameters_load (void)
 {
-    /* TODO */
+    printf("load parameters from file %s\n", parameters_file);
+    parameters_json_object = json_object_from_file(parameters_file);
 }
 
 void parameters_init (void)
@@ -227,16 +230,13 @@ void parameters_init (void)
     /* else                 */
     /*     load_defaults    */
 
-    parameters_default();
-    parameters_to_json_object();
-    parameters_save();
-
-    exit(0);
-
     /*--- for test ---*/
+//    parameters_default();
+//    parameters_to_json_object();
+    parameters_load();
     parameters_print();
-    parameters_to_json_object();
     printf ("%s\n",json_object_to_json_string_ext(parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
 
+    exit(0);
 }
 
