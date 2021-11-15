@@ -1,6 +1,7 @@
 /*===== file header =========================================================*/
 
 /*===== includes ============================================================*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <json-c/json.h>
@@ -14,7 +15,10 @@
 
 /*===== public constants ====================================================*/
 
+static const char* parameters_file = "parameters.json";
+
 /*===== private variables ===================================================*/
+
 static parameters_t parameters;
 static json_object* parameters_json_object;
 
@@ -33,11 +37,11 @@ static int serializer_double(struct json_object* o, struct printbuf* pb, int lev
 	return 0;
 }
 
-static int serializer_string(struct json_object* jo, struct printbuf* pb, int level, int flags)
+static int serializer_string(struct json_object* o, struct printbuf* pb, int level, int flags)
 {
-    char* string;
+    const char* string;
 
-    string = json_object_get_string(jo);	
+    string = json_object_get_string(o);	
 	sprintbuf(pb, "\"%s\"", string);
 	return 0;
 }
@@ -115,6 +119,11 @@ static void parameters_to_json_object (void)
     json_object_string_add  (parameters_json_object, "viewer_file",     parameters.viewer_file);
     json_object_string_add  (parameters_json_object, "viewer_path",     parameters.viewer_path);
     json_object_boolean_add (parameters_json_object, "viterbi",         parameters.viterbi);
+}
+
+static void parameters_from_json_object (void)
+{
+    /* TODO */
 }
 
 /*===== callback functions ==================================================*/
@@ -199,16 +208,35 @@ void parameters_print (void)
     printf("viterbi        : %s\n",   parameters.viterbi == true ? "true" : "false");
 }
 
+void parameters_save (void)
+{
+    printf("save parameters to file %s\n", parameters_file);
+    json_object_to_file_ext(parameters_file, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
+}
+
+void parameters_load (void)
+{
+    /* TODO */
+}
+
 void parameters_init (void)
 {
-    /* TODO load parameters from file or with defaults */
+    /* TODO load parameters */
+    /* if (file_exist)      */
+    /*     load_from_file   */
+    /* else                 */
+    /*     load_defaults    */
+
     parameters_default();
+    parameters_to_json_object();
+    parameters_save();
+
+    exit(0);
 
     /*--- for test ---*/
     parameters_print();
     parameters_to_json_object();
     printf ("%s\n",json_object_to_json_string_ext(parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
 
-    exit(0);
 }
 
