@@ -80,6 +80,38 @@ static void json_object_boolean_add(struct json_object* obj, char* key, bool val
     json_object_object_add(obj, key, o);
 }
 
+static void json_object_int_get(struct json_object* obj, const char* key, int* val)
+{
+    struct json_object* o;
+    
+    json_object_object_get_ex(parameters_json_object, key, &o);
+    *val = json_object_get_int(o);
+}
+
+static void json_object_string_get(struct json_object* obj, const char* key, char** val)
+{
+    struct json_object* o;
+    
+    json_object_object_get_ex(parameters_json_object, key, &o);
+    *val = (char*)json_object_get_string(o);
+}
+
+static void json_object_boolean_get(struct json_object* obj, const char* key, bool* val)
+{
+    struct json_object* o;
+    
+    json_object_object_get_ex(parameters_json_object, key, &o);
+    *val = json_object_get_boolean(o);
+}
+
+static void json_object_double_get(struct json_object* obj, const char* key, float* val)
+{
+    struct json_object* o;
+    
+    json_object_object_get_ex(parameters_json_object, key, &o);
+    *val = (float)json_object_get_double(o);
+}
+
 static void parameters_to_json_object (void)
 {
     parameters_json_object = json_object_new_object();
@@ -123,7 +155,43 @@ static void parameters_to_json_object (void)
 
 static void parameters_from_json_object (void)
 {
-    /* TODO */
+    struct json_object* jso;
+
+    json_object_int_get     (parameters_json_object, "bandwidth",       &parameters.bandwidth);
+    json_object_string_get  (parameters_json_object, "constellation",   &parameters.constellation);
+    json_object_string_get  (parameters_json_object, "debug",           &parameters.debug);
+    json_object_boolean_get (parameters_json_object, "fastdrift",       &parameters.fastdrift);
+    json_object_boolean_get (parameters_json_object, "fastlock",        &parameters.fastlock);
+    json_object_string_get  (parameters_json_object, "fec",             &parameters.fec);
+    json_object_string_get  (parameters_json_object, "framesizes",      &parameters.framesizes);
+    json_object_double_get  (parameters_json_object, "frequency",       &parameters.frequency);
+    json_object_int_get     (parameters_json_object, "gain",            &parameters.gain);
+    json_object_boolean_get (parameters_json_object, "gui",             &parameters.gui);
+    json_object_boolean_get (parameters_json_object, "hardmetric",      &parameters.hardmetric);
+    json_object_int_get     (parameters_json_object, "inpipe",          &parameters.inpipe);
+    json_object_int_get     (parameters_json_object, "ldpc_bf",         &parameters.ldpc_bf);
+    json_object_string_get  (parameters_json_object, "ldpchelper_file", &parameters.ldpchelper_file);
+    json_object_string_get  (parameters_json_object, "ldpchelper_path", &parameters.ldpchelper_path);
+    json_object_string_get  (parameters_json_object, "leandvb_file",    &parameters.leandvb_file);
+    json_object_string_get  (parameters_json_object, "leandvb_path",    &parameters.leandvb_path);
+    json_object_double_get  (parameters_json_object, "lnb_lo",          &parameters.lnb_lo);
+    json_object_boolean_get (parameters_json_object, "maxsens",         &parameters.maxsens);
+    json_object_string_get  (parameters_json_object, "modcods",         &parameters.modcods);
+    json_object_int_get     (parameters_json_object, "nhelpers",        &parameters.nhelpers);
+    json_object_int_get     (parameters_json_object, "ppm",             &parameters.ppm);
+    json_object_double_get  (parameters_json_object, "rolloff",         &parameters.rolloff);
+    json_object_double_get  (parameters_json_object, "rrcrej",          &parameters.rrcrej);
+    json_object_int_get     (parameters_json_object, "rtldongle",       &parameters.rtldongle);
+    json_object_string_get  (parameters_json_object, "rtlsdr_file",     &parameters.rtlsdr_file);
+    json_object_string_get  (parameters_json_object, "rtlsdr_path",     &parameters.rtlsdr_path);
+    json_object_string_get  (parameters_json_object, "sampler",         &parameters.sampler);
+    json_object_string_get  (parameters_json_object, "standard",        &parameters.standard);
+    json_object_boolean_get (parameters_json_object, "strongpls",       &parameters.strongpls);
+    json_object_int_get     (parameters_json_object, "symbolrate",      &parameters.symbolrate);
+    json_object_int_get     (parameters_json_object, "tune",            &parameters.tune);
+    json_object_string_get  (parameters_json_object, "viewer_file",     &parameters.viewer_file);
+    json_object_string_get  (parameters_json_object, "viewer_path",     &parameters.viewer_path);
+    json_object_boolean_get (parameters_json_object, "viterbi",         &parameters.viterbi);
 }
 
 /*===== callback functions ==================================================*/
@@ -234,8 +302,9 @@ void parameters_init (void)
 //    parameters_default();
 //    parameters_to_json_object();
     parameters_load();
+    parameters_from_json_object();
     parameters_print();
-    printf ("%s\n",json_object_to_json_string_ext(parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
+//    printf ("%s\n",json_object_to_json_string_ext(parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
 
     exit(0);
 }
