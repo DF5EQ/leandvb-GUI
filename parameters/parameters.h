@@ -59,6 +59,7 @@ parameters_t;
 /*===== public functions ====================================================*/
 
 void parameters_init    (void);
+void parameters_deinit  (void);
 void parameters_print   (void);
 void parameters_default (void);
 void parameters_load    (void);

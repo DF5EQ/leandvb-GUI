@@ -31,8 +31,8 @@ int main (int argc, char *argv[])
     setlocale(LC_ALL, "en_US.UTF-8");
     parameters_init();
     gui_init ();
-
     gtk_main ();
+    parameters_deinit();
 
   return 0;
 }

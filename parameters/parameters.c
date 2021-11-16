@@ -15,7 +15,8 @@
 
 /*===== public constants ====================================================*/
 
-static const char* parameters_file = "parameters.json";
+static const char* parameters_file_name = "parameters.json";
+static FILE*       parameters_file = NULL;
 
 /*===== private variables ===================================================*/
 
@@ -200,6 +201,8 @@ static void parameters_from_json_object (void)
 
 void parameters_default(void)
 {
+    /* load parameters with defaults */
+
     printf("load parameters with defaults\n");
 
     parameters.bandwidth       = 2400;
@@ -243,6 +246,8 @@ void parameters_default(void)
 
 void parameters_print (void)
 {
+    /* print parameters to console */
+
     printf("bandwidth      : %u\n",   parameters.bandwidth);
     printf("constellation  : %s\n",   parameters.constellation);
     printf("debug          : %s\n",   parameters.debug);
@@ -282,33 +287,42 @@ void parameters_print (void)
 
 void parameters_save (void)
 {
-    printf("save parameters to file %s\n", parameters_file);
+    /* save parameters to file */
+
+    printf("save parameters to file %s\n", parameters_file_name);
     parameters_to_json_object();
-    json_object_to_file_ext(parameters_file, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
+    json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
 }
 
 void parameters_load (void)
 {
-    printf("load parameters from file %s\n", parameters_file);
-    parameters_json_object = json_object_from_file(parameters_file);
+    /* load parameters from file */
+
+    printf("load parameters from file %s\n", parameters_file_name);
+    parameters_json_object = json_object_from_file(parameters_file_name);
     parameters_from_json_object();
 }
 
 void parameters_init (void)
 {
-    /* TODO load parameters */
-    /* if (file_exist)      */
-    /*     load_from_file   */
-    /* else                 */
-    /*     load_defaults    */
+    /* load parameters from file or with defaults */
 
-    /*--- for test ---*/
-    parameters_default();
-    parameters_print();
+    parameters_file = fopen(parameters_file_name, "r");
+    if (parameters_file == NULL)
+    {   /* file does not exist */
+        parameters_default();
+    }
+    else
+    {   /* file exists */
+        fclose(parameters_file);
+        parameters_load();
+    }
+}
 
-    parameters_load();
-    parameters_print();
+void parameters_deinit (void)
+{
+    /* save parameters to file */
 
-    exit(0);
+    parameters_save();
 }
 
