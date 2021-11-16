@@ -4,10 +4,12 @@
 /*===== file header =========================================================*/
 
 /*===== includes ============================================================*/
+
 #include <stdint.h>
 #include <stdbool.h>
 
 /*===== public datatypes ====================================================*/
+
 typedef struct
 {
     int   bandwidth;
@@ -55,8 +57,11 @@ parameters_t;
 /*===== public variables ====================================================*/
 
 /*===== public functions ====================================================*/
+
 void parameters_init    (void);
 void parameters_print   (void);
 void parameters_default (void);
+void parameters_load    (void);
+void parameters_save    (void);
 
 #endif

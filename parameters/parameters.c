@@ -237,6 +237,8 @@ void parameters_default(void)
     parameters.viewer_file     = "ffplay -v 0";
     parameters.viewer_path     = "";
     parameters.viterbi         = false;
+
+    parameters_to_json_object();
 }
 
 void parameters_print (void)
@@ -281,6 +283,7 @@ void parameters_print (void)
 void parameters_save (void)
 {
     printf("save parameters to file %s\n", parameters_file);
+    parameters_to_json_object();
     json_object_to_file_ext(parameters_file, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
 }
 
@@ -288,6 +291,7 @@ void parameters_load (void)
 {
     printf("load parameters from file %s\n", parameters_file);
     parameters_json_object = json_object_from_file(parameters_file);
+    parameters_from_json_object();
 }
 
 void parameters_init (void)
@@ -299,12 +303,11 @@ void parameters_init (void)
     /*     load_defaults    */
 
     /*--- for test ---*/
-//    parameters_default();
-//    parameters_to_json_object();
-    parameters_load();
-    parameters_from_json_object();
+    parameters_default();
     parameters_print();
-//    printf ("%s\n",json_object_to_json_string_ext(parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
+
+    parameters_load();
+    parameters_print();
 
     exit(0);
 }
