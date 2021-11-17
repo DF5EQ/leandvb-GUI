@@ -360,7 +360,6 @@ void parameters_load (void)
 
     printf("load parameters from file %s\n", parameters_file_name);
     parameters_json_object = json_object_from_file(parameters_file_name);
-    parameters_from_json_object();
 }
 
 int parameters_get_int (const char* key, int* const val)
