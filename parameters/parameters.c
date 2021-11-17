@@ -115,8 +115,6 @@ static void json_object_double_get(struct json_object* obj, const char* key, flo
 
 static void parameters_to_json_object (void)
 {
-    parameters_json_object = json_object_new_object();
-
     json_object_int_add     (parameters_json_object, "bandwidth",       parameters.bandwidth);
     json_object_string_add  (parameters_json_object, "constellation",   parameters.constellation);
     json_object_string_add  (parameters_json_object, "debug",           parameters.debug);
@@ -156,8 +154,6 @@ static void parameters_to_json_object (void)
 
 static void parameters_from_json_object (void)
 {
-    struct json_object* jso;
-
     json_object_int_get     (parameters_json_object, "bandwidth",       &parameters.bandwidth);
     json_object_string_get  (parameters_json_object, "constellation",   &parameters.constellation);
     json_object_string_get  (parameters_json_object, "debug",           &parameters.debug);
@@ -244,45 +240,110 @@ void parameters_default(void)
     parameters_to_json_object();
 }
 
+static void parameters_print_int (const char* key)
+{
+    int val;
+
+    printf("%-15s: ", key);
+
+    if( 0 > parameters_get_int(key, &val))
+    {
+        printf("<undefined>\n");
+    }
+    else
+    {
+        printf("%d\n", val);
+    }
+}
+
+static void parameters_print_bool (const char* key)
+{
+    bool val;
+
+    printf("%-15s: ", key);
+
+    if( 0 > parameters_get_bool(key, &val))
+    {
+        printf("<undefined>\n");
+    }
+    else
+    {
+        printf("%s\n", val?"true":"false");
+    }
+}
+
+static void parameters_print_string (const char* key)
+{
+    const char* val;
+
+    printf("%-15s: ", key);
+
+    if( 0 > parameters_get_string(key, &val))
+    {
+        printf("<undefined>\n");
+    }
+    else
+    {
+        printf("%s\n", val);
+    }
+}
+
+static void parameters_print_float (const char* key, const char* format)
+{
+    float val;
+
+    printf("%-15s: ", key);
+
+    if( 0 > parameters_get_float(key, &val))
+    {
+        printf("<undefined>\n");
+    }
+    else
+    {
+        printf(format, val);
+        printf("\n");
+    }
+}
+
 void parameters_print (void)
 {
     /* print parameters to console */
 
-    printf("bandwidth      : %u\n",   parameters.bandwidth);
-    printf("constellation  : %s\n",   parameters.constellation);
-    printf("debug          : %s\n",   parameters.debug);
-    printf("fastdrift      : %s\n",   parameters.fastdrift == true ? "true" : "false");
-    printf("fastlock       : %s\n",   parameters.fastlock == true ? "true" : "false");
-    printf("fec            : %s\n",   parameters.fec);
-    printf("framesizes     : %s\n",   parameters.framesizes);
-    printf("frequency      : %.3f\n", parameters.frequency);
-    printf("gain           : %u\n",   parameters.gain);
-    printf("gui            : %s\n",   parameters.gui == true ? "true" : "false");
-    printf("hardmetric     : %s\n",   parameters.hardmetric == true ? "true" : "false");
-    printf("inpipe         : %u\n",   parameters.inpipe);
-    printf("ldpc bitflip   : %u\n",   parameters.ldpc_bf);
-    printf("ldpchelper file: %s\n",   parameters.ldpchelper_file);
-    printf("ldpchelper path: %s\n",   parameters.ldpchelper_path);
-    printf("leandvb file   : %s\n",   parameters.leandvb_file);
-    printf("leandvb path   : %s\n",   parameters.leandvb_path);
-    printf("lnb_lo         : %.3f\n", parameters.lnb_lo);
-    printf("maxsens        : %s\n",   parameters.maxsens == true ? "true" : "false");
-    printf("modcods        : %s\n",   parameters.modcods);
-    printf("nhelpers       : %u\n",   parameters.nhelpers);
-    printf("ppm            : %u\n",   parameters.ppm);
-    printf("rolloff        : %.2f\n", parameters.rolloff);
-    printf("rrcrej         : %.1f\n", parameters.rrcrej);
-    printf("rtldongle      : %u\n",   parameters.rtldongle);
-    printf("rtlsdr file    : %s\n",   parameters.rtlsdr_file);
-    printf("rtlsdr path    : %s\n",   parameters.rtlsdr_path);
-    printf("sampler        : %s\n",   parameters.sampler);
-    printf("standard       : %s\n",   parameters.standard);
-    printf("strongpls      : %s\n",   parameters.strongpls == true ? "true" : "false");
-    printf("symbolrate     : %u\n",   parameters.symbolrate);
-    printf("tune           : %u\n",   parameters.tune);
-    printf("viewer file    : %s\n",   parameters.viewer_file);
-    printf("viewer path    : %s\n",   parameters.viewer_path);
-    printf("viterbi        : %s\n",   parameters.viterbi == true ? "true" : "false");
+    parameters_print_int    ("bandwidth");
+    parameters_print_string ("constellation");
+    parameters_print_string ("debug");
+    parameters_print_bool   ("fastdrift");
+    parameters_print_bool   ("fastlock");
+    parameters_print_string ("fec");
+    parameters_print_string ("framesizes");
+    parameters_print_float  ("frequency","%.3f");
+    parameters_print_int    ("gain");
+    parameters_print_bool   ("gui");
+    parameters_print_bool   ("hardmetric");
+    parameters_print_int    ("inpipe");
+    parameters_print_int    ("ldpc_bf");
+    parameters_print_string ("ldpchelper_file");
+    parameters_print_string ("ldpchelper_path");
+    parameters_print_string ("leandvb_file");
+    parameters_print_string ("leandvb_path");
+    parameters_print_float  ("lnb_lo","%.3f");
+    parameters_print_bool   ("maxsens");
+    parameters_print_string ("modcods");
+    parameters_print_int    ("nhelpers");
+    parameters_print_int    ("ppm");
+    parameters_print_float  ("rolloff","%.2f");
+    parameters_print_float  ("rrcrej","%.1f");
+    parameters_print_int    ("rtldongle");
+    parameters_print_string ("rtlsdr_file");
+    parameters_print_string ("rtlsdr_path");
+    parameters_print_string ("sampler");
+    parameters_print_string ("standard");
+    parameters_print_bool   ("strongpls");
+    parameters_print_int    ("symbolrate");
+    parameters_print_int    ("tune");
+    parameters_print_string ("viewer_file");
+    parameters_print_string ("viewer_path");
+    parameters_print_bool   ("viterbi");
 }
 
 void parameters_save (void)
@@ -501,6 +562,9 @@ int parameters_add_string (const char* key, const char* val)
 
 void parameters_init (void)
 {
+    /* create new json_object for parameters */
+    parameters_json_object = json_object_new_object();
+
     /* load parameters from file or with defaults */
 
     parameters_file = fopen(parameters_file_name, "r");
@@ -515,14 +579,13 @@ void parameters_init (void)
     }
 
     /*--- for test ---*/
-    int res = 42;
-    const char* v = "hello";
 
-    res = parameters_add_string ("neu", v);
-    printf("result: %d %s\n", res, v);
-    v = "hey";
-    res = parameters_get_string ("neu", &v);
-    printf("result: %d %s\n", res, v);
+    parameters_print();
+    exit(0);
+
+    parameters_to_json_object();
+    printf("%s\n", json_object_to_json_string_ext(parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
+    json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
 
     exit(0);
 }
