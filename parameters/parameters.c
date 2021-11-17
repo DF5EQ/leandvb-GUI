@@ -266,48 +266,48 @@ void parameters_default(void)
 
     printf("load parameters with defaults\n");
 
-    parameters.bandwidth       = 2400;
-    parameters.constellation   = "QPSK";
-    parameters.debug           = "all";
-    parameters.fastdrift       = false;
-    parameters.fastlock        = false;
-    parameters.fec             = "1/2";
-    parameters.framesizes      = "0x01";
-    parameters.frequency       = 10491.500;
-    parameters.gain            = 36;
-    parameters.gui             = true;
-    parameters.hardmetric      = false;
-    parameters.inpipe          = 32000000;
-    parameters.ldpc_bf         = 0;
-    parameters.ldpchelper_file = "ldpc_tool";
-    parameters.ldpchelper_path = "./";
-    parameters.leandvb_file    = "leandvb";
-    parameters.leandvb_path    = "./";
-    parameters.lnb_lo          = 9750.000;
-    parameters.maxsens         = false;
-    parameters.modcods         = "0x0040";
-    parameters.nhelpers        = 6;
-    parameters.ppm             = 0;
-    parameters.rolloff         = 0.35;
-    parameters.rrcrej          = 30.0;
-    parameters.rtldongle       = 0;
-    parameters.rtlsdr_file     = "rtl_sdr";
-    parameters.rtlsdr_path     = "";
-    parameters.sampler         = "rrc";
-    parameters.standard        = "DVB-S2";
-    parameters.strongpls       = false;
-    parameters.symbolrate      = 1500;
-    parameters.tune            = 0;
-    parameters.viewer_file     = "ffplay -v 0";
-    parameters.viewer_path     = "";
-    parameters.viterbi         = false;
-
-    parameters_to_json_object();
+    parameters_add_int    ("bandwidth", 2400);
+    parameters_add_string ("constellation", "QPSK");
+    parameters_add_string ("debug", "all");
+    parameters_add_bool   ("fastdrift", false);
+    parameters_add_bool   ("fastlock", false);
+    parameters_add_string ("fec", "1/2");
+    parameters_add_string ("framesizes", "0x01");
+    parameters_add_float  ("frequency", 10491.500);
+    parameters_add_int    ("gain", 36);
+    parameters_add_bool   ("gui", true);
+    parameters_add_bool   ("hardmetric", false);
+    parameters_add_int    ("inpipe", 32000000);
+    parameters_add_int    ("ldpc_bf", 0);
+    parameters_add_string ("ldpchelper_file", "ldpc_tool");
+    parameters_add_string ("ldpchelper_path", "./");
+    parameters_add_string ("leandvb_file", "leandvb");
+    parameters_add_string ("leandvb_path", "./");
+    parameters_add_float  ("lnb_lo", 9750.000);
+    parameters_add_bool   ("maxsens", false);
+    parameters_add_string ("modcods", "0x0040");
+    parameters_add_int    ("nhelpers", 6);
+    parameters_add_int    ("ppm", 0);
+    parameters_add_float  ("rolloff", 0.35);
+    parameters_add_float  ("rrcrej", 30.0);
+    parameters_add_int    ("rtldongle", 0);
+    parameters_add_string ("rtlsdr_file", "rtl_sdr");
+    parameters_add_string ("rtlsdr_path", "");
+    parameters_add_string ("sampler", "rrc");
+    parameters_add_string ("standard", "DVB-S2");
+    parameters_add_bool   ("strongpls", false);
+    parameters_add_int    ("symbolrate", 1500);
+    parameters_add_int    ("tune", 0);
+    parameters_add_string ("viewer_file", "ffplay -v 0");
+    parameters_add_string ("viewer_path", "");
+    parameters_add_bool   ("viterbi", false);
 }
 
 void parameters_print (void)
 {
     /* print parameters to console */
+
+    printf("print parameters\n");
 
     parameters_print_int    ("bandwidth");
     parameters_print_string ("constellation");
