@@ -191,55 +191,6 @@ static void parameters_from_json_object (void)
     json_object_boolean_get (parameters_json_object, "viterbi",         &parameters.viterbi);
 }
 
-/*===== callback functions ==================================================*/
-
-/*===== public functions ====================================================*/
-
-void parameters_default(void)
-{
-    /* load parameters with defaults */
-
-    printf("load parameters with defaults\n");
-
-    parameters.bandwidth       = 2400;
-    parameters.constellation   = "QPSK";
-    parameters.debug           = "all";
-    parameters.fastdrift       = false;
-    parameters.fastlock        = false;
-    parameters.fec             = "1/2";
-    parameters.framesizes      = "0x01";
-    parameters.frequency       = 10491.500;
-    parameters.gain            = 36;
-    parameters.gui             = true;
-    parameters.hardmetric      = false;
-    parameters.inpipe          = 32000000;
-    parameters.ldpc_bf         = 0;
-    parameters.ldpchelper_file = "ldpc_tool";
-    parameters.ldpchelper_path = "./";
-    parameters.leandvb_file    = "leandvb";
-    parameters.leandvb_path    = "./";
-    parameters.lnb_lo          = 9750.000;
-    parameters.maxsens         = false;
-    parameters.modcods         = "0x0040";
-    parameters.nhelpers        = 6;
-    parameters.ppm             = 0;
-    parameters.rolloff         = 0.35;
-    parameters.rrcrej          = 30.0;
-    parameters.rtldongle       = 0;
-    parameters.rtlsdr_file     = "rtl_sdr";
-    parameters.rtlsdr_path     = "";
-    parameters.sampler         = "rrc";
-    parameters.standard        = "DVB-S2";
-    parameters.strongpls       = false;
-    parameters.symbolrate      = 1500;
-    parameters.tune            = 0;
-    parameters.viewer_file     = "ffplay -v 0";
-    parameters.viewer_path     = "";
-    parameters.viterbi         = false;
-
-    parameters_to_json_object();
-}
-
 static void parameters_print_int (const char* key)
 {
     int val;
@@ -303,6 +254,55 @@ static void parameters_print_float (const char* key, const char* format)
         printf(format, val);
         printf("\n");
     }
+}
+
+/*===== callback functions ==================================================*/
+
+/*===== public functions ====================================================*/
+
+void parameters_default(void)
+{
+    /* load parameters with defaults */
+
+    printf("load parameters with defaults\n");
+
+    parameters.bandwidth       = 2400;
+    parameters.constellation   = "QPSK";
+    parameters.debug           = "all";
+    parameters.fastdrift       = false;
+    parameters.fastlock        = false;
+    parameters.fec             = "1/2";
+    parameters.framesizes      = "0x01";
+    parameters.frequency       = 10491.500;
+    parameters.gain            = 36;
+    parameters.gui             = true;
+    parameters.hardmetric      = false;
+    parameters.inpipe          = 32000000;
+    parameters.ldpc_bf         = 0;
+    parameters.ldpchelper_file = "ldpc_tool";
+    parameters.ldpchelper_path = "./";
+    parameters.leandvb_file    = "leandvb";
+    parameters.leandvb_path    = "./";
+    parameters.lnb_lo          = 9750.000;
+    parameters.maxsens         = false;
+    parameters.modcods         = "0x0040";
+    parameters.nhelpers        = 6;
+    parameters.ppm             = 0;
+    parameters.rolloff         = 0.35;
+    parameters.rrcrej          = 30.0;
+    parameters.rtldongle       = 0;
+    parameters.rtlsdr_file     = "rtl_sdr";
+    parameters.rtlsdr_path     = "";
+    parameters.sampler         = "rrc";
+    parameters.standard        = "DVB-S2";
+    parameters.strongpls       = false;
+    parameters.symbolrate      = 1500;
+    parameters.tune            = 0;
+    parameters.viewer_file     = "ffplay -v 0";
+    parameters.viewer_path     = "";
+    parameters.viterbi         = false;
+
+    parameters_to_json_object();
 }
 
 void parameters_print (void)
