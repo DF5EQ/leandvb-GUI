@@ -303,6 +303,202 @@ void parameters_load (void)
     parameters_from_json_object();
 }
 
+int parameters_get_int (const char* key, int* const val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_int) return -2;
+
+    *val = json_object_get_int(jobj);
+
+    return 0;
+}
+
+int parameters_get_float (const char* key, float* const val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_double) return -2;
+
+    *val = json_object_get_double(jobj);
+
+    return 0;
+}
+
+int parameters_get_bool (const char* key, bool* const val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_boolean) return -2;
+
+    *val = json_object_get_boolean(jobj);
+
+    return 0;
+}
+
+int parameters_get_string (const char* key, const char** val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_string) return -2;
+
+    *val = json_object_get_string(jobj);
+
+    return 0;
+}
+
+int parameters_set_int (const char* key, const int val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_int) return -2;
+
+    ret = json_object_set_int(jobj, val);
+    if (ret == false) return -3;
+
+    return 0;
+}
+
+int parameters_set_float (const char* key, const float val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_double) return -2;
+
+    ret = json_object_set_double(jobj, val);
+    if (ret == false) return -3;
+
+    return 0;
+}
+
+int parameters_set_bool (const char* key, const bool val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_boolean) return -2;
+
+    ret = json_object_set_boolean(jobj, val);
+    if (ret == false) return -3;
+
+    return 0;
+}
+
+int parameters_set_string (const char* key, const char* val)
+{
+    struct json_object* jobj;
+    enum   json_type    jtyp;
+    bool                ret;
+
+    ret = json_object_object_get_ex(parameters_json_object, key, &jobj);
+    if (ret == false) return -1;
+
+    jtyp = json_object_get_type(jobj);
+    if (jtyp != json_type_string) return -2;
+
+    ret = json_object_set_string(jobj, val);
+    if (ret == false) return -3;
+
+    return 0;
+}
+
+int parameters_add_int (const char* key, const int val)
+{
+    struct json_object* jobj;
+    int                 ret;
+
+    jobj = json_object_new_int(val);
+    if (jobj == NULL) return -1;
+
+    ret = json_object_object_add(parameters_json_object, key, jobj);
+    if (ret < 0) return -2;
+
+    return 0;
+}
+
+int parameters_add_float (const char* key, const float val)
+{
+    struct json_object* jobj;
+    int                 ret;
+
+    jobj = json_object_new_double(val);
+    if (jobj == NULL) return -1;
+
+    ret = json_object_object_add(parameters_json_object, key, jobj);
+    if (ret < 0) return -2;
+
+    return 0;
+}
+
+int parameters_add_bool (const char* key, const bool val)
+{
+    struct json_object* jobj;
+    int                 ret;
+
+    jobj = json_object_new_boolean(val);
+    if (jobj == NULL) return -1;
+
+    ret = json_object_object_add(parameters_json_object, key, jobj);
+    if (ret < 0) return -2;
+
+    return 0;
+}
+
+int parameters_add_string (const char* key, const char* val)
+{
+    struct json_object* jobj;
+    int                 ret;
+
+    jobj = json_object_new_string(val);
+    if (jobj == NULL) return -1;
+
+    ret = json_object_object_add(parameters_json_object, key, jobj);
+    if (ret < 0) return -2;
+
+    return 0;
+}
+
 void parameters_init (void)
 {
     /* load parameters from file or with defaults */
@@ -317,6 +513,18 @@ void parameters_init (void)
         fclose(parameters_file);
         parameters_load();
     }
+
+    /*--- for test ---*/
+    int res = 42;
+    const char* v = "hello";
+
+    res = parameters_add_string ("neu", v);
+    printf("result: %d %s\n", res, v);
+    v = "hey";
+    res = parameters_get_string ("neu", &v);
+    printf("result: %d %s\n", res, v);
+
+    exit(0);
 }
 
 void parameters_deinit (void)
