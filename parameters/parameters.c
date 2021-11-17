@@ -351,7 +351,6 @@ void parameters_save (void)
     /* save parameters to file */
 
     printf("save parameters to file %s\n", parameters_file_name);
-    parameters_to_json_object();
     json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
 }
 
@@ -581,13 +580,9 @@ void parameters_init (void)
     /*--- for test ---*/
 
     parameters_print();
+    parameters_save();
     exit(0);
 
-    parameters_to_json_object();
-    printf("%s\n", json_object_to_json_string_ext(parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY));
-    json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
-
-    exit(0);
 }
 
 void parameters_deinit (void)

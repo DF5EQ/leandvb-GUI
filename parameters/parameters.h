@@ -63,7 +63,7 @@ void parameters_deinit  (void);
 void parameters_print   (void);
 void parameters_default (void);
 void parameters_load    (void); /* TODO change from struct to json_object */
-void parameters_save    (void); /* TODO change from struct to json_object */
+void parameters_save    (void);
 
 int parameters_get_int    (const char* key, int*   const  val);
 int parameters_get_float  (const char* key, float* const  val);
