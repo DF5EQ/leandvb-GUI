@@ -25,13 +25,13 @@ static json_object* parameters_json_object;
 
 /*===== private functions ===================================================*/
 
-static int serializer_double(struct json_object* o, struct printbuf* pb, int level, int flags)
+static int serializer_double(struct json_object* obj, struct printbuf* pb, int level, int flags)
 {
     char* format;
     double value;
 
-    format = json_object_get_userdata(o);
-    value  = json_object_get_double(o); 	
+    format = json_object_get_userdata(obj);
+    value  = json_object_get_double(obj); 	
 	sprintbuf(pb, format, value);
 
 	return 0;
