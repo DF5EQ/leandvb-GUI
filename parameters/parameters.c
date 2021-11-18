@@ -39,15 +39,6 @@ static int serializer_double(struct json_object* o, struct printbuf* pb, int lev
 	return 0;
 }
 
-static int serializer_string(struct json_object* o, struct printbuf* pb, int level, int flags)
-{
-    const char* string;
-
-    string = json_object_get_string(o);	
-	sprintbuf(pb, "\"%s\"", string);
-	return 0;
-}
-
 static void parameters_print_int (const char* key)
 {
     int val;
@@ -208,7 +199,7 @@ void parameters_save (void)
     /* save parameters to file */
 
     printf("save parameters to file %s\n", parameters_file_name);
-    json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
+    json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_NOSLASHESCAPE);
 }
 
 void parameters_load (void)
@@ -410,8 +401,6 @@ int parameters_add_string (const char* key, const char* val)
 
     jobj = json_object_new_string(val);
     if (jobj == NULL) return -1;
-
-    json_object_set_serializer(jobj, serializer_string, NULL, NULL);
 
     ret = json_object_object_add(parameters_json_object, key, jobj);
     if (ret < 0) return -2;
