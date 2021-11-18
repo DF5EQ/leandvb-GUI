@@ -20,7 +20,15 @@ static GtkBuilder*     builder;
 static GtkCssProvider* css_provider;
 
 /*----- exposed widgets -----*/
+
+/*-- main window --*/
 static GtkWidget* window;
+static GtkComboBoxText* fec_combobox;
+static gchar* fec_list[]       = {"1/2", "2/3", "3/4", "4/5", "5/6", "6/7", "7/8" };
+static gint   fec_list_default = 3;
+
+
+/*-- settings dialog --*/
 static GtkDialog* settings_dialog;
 
 /* settings DVB-S */
@@ -53,6 +61,8 @@ static GtkSpinButton* nhelpers_spinbutton;
 
 /*===== callback functions ==================================================*/
 
+/*----- main window -----*/
+
 void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 {
 	gtk_main_quit();
@@ -75,6 +85,14 @@ void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
 
     /* hide the settingsdialog after it's closing */
     gtk_widget_hide (GTK_WIDGET(settings_dialog));
+}
+
+void fec_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
+{
+    gchar* text;
+
+    text = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT(widget));
+    printf("fec changed to %s\n", text);
 }
 
 /*----- settings  files -----*/
@@ -116,6 +134,7 @@ gboolean viewer_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y
 }
 
 /*----- settings leandvb -----*/
+
 void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
 {
     gchar* text;
@@ -177,6 +196,8 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
 
 void gui_init (void)
 {
+    int i;
+
     /* load gui elements */
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "gui/gui.ui", NULL);
@@ -187,8 +208,13 @@ void gui_init (void)
     gtk_css_provider_load_from_path (css_provider, "gui/gui.css", NULL);
     gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-    /* expose needed widgets */
-    window              = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
+    /*--- expose needed widgets ---*/
+
+    /* main window */
+    window       = GTK_WIDGET         (gtk_builder_get_object (builder, "main_window"));
+    fec_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "fec_combobox"));
+
+    /* settings dialog */
     settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
 
         /* settings DVB-S */
@@ -214,6 +240,14 @@ void gui_init (void)
         ldpcbf_spinbutton   = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ldpcbf_spinbutton"));
         nhelpers_label      = GTK_LABEL       (gtk_builder_get_object (builder, "nhelpers_label"));
         nhelpers_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "nhelpers_spinbutton"));
+
+    /* load widgets */
+    for( i=0; i<sizeof(fec_list)/sizeof(gchar*); i++)
+    {
+        gtk_combo_box_text_append_text (fec_combobox, fec_list[i]);
+    }
+    gtk_combo_box_set_active ((GtkComboBox*)fec_combobox, fec_list_default);
+
 
     /* connect the signals */
     gtk_builder_connect_signals(builder, NULL);
