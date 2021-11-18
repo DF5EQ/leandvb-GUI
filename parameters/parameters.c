@@ -18,7 +18,6 @@
 /*===== private variables ===================================================*/
 
 static const char*  parameters_file_name = "parameters.json";
-static FILE*        parameters_file;
 static json_object* parameters_json_object;
 
 /*===== public variables ====================================================*/
@@ -408,28 +407,23 @@ int parameters_add_string (const char* key, const char* val)
 
 void parameters_init (void)
 {
+    FILE* file;
+
     /* create new json_object for parameters */
     parameters_json_object = json_object_new_object();
 
     /* load parameters from file or with defaults */
 
-    parameters_file = fopen(parameters_file_name, "r");
-    if (parameters_file == NULL)
+    file = fopen(parameters_file_name, "r");
+    if (file == NULL)
     {   /* file does not exist */
         parameters_default();
     }
     else
     {   /* file exists */
-        fclose(parameters_file);
+        fclose(file);
         parameters_load();
     }
-
-    /*--- for test ---*/
-
-    parameters_print();
-    parameters_save();
-    exit(0);
-
 }
 
 void parameters_deinit (void)
