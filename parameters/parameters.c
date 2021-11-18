@@ -15,12 +15,10 @@
 
 /*===== public constants ====================================================*/
 
-static const char* parameters_file_name = "parameters.json";
-static FILE*       parameters_file = NULL;
-
 /*===== private variables ===================================================*/
 
-static parameters_t parameters;
+static const char*  parameters_file_name = "parameters.json";
+static FILE*        parameters_file;
 static json_object* parameters_json_object;
 
 /*===== public variables ====================================================*/
