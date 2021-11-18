@@ -35,6 +35,7 @@ static int serializer_double(struct json_object* o, struct printbuf* pb, int lev
     format = json_object_get_userdata(o);
     value  = json_object_get_double(o); 	
 	sprintbuf(pb, format, value);
+
 	return 0;
 }
 
@@ -129,7 +130,7 @@ void parameters_default(void)
     parameters_add_bool   ("fastlock", false);
     parameters_add_string ("fec", "1/2");
     parameters_add_string ("framesizes", "0x01");
-    parameters_add_float  ("frequency", 10491.500);
+    parameters_add_float  ("frequency", 10491.500, "%.3f");
     parameters_add_int    ("gain", 36);
     parameters_add_bool   ("gui", true);
     parameters_add_bool   ("hardmetric", false);
@@ -139,13 +140,13 @@ void parameters_default(void)
     parameters_add_string ("ldpchelper_path", "./");
     parameters_add_string ("leandvb_file", "leandvb");
     parameters_add_string ("leandvb_path", "./");
-    parameters_add_float  ("lnb_lo", 9750.000);
+    parameters_add_float  ("lnb_lo", 9750.000, "%.3f");
     parameters_add_bool   ("maxsens", false);
     parameters_add_string ("modcods", "0x0040");
     parameters_add_int    ("nhelpers", 6);
     parameters_add_int    ("ppm", 0);
-    parameters_add_float  ("rolloff", 0.35);
-    parameters_add_float  ("rrcrej", 30.0);
+    parameters_add_float  ("rolloff", 0.35, "%.2f");
+    parameters_add_float  ("rrcrej", 30.0, "%.1f");
     parameters_add_int    ("rtldongle", 0);
     parameters_add_string ("rtlsdr_file", "rtl_sdr");
     parameters_add_string ("rtlsdr_path", "");
@@ -372,13 +373,15 @@ int parameters_add_int (const char* key, const int val)
     return 0;
 }
 
-int parameters_add_float (const char* key, const float val)
+int parameters_add_float (const char* key, const float val, char* format)
 {
     struct json_object* jobj;
     int                 ret;
 
     jobj = json_object_new_double(val);
     if (jobj == NULL) return -1;
+
+    json_object_set_serializer(jobj, serializer_double, format, NULL);
 
     ret = json_object_object_add(parameters_json_object, key, jobj);
     if (ret < 0) return -2;
@@ -407,6 +410,8 @@ int parameters_add_string (const char* key, const char* val)
 
     jobj = json_object_new_string(val);
     if (jobj == NULL) return -1;
+
+    json_object_set_serializer(jobj, serializer_string, NULL, NULL);
 
     ret = json_object_object_add(parameters_json_object, key, jobj);
     if (ret < 0) return -2;
