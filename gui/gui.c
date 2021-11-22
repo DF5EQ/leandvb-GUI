@@ -62,6 +62,45 @@ static GtkSpinButton* nhelpers_spinbutton;
 
 /*===== private functions ===================================================*/
 
+static void expose_widgets (void)
+{
+    /* main window */
+    window           = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
+    fec_entry        = GTK_ENTRY  (gtk_builder_get_object (builder, "fec_entry"));
+    lnblo_entry      = GTK_ENTRY  (gtk_builder_get_object (builder, "lnblo_entry"));
+    tune_entry       = GTK_ENTRY  (gtk_builder_get_object (builder, "tune_entry"));
+    bandwidth_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "bandwidth_entry"));
+    symbolrate_entry = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
+    frequency_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
+
+    /* settings dialog */
+    settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
+
+    /* settings DVB-S */
+    constellation_label    = GTK_LABEL          (gtk_builder_get_object (builder, "constellation_label"));
+    constellation_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "constellation_combobox"));
+    coderate_label         = GTK_LABEL          (gtk_builder_get_object (builder, "coderate_label"));
+    coderate_combobox      = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "coderate_combobox"));
+    viterbi_label          = GTK_LABEL          (gtk_builder_get_object (builder, "viterbi_label"));
+    viterbi_switch         = GTK_SWITCH         (gtk_builder_get_object (builder, "viterbi_switch"));
+    hardmetric_label       = GTK_LABEL          (gtk_builder_get_object (builder, "hardmetric_label"));
+    hardmetric_switch      = GTK_SWITCH         (gtk_builder_get_object (builder, "hardmetric_switch"));
+
+    /* settings DVB-S2 */
+    strongpls_label     = GTK_LABEL       (gtk_builder_get_object (builder, "strongpls_label"));
+    strongpls_switch    = GTK_SWITCH      (gtk_builder_get_object (builder, "strongpls_switch"));
+    modcods_label       = GTK_LABEL       (gtk_builder_get_object (builder, "modcods_label"));
+    modcods_entry       = GTK_ENTRY       (gtk_builder_get_object (builder, "modcods_entry"));
+    framesizes_label    = GTK_LABEL       (gtk_builder_get_object (builder, "framesizes_label"));
+    framesizes_entry    = GTK_ENTRY       (gtk_builder_get_object (builder, "framesizes_entry"));
+    fastdrift_label     = GTK_LABEL       (gtk_builder_get_object (builder, "fastdrift_label"));
+    fastdrift_switch    = GTK_SWITCH      (gtk_builder_get_object (builder, "fastdrift_switch"));
+    ldpcbf_label        = GTK_LABEL       (gtk_builder_get_object (builder, "ldpcbf_label"));
+    ldpcbf_spinbutton   = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ldpcbf_spinbutton"));
+    nhelpers_label      = GTK_LABEL       (gtk_builder_get_object (builder, "nhelpers_label"));
+    nhelpers_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "nhelpers_spinbutton"));
+}
+
 static void parameters_to_gui (void)
 {
     const char* s;
@@ -242,43 +281,8 @@ void gui_init (void)
     gtk_css_provider_load_from_path (css_provider, "gui/gui.css", NULL);
     gtk_style_context_add_provider_for_screen (gdk_screen_get_default(), GTK_STYLE_PROVIDER(css_provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-    /*--- expose needed widgets ---*/
-
-    /* main window */
-    window           = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
-    fec_entry        = GTK_ENTRY  (gtk_builder_get_object (builder, "fec_entry"));
-    lnblo_entry      = GTK_ENTRY  (gtk_builder_get_object (builder, "lnblo_entry"));
-    tune_entry       = GTK_ENTRY  (gtk_builder_get_object (builder, "tune_entry"));
-    bandwidth_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "bandwidth_entry"));
-    symbolrate_entry = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
-    frequency_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
-
-    /* settings dialog */
-    settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
-
-        /* settings DVB-S */
-        constellation_label    = GTK_LABEL          (gtk_builder_get_object (builder, "constellation_label"));
-        constellation_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "constellation_combobox"));
-        coderate_label         = GTK_LABEL          (gtk_builder_get_object (builder, "coderate_label"));
-        coderate_combobox      = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "coderate_combobox"));
-        viterbi_label          = GTK_LABEL          (gtk_builder_get_object (builder, "viterbi_label"));
-        viterbi_switch         = GTK_SWITCH         (gtk_builder_get_object (builder, "viterbi_switch"));
-        hardmetric_label       = GTK_LABEL          (gtk_builder_get_object (builder, "hardmetric_label"));
-        hardmetric_switch      = GTK_SWITCH         (gtk_builder_get_object (builder, "hardmetric_switch"));
-
-        /* settings DVB-S2 */
-        strongpls_label     = GTK_LABEL       (gtk_builder_get_object (builder, "strongpls_label"));
-        strongpls_switch    = GTK_SWITCH      (gtk_builder_get_object (builder, "strongpls_switch"));
-        modcods_label       = GTK_LABEL       (gtk_builder_get_object (builder, "modcods_label"));
-        modcods_entry       = GTK_ENTRY       (gtk_builder_get_object (builder, "modcods_entry"));
-        framesizes_label    = GTK_LABEL       (gtk_builder_get_object (builder, "framesizes_label"));
-        framesizes_entry    = GTK_ENTRY       (gtk_builder_get_object (builder, "framesizes_entry"));
-        fastdrift_label     = GTK_LABEL       (gtk_builder_get_object (builder, "fastdrift_label"));
-        fastdrift_switch    = GTK_SWITCH      (gtk_builder_get_object (builder, "fastdrift_switch"));
-        ldpcbf_label        = GTK_LABEL       (gtk_builder_get_object (builder, "ldpcbf_label"));
-        ldpcbf_spinbutton   = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ldpcbf_spinbutton"));
-        nhelpers_label      = GTK_LABEL       (gtk_builder_get_object (builder, "nhelpers_label"));
-        nhelpers_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "nhelpers_spinbutton"));
+    /* expose needed widgets */
+    expose_widgets();
 
     /* load parameters */
     parameters_to_gui();
