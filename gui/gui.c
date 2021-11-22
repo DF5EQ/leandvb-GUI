@@ -27,6 +27,7 @@ static GtkWidget* window;
 static GtkEntry*  fec_entry;
 static GtkEntry*  lnblo_entry;
 static GtkEntry*  tune_entry;
+static GtkEntry*  bandwidth_entry;
 
 /*-- settings dialog --*/
 static GtkDialog* settings_dialog;
@@ -78,6 +79,10 @@ static void parameters_to_gui (void)
     parameters_get_int ("tune", &i);
     snprintf (buf,sizeof(buf), "%d", i);
     gtk_entry_set_text ((GtkEntry*)tune_entry, buf);
+
+    parameters_get_int ("bandwidth", &i);
+    snprintf (buf,sizeof(buf), "%d", i);
+    gtk_entry_set_text ((GtkEntry*)bandwidth_entry, buf);
 }
 
 /*===== callback functions ==================================================*/
@@ -230,10 +235,11 @@ void gui_init (void)
     /*--- expose needed widgets ---*/
 
     /* main window */
-    window       = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
-    fec_entry    = GTK_ENTRY  (gtk_builder_get_object (builder, "fec_entry"));
-    lnblo_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "lnblo_entry"));
-    tune_entry   = GTK_ENTRY  (gtk_builder_get_object (builder, "tune_entry"));
+    window          = GTK_WIDGET (gtk_builder_get_object (builder, "main_window"));
+    fec_entry       = GTK_ENTRY  (gtk_builder_get_object (builder, "fec_entry"));
+    lnblo_entry     = GTK_ENTRY  (gtk_builder_get_object (builder, "lnblo_entry"));
+    tune_entry      = GTK_ENTRY  (gtk_builder_get_object (builder, "tune_entry"));
+    bandwidth_entry = GTK_ENTRY  (gtk_builder_get_object (builder, "bandwidth_entry"));
 
     /* settings dialog */
     settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
