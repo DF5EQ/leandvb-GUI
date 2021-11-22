@@ -106,7 +106,6 @@ static void parameters_to_gui (void)
     const char* s;
     int         i;
     float       f;
-    bool        b;
     char      buf[20];
 
     parameters_get_string ("fec", &s);
@@ -134,23 +133,37 @@ static void parameters_to_gui (void)
     gtk_entry_set_text ((GtkEntry*)frequency_entry, buf);
 }
 
+void parameters_from_gui (void)
+{
+    const char* s;
+    int         i;
+    float       f;
+    char      buf[20];
+
+    printf("parameters_from_gui\n");
+}
+
 /*===== callback functions ==================================================*/
 
 /*----- main window -----*/
 
 void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 {
+    /* save parameters */
+    parameters_from_gui();
+
+    /* stop the gui */
 	gtk_main_quit();
 }
 
 void button_start_clicked_cb (GtkWidget* widget, gpointer data)
 {
-	gtk_main_quit();
+    printf("TODO: %s\n", __FUNCTION__);
 }
 
 void button_stop_clicked_cb (GtkWidget* widget, gpointer data)
 {
-	gtk_main_quit();
+    printf("TODO: %s\n", __FUNCTION__);
 }
 
 void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
