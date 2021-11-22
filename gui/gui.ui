@@ -302,7 +302,6 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="width_chars">10</property>
-                    <property name="text" translatable="yes">9750.000</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
@@ -481,6 +480,15 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_entry">True</property>
+                    <items>
+                      <item translatable="yes">1/2</item>
+                      <item translatable="yes">2/3</item>
+                      <item translatable="yes">3/4</item>
+                      <item translatable="yes">4/5</item>
+                      <item translatable="yes">5/6</item>
+                      <item translatable="yes">6/7</item>
+                      <item translatable="yes">7/8</item>
+                    </items>
                     <signal name="changed" handler="fec_combobox_changed_cb" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="fec_entry">

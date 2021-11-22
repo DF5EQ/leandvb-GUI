@@ -5,6 +5,7 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include "gui.uih"
+#include "parameters.h"
 
 /*===== private datatypes ===================================================*/
 
@@ -23,10 +24,8 @@ static GtkCssProvider* css_provider;
 
 /*-- main window --*/
 static GtkWidget* window;
-static GtkComboBoxText* fec_combobox;
-static gchar* fec_list[]       = {"1/2", "2/3", "3/4", "4/5", "5/6", "6/7", "7/8" };
-static gint   fec_list_default = 3;
-
+static GtkEntry*        fec_entry;
+static GtkEntry*        lnblo_entry;
 
 /*-- settings dialog --*/
 static GtkDialog* settings_dialog;
@@ -58,6 +57,22 @@ static GtkSpinButton* nhelpers_spinbutton;
 /*===== public variables ====================================================*/
 
 /*===== private functions ===================================================*/
+
+static void parameters_to_gui (void)
+{
+    const char* s;
+    int         i;
+    float       f;
+    bool        b;
+    char buf[100];
+
+    parameters_get_string ("fec", &s);
+    gtk_entry_set_text ((GtkEntry*)fec_entry, s);
+
+    parameters_get_float ("lnb_lo", &f);
+    sprintf (buf, "%.3f", f);
+    gtk_entry_set_text ((GtkEntry*)lnblo_entry, buf);
+}
 
 /*===== callback functions ==================================================*/
 
@@ -196,8 +211,6 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
 
 void gui_init (void)
 {
-    int i;
-
     /* load gui elements */
     builder = gtk_builder_new();
     gtk_builder_add_from_file (builder, "gui/gui.ui", NULL);
@@ -212,7 +225,8 @@ void gui_init (void)
 
     /* main window */
     window       = GTK_WIDGET         (gtk_builder_get_object (builder, "main_window"));
-    fec_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "fec_combobox"));
+    fec_entry    = GTK_ENTRY          (gtk_builder_get_object (builder, "fec_entry"));
+    lnblo_entry  = GTK_ENTRY          (gtk_builder_get_object (builder, "lnblo_entry"));
 
     /* settings dialog */
     settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
@@ -241,13 +255,8 @@ void gui_init (void)
         nhelpers_label      = GTK_LABEL       (gtk_builder_get_object (builder, "nhelpers_label"));
         nhelpers_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "nhelpers_spinbutton"));
 
-    /* load widgets */
-    for( i=0; i<sizeof(fec_list)/sizeof(gchar*); i++)
-    {
-        gtk_combo_box_text_append_text (fec_combobox, fec_list[i]);
-    }
-    gtk_combo_box_set_active ((GtkComboBox*)fec_combobox, fec_list_default);
-
+    /* load parameters */
+    parameters_to_gui();
 
     /* connect the signals */
     gtk_builder_connect_signals(builder, NULL);
