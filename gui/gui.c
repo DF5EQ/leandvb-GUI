@@ -29,6 +29,7 @@ static GtkEntry*  lnblo_entry;
 static GtkEntry*  tune_entry;
 static GtkEntry*  bandwidth_entry;
 static GtkEntry*  symbolrate_entry;
+static GtkEntry*  frequency_entry;
 
 /*-- settings dialog --*/
 static GtkDialog* settings_dialog;
@@ -88,6 +89,10 @@ static void parameters_to_gui (void)
     parameters_get_int ("symbolrate", &i);
     snprintf (buf,sizeof(buf), "%d", i);
     gtk_entry_set_text ((GtkEntry*)symbolrate_entry, buf);
+
+    parameters_get_float ("frequency", &f);
+    snprintf (buf,sizeof(buf), "%.3f", f);
+    gtk_entry_set_text ((GtkEntry*)frequency_entry, buf);
 }
 
 /*===== callback functions ==================================================*/
@@ -246,6 +251,7 @@ void gui_init (void)
     tune_entry       = GTK_ENTRY  (gtk_builder_get_object (builder, "tune_entry"));
     bandwidth_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "bandwidth_entry"));
     symbolrate_entry = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
+    frequency_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
 
     /* settings dialog */
     settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
