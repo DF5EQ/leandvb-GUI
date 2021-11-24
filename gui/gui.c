@@ -146,6 +146,14 @@ void parameters_from_gui (void)
     s = gtk_entry_get_text ((GtkEntry*)lnblo_entry);
     f = atof(s);
     parameters_set_float ("lnb_lo", f, "%.3f");
+
+    s = gtk_entry_get_text ((GtkEntry*)tune_entry);
+    i = atoi(s);
+    parameters_set_int ("tune", i);
+
+    s = gtk_entry_get_text ((GtkEntry*)bandwidth_entry);
+    i = atoi(s);
+    parameters_set_int ("bandwidth", i);
 }
 
 /*===== callback functions ==================================================*/
