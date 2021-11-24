@@ -118,6 +118,8 @@ static void parameters_to_gui (void)
     float       f;
     char      buf[20];
 
+    /* load main window parameters */
+
     parameters_get_string ("fec", &s);
     snprintf (buf,sizeof(buf), "%s", s);
     gtk_entry_set_text ((GtkEntry*)fec_entry, buf);
@@ -142,6 +144,8 @@ static void parameters_to_gui (void)
     snprintf (buf,sizeof(buf), "%.3f", f);
     gtk_entry_set_text ((GtkEntry*)frequency_entry, buf);
 
+    /* load settings/rtl_dongle parameters */
+
     parameters_get_int ("rtldongle", &i);
     gtk_spin_button_set_value (rtldongle_spinbutton, (float)i);
 
@@ -150,13 +154,24 @@ static void parameters_to_gui (void)
 
     parameters_get_int ("ppm", &i);
     gtk_spin_button_set_value (ppm_spinbutton, (float)i);
+
+    /* load settings/leandvb parameters */
+
+    /* load  settings/files parameters */
+
 }
 
-void parameters_from_gui (void)
+/*===== callback functions ==================================================*/
+
+/*----- main window -----*/
+
+void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 {
     const char* s;
     int         i;
     float       f;
+
+    /* store main window parameters */
 
     s = gtk_entry_get_text ((GtkEntry*)fec_entry);
     parameters_set_string ("fec", s);
@@ -180,16 +195,6 @@ void parameters_from_gui (void)
     s = gtk_entry_get_text ((GtkEntry*)frequency_entry);
     f = atof(s);
     parameters_set_float ("frequency", f, "%.3f");
-}
-
-/*===== callback functions ==================================================*/
-
-/*----- main window -----*/
-
-void main_window_destroy_cb (GtkWidget* widget, gpointer data)
-{
-    /* save parameters */
-    parameters_from_gui();
 
     /* stop the gui */
 	gtk_main_quit();
@@ -220,9 +225,7 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     int         i;
     float       f;
 
-    printf("under construction: %s\n", __FUNCTION__);
-
-    /* store parameters in json_object */
+    /* store settings/rtl_dongle parameters */
 
     i = gtk_spin_button_get_value_as_int (rtldongle_spinbutton);
     parameters_set_int ("rtldongle", i);
@@ -232,6 +235,9 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     i = gtk_spin_button_get_value_as_int (ppm_spinbutton);
     parameters_set_int ("ppm", i);
+
+    printf("TODO: %s - store settings/leandvb parameters\n", __FUNCTION__);
+    printf("TODO: %s - store settings/files parameters\n", __FUNCTION__);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
