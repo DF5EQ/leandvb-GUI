@@ -140,7 +140,12 @@ void parameters_from_gui (void)
     float       f;
     char      buf[20];
 
-    printf("parameters_from_gui\n");
+    s = gtk_entry_get_text ((GtkEntry*)fec_entry);
+    parameters_set_string ("fec", s);
+
+    s = gtk_entry_get_text ((GtkEntry*)lnblo_entry);
+    f = atof(s);
+    parameters_set_float ("lnb_lo", f, "%.3f");
 }
 
 /*===== callback functions ==================================================*/
@@ -173,14 +178,6 @@ void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
 
     /* hide the settingsdialog after it's closing */
     gtk_widget_hide (GTK_WIDGET(settings_dialog));
-}
-
-void fec_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
-{
-    gchar* text;
-
-    text = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT(widget));
-    printf("fec changed to %s\n", text);
 }
 
 /*----- settings  files -----*/

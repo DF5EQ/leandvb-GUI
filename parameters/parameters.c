@@ -196,6 +196,7 @@ void parameters_save (void)
     /* save parameters to file */
 
     printf("save parameters to file %s\n", parameters_file_name);
+
     json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_NOSLASHESCAPE);
 }
 
@@ -293,7 +294,7 @@ int parameters_set_int (const char* key, const int val)
     return 0;
 }
 
-int parameters_set_float (const char* key, const float val)
+int parameters_set_float (const char* key, const float val, char* format)
 {
     struct json_object* jobj;
     enum   json_type    jtyp;
@@ -304,6 +305,8 @@ int parameters_set_float (const char* key, const float val)
 
     jtyp = json_object_get_type(jobj);
     if (jtyp != json_type_double) return -2;
+
+    json_object_set_serializer(jobj, serializer_double, format, NULL);
 
     ret = json_object_set_double(jobj, val);
     if (ret == false) return -3;
