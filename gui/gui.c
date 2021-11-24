@@ -34,6 +34,11 @@ static GtkEntry*  frequency_entry;
 /*-- settings dialog --*/
 static GtkDialog* settings_dialog;
 
+/* settings/rtl_dongle */
+static GtkSpinButton* rtldongle_spinbutton;
+static GtkSpinButton* gain_spinbutton;
+static GtkSpinButton* ppm_spinbutton;
+
 /* settings DVB-S */
 static GtkLabel*        constellation_label;
 static GtkComboBoxText* constellation_combobox;
@@ -75,6 +80,11 @@ static void expose_widgets (void)
 
     /* settings dialog */
     settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
+
+    /* settings/rtl_sdr */
+    rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
+    gain_spinbutton      = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "gain_spinbutton"));
+    ppm_spinbutton       = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ppm_spinbutton"));
 
     /* settings DVB-S */
     constellation_label    = GTK_LABEL          (gtk_builder_get_object (builder, "constellation_label"));
@@ -131,6 +141,15 @@ static void parameters_to_gui (void)
     parameters_get_float ("frequency", &f);
     snprintf (buf,sizeof(buf), "%.3f", f);
     gtk_entry_set_text ((GtkEntry*)frequency_entry, buf);
+
+    parameters_get_int ("rtldongle", &i);
+    gtk_spin_button_set_value (rtldongle_spinbutton, (float)i);
+
+    parameters_get_int ("gain", &i);
+    gtk_spin_button_set_value (gain_spinbutton, (float)i);
+
+    parameters_get_int ("ppm", &i);
+    gtk_spin_button_set_value (ppm_spinbutton, (float)i);
 }
 
 void parameters_from_gui (void)
@@ -138,7 +157,6 @@ void parameters_from_gui (void)
     const char* s;
     int         i;
     float       f;
-    char      buf[20];
 
     s = gtk_entry_get_text ((GtkEntry*)fec_entry);
     parameters_set_string ("fec", s);
