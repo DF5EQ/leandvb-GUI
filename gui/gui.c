@@ -154,6 +154,14 @@ void parameters_from_gui (void)
     s = gtk_entry_get_text ((GtkEntry*)bandwidth_entry);
     i = atoi(s);
     parameters_set_int ("bandwidth", i);
+
+    s = gtk_entry_get_text ((GtkEntry*)symbolrate_entry);
+    i = atoi(s);
+    parameters_set_int ("symbolrate", i);
+
+    s = gtk_entry_get_text ((GtkEntry*)frequency_entry);
+    f = atof(s);
+    parameters_set_float ("frequency", f, "%.3f");
 }
 
 /*===== callback functions ==================================================*/
