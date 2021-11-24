@@ -71,7 +71,7 @@ static void expose_widgets (void)
     tune_entry       = GTK_ENTRY  (gtk_builder_get_object (builder, "tune_entry"));
     bandwidth_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "bandwidth_entry"));
     symbolrate_entry = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
-    frequency_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "symbolrate_entry"));
+    frequency_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "frequency_entry"));
 
     /* settings dialog */
     settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
