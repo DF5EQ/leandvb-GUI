@@ -195,23 +195,53 @@ void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 	gtk_main_quit();
 }
 
-void button_start_clicked_cb (GtkWidget* widget, gpointer data)
+void start_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
     printf("TODO: %s\n", __FUNCTION__);
 }
 
-void button_stop_clicked_cb (GtkWidget* widget, gpointer data)
+void stop_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
     printf("TODO: %s\n", __FUNCTION__);
 }
 
-void button_settings_clicked_cb (GtkWidget* widget, gpointer data)
+void settings_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
 	/* show the settings dialog and wait for closing */
     gtk_dialog_run (settings_dialog);
 
     /* hide the settingsdialog after it's closing */
     gtk_widget_hide (GTK_WIDGET(settings_dialog));
+}
+
+void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
+{
+    const char* s;
+    int         i;
+    float       f;
+
+    printf("under construction: %s\n", __FUNCTION__);
+
+    /* store parameters in json_object */
+
+    i = gtk_spin_button_get_value_as_int (rtldongle_spinbutton);
+    parameters_set_int ("rtldongle", i);
+
+    i = gtk_spin_button_get_value_as_int (gain_spinbutton);
+    parameters_set_int ("gain", i);
+
+    i = gtk_spin_button_get_value_as_int (ppm_spinbutton);
+    parameters_set_int ("ppm", i);
+}
+
+void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
+{
+    printf("TODO: %s\n", __FUNCTION__);
+}
+
+void settings_defaults_button_clicked_cb (GtkWidget* widget, gpointer data)
+{
+    printf("TODO: %s\n", __FUNCTION__);
 }
 
 /*----- settings  files -----*/
