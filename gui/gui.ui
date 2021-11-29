@@ -1361,20 +1361,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFileChooserButton" id="ldpchelper_filechooser">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="title" translatable="yes">ldpchelper_filechooser</property>
-                        <signal name="query-tooltip" handler="ldpchelper_filechooser_query_tooltip_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="rltsdr_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1404,6 +1390,7 @@
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="hexpand">True</property>
+                        <property name="action">save</property>
                         <property name="title" translatable="yes"/>
                         <signal name="query-tooltip" handler="leandvb_filechooser_query_tooltip_cb" swapped="no"/>
                       </object>
@@ -1497,7 +1484,28 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkEntry" id="ldpchelper_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="ldpchelper_button">
+                        <property name="label" translatable="yes">...</property>
+                        <property name="name">filechooser_button</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="filechooser_button_clicked_cb" object="ldpchelper_entry" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">1</property>
+                      </packing>
                     </child>
                     <child>
                       <placeholder/>
