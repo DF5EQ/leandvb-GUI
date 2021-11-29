@@ -38,13 +38,13 @@ static GtkDialog* settings_dialog;
 static GtkSpinButton* rtldongle_spinbutton;
 static GtkSpinButton* gain_spinbutton;
 static GtkSpinButton* ppm_spinbutton;
-static GtkEntry*      test_entry;
 
 /* settings/files */
-static GtkFileChooser* viewer_filechooser;
 static GtkFileChooser* rtlsdr_filechooser;
 static GtkFileChooser* ldpchelper_filechooser;
 static GtkFileChooser* leandvb_filechooser;
+static GtkEntry* viewer_entry;     
+static GtkEntry* test_entry;
 
 /* settings DVB-S */
 static GtkLabel*        constellation_label;
@@ -94,10 +94,10 @@ static void expose_widgets (void)
     ppm_spinbutton       = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ppm_spinbutton"));
 
     /* settings/files */
-    viewer_filechooser     = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "viewer_filechooser"));
     rtlsdr_filechooser     = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "rtlsdr_filechooser"));
     ldpchelper_filechooser = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "ldpchelper_filechooser"));
     leandvb_filechooser    = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "leandvb_filechooser"));
+    viewer_entry           = GTK_ENTRY        (gtk_builder_get_object (builder, "viewer_entry"));
     test_entry             = GTK_ENTRY        (gtk_builder_get_object (builder, "test_entry"));
 
     /* settings DVB-S */
@@ -174,10 +174,12 @@ static void parameters_to_gui (void)
 
     /* load  settings/files parameters */
 
+    parameters_get_string ("viewer_path", &s);
+    gtk_widget_set_tooltip_text ((GtkWidget*)viewer_entry, s);
+
     parameters_get_string ("viewer_file", &s);
-    printf("%s: %s\n", __FUNCTION__, s);
-//    gtk_file_chooser_set_filename (viewer_filechooser, "makefile");
-//    gtk_file_chooser_set_current_name (viewer_filechooser, "makefile");
+    gtk_entry_set_text ((GtkEntry*) viewer_entry, s);
+
 }
 
 /*===== callback functions ==================================================*/
@@ -271,7 +273,7 @@ void settings_defaults_button_clicked_cb (GtkWidget* widget, gpointer data)
 
 /*----- settings/files -----*/
 
-void test_button_clicked_cb (GtkWidget* widget, gpointer data)
+void filechooser_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
     /* 'data' is set up in GLADE to point to the corresponding entry */
 
@@ -330,15 +332,6 @@ gboolean ldpchelper_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gi
 }
 
 gboolean rtlsdr_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
-{
-    gchar* filename;
-
-    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
-    gtk_tooltip_set_text (tooltip, filename);
-    return TRUE;
-}
-
-gboolean viewer_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
 {
     gchar* filename;
 
