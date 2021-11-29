@@ -38,6 +38,13 @@ static GtkDialog* settings_dialog;
 static GtkSpinButton* rtldongle_spinbutton;
 static GtkSpinButton* gain_spinbutton;
 static GtkSpinButton* ppm_spinbutton;
+static GtkEntry*      test_entry;
+
+/* settings/files */
+static GtkFileChooser* viewer_filechooser;
+static GtkFileChooser* rtlsdr_filechooser;
+static GtkFileChooser* ldpchelper_filechooser;
+static GtkFileChooser* leandvb_filechooser;
 
 /* settings DVB-S */
 static GtkLabel*        constellation_label;
@@ -86,6 +93,13 @@ static void expose_widgets (void)
     gain_spinbutton      = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "gain_spinbutton"));
     ppm_spinbutton       = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ppm_spinbutton"));
 
+    /* settings/files */
+    viewer_filechooser     = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "viewer_filechooser"));
+    rtlsdr_filechooser     = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "rtlsdr_filechooser"));
+    ldpchelper_filechooser = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "ldpchelper_filechooser"));
+    leandvb_filechooser    = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "leandvb_filechooser"));
+    test_entry             = GTK_ENTRY        (gtk_builder_get_object (builder, "test_entry"));
+
     /* settings DVB-S */
     constellation_label    = GTK_LABEL          (gtk_builder_get_object (builder, "constellation_label"));
     constellation_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "constellation_combobox"));
@@ -117,6 +131,9 @@ static void parameters_to_gui (void)
     int         i;
     float       f;
     char      buf[20];
+
+    /* load settings/leandvb parameters */
+    printf("TODO: %s - load settings/leandvb parameters\n", __FUNCTION__);
 
     /* load main window parameters */
 
@@ -155,10 +172,12 @@ static void parameters_to_gui (void)
     parameters_get_int ("ppm", &i);
     gtk_spin_button_set_value (ppm_spinbutton, (float)i);
 
-    /* load settings/leandvb parameters */
-
     /* load  settings/files parameters */
 
+    parameters_get_string ("viewer_file", &s);
+    printf("%s: %s\n", __FUNCTION__, s);
+//    gtk_file_chooser_set_filename (viewer_filechooser, "makefile");
+//    gtk_file_chooser_set_current_name (viewer_filechooser, "makefile");
 }
 
 /*===== callback functions ==================================================*/
@@ -250,7 +269,47 @@ void settings_defaults_button_clicked_cb (GtkWidget* widget, gpointer data)
     printf("TODO: %s\n", __FUNCTION__);
 }
 
-/*----- settings  files -----*/
+/*----- settings/files -----*/
+
+void test_button_clicked_cb (GtkWidget* widget, gpointer data)
+{
+    /* 'data' is set up in GLADE to point to the corresponding entry */
+
+    GtkWidget* dialog;
+    const char* file;
+    const char* path;
+    int res;
+    
+    /* create a new dialog */
+    dialog = gtk_file_chooser_dialog_new ("Choose File", NULL, GTK_FILE_CHOOSER_ACTION_SAVE,
+                                          "Cancel", GTK_RESPONSE_CANCEL,
+                                          "Open", GTK_RESPONSE_ACCEPT,
+                                          NULL);
+
+    /* prepare dialog with current path/file */
+
+    path = gtk_widget_get_tooltip_text ((GtkWidget*)data);
+    file = gtk_entry_get_text ((GtkEntry*)data);
+
+    if (path != NULL) gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), path);
+    if (file != NULL) gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), file);
+
+    /* run the dialog */
+    res = gtk_dialog_run (GTK_DIALOG (dialog));
+    if (res == GTK_RESPONSE_ACCEPT)
+    {
+        /* store the choosen path/file */
+
+        path = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
+        file = gtk_file_chooser_get_current_name   (GTK_FILE_CHOOSER (dialog));
+ 
+        gtk_widget_set_tooltip_text ((GtkWidget*)data, path);
+        gtk_entry_set_text          ((GtkEntry*) data, file);
+    }
+
+    /* destroy the dialog */
+    gtk_widget_destroy (dialog);
+}
 
 gboolean leandvb_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
 {
