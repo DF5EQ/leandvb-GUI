@@ -85,7 +85,7 @@ static void expose_widgets (void)
     frequency_entry  = GTK_ENTRY  (gtk_builder_get_object (builder, "frequency_entry"));
 
     /* settings dialog */
-    settings_dialog     = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
+    settings_dialog = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
 
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
@@ -137,27 +137,27 @@ static void parameters_to_gui (void)
 
     parameters_get_string ("fec", &s);
     snprintf (buf,sizeof(buf), "%s", s);
-    gtk_entry_set_text ((GtkEntry*)fec_entry, buf);
+    gtk_entry_set_text (GTK_ENTRY(fec_entry), buf);
 
     parameters_get_float ("lnb_lo", &f);
     snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text ((GtkEntry*)lnblo_entry, buf);
+    gtk_entry_set_text (GTK_ENTRY(lnblo_entry), buf);
 
     parameters_get_int ("tune", &i);
     snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text ((GtkEntry*)tune_entry, buf);
+    gtk_entry_set_text (GTK_ENTRY(tune_entry), buf);
 
     parameters_get_int ("bandwidth", &i);
     snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text ((GtkEntry*)bandwidth_entry, buf);
+    gtk_entry_set_text (GTK_ENTRY(bandwidth_entry), buf);
 
     parameters_get_int ("symbolrate", &i);
     snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text ((GtkEntry*)symbolrate_entry, buf);
+    gtk_entry_set_text (GTK_ENTRY(symbolrate_entry), buf);
 
     parameters_get_float ("frequency", &f);
     snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text ((GtkEntry*)frequency_entry, buf);
+    gtk_entry_set_text (GTK_ENTRY(frequency_entry), buf);
 
     /* load settings/rtl_dongle parameters */
 
@@ -173,28 +173,28 @@ static void parameters_to_gui (void)
     /* load  settings/files parameters */
 
     parameters_get_string ("viewer_path", &s);
-    gtk_widget_set_tooltip_text ((GtkWidget*)viewer_entry, s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(viewer_entry), s);
 
     parameters_get_string ("viewer_file", &s);
-    gtk_entry_set_text ((GtkEntry*) viewer_entry, s);
+    gtk_entry_set_text (GTK_ENTRY(viewer_entry), s);
 
     parameters_get_string ("rtlsdr_path", &s);
-    gtk_widget_set_tooltip_text ((GtkWidget*)rtlsdr_entry, s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(rtlsdr_entry), s);
 
     parameters_get_string ("rtlsdr_file", &s);
-    gtk_entry_set_text ((GtkEntry*) rtlsdr_entry, s);
+    gtk_entry_set_text (GTK_ENTRY(rtlsdr_entry), s);
 
     parameters_get_string ("ldpchelper_path", &s);
-    gtk_widget_set_tooltip_text ((GtkWidget*)ldpchelper_entry, s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(ldpchelper_entry), s);
 
     parameters_get_string ("ldpchelper_file", &s);
-    gtk_entry_set_text ((GtkEntry*) ldpchelper_entry, s);
+    gtk_entry_set_text (GTK_ENTRY(ldpchelper_entry), s);
 
     parameters_get_string ("leandvb_path", &s);
-    gtk_widget_set_tooltip_text ((GtkWidget*)leandvb_entry, s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(leandvb_entry), s);
 
     parameters_get_string ("leandvb_file", &s);
-    gtk_entry_set_text ((GtkEntry*) leandvb_entry, s);
+    gtk_entry_set_text (GTK_ENTRY(leandvb_entry), s);
 }
 
 /*===== callback functions ==================================================*/
@@ -209,26 +209,26 @@ void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 
     /* store main window parameters */
 
-    s = gtk_entry_get_text ((GtkEntry*)fec_entry);
+    s = gtk_entry_get_text (GTK_ENTRY(fec_entry));
     parameters_set_string ("fec", s);
 
-    s = gtk_entry_get_text ((GtkEntry*)lnblo_entry);
+    s = gtk_entry_get_text (GTK_ENTRY(lnblo_entry));
     f = atof(s);
     parameters_set_float ("lnb_lo", f, "%.3f");
 
-    s = gtk_entry_get_text ((GtkEntry*)tune_entry);
+    s = gtk_entry_get_text (GTK_ENTRY(tune_entry));
     i = atoi(s);
     parameters_set_int ("tune", i);
 
-    s = gtk_entry_get_text ((GtkEntry*)bandwidth_entry);
+    s = gtk_entry_get_text (GTK_ENTRY(bandwidth_entry));
     i = atoi(s);
     parameters_set_int ("bandwidth", i);
 
-    s = gtk_entry_get_text ((GtkEntry*)symbolrate_entry);
+    s = gtk_entry_get_text (GTK_ENTRY(symbolrate_entry));
     i = atoi(s);
     parameters_set_int ("symbolrate", i);
 
-    s = gtk_entry_get_text ((GtkEntry*)frequency_entry);
+    s = gtk_entry_get_text (GTK_ENTRY(frequency_entry));
     f = atof(s);
     parameters_set_float ("frequency", f, "%.3f");
 
@@ -305,8 +305,8 @@ void filechooser_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     /* prepare dialog with current path/file */
 
-    path = gtk_widget_get_tooltip_text ((GtkWidget*)data);
-    file = gtk_entry_get_text ((GtkEntry*)data);
+    path = gtk_widget_get_tooltip_text (GTK_WIDGET(data));
+    file = gtk_entry_get_text (GTK_ENTRY(data));
 
     if (path != NULL) gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), path);
     if (file != NULL) gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), file);
@@ -320,8 +320,8 @@ void filechooser_button_clicked_cb (GtkWidget* widget, gpointer data)
         path = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (dialog));
         file = gtk_file_chooser_get_current_name   (GTK_FILE_CHOOSER (dialog));
  
-        gtk_widget_set_tooltip_text ((GtkWidget*)data, path);
-        gtk_entry_set_text          ((GtkEntry*) data, file);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(data), path);
+        gtk_entry_set_text          (GTK_ENTRY (data), file);
     }
 
     /* destroy the dialog */
