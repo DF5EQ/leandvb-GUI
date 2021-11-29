@@ -44,7 +44,6 @@ static GtkEntry* leandvb_entry;
 static GtkEntry* ldpchelper_entry;
 static GtkEntry* rtlsdr_entry;
 static GtkEntry* viewer_entry;     
-static GtkEntry* test_entry;
 
 /* settings DVB-S */
 static GtkLabel*        constellation_label;
@@ -94,11 +93,10 @@ static void expose_widgets (void)
     ppm_spinbutton       = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ppm_spinbutton"));
 
     /* settings/files */
-    leandvb_entry          = GTK_ENTRY        (gtk_builder_get_object (builder, "leandvb_entry"));
-    ldpchelper_entry       = GTK_ENTRY        (gtk_builder_get_object (builder, "ldpchelper_entry"));
-    rtlsdr_entry           = GTK_ENTRY        (gtk_builder_get_object (builder, "rtlsdr_entry"));
-    viewer_entry           = GTK_ENTRY        (gtk_builder_get_object (builder, "viewer_entry"));
-    test_entry             = GTK_ENTRY        (gtk_builder_get_object (builder, "test_entry"));
+    leandvb_entry    = GTK_ENTRY (gtk_builder_get_object (builder, "leandvb_entry"));
+    ldpchelper_entry = GTK_ENTRY (gtk_builder_get_object (builder, "ldpchelper_entry"));
+    rtlsdr_entry     = GTK_ENTRY (gtk_builder_get_object (builder, "rtlsdr_entry"));
+    viewer_entry     = GTK_ENTRY (gtk_builder_get_object (builder, "viewer_entry"));
 
     /* settings DVB-S */
     constellation_label    = GTK_LABEL          (gtk_builder_get_object (builder, "constellation_label"));
