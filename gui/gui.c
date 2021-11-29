@@ -40,9 +40,9 @@ static GtkSpinButton* gain_spinbutton;
 static GtkSpinButton* ppm_spinbutton;
 
 /* settings/files */
-static GtkFileChooser* rtlsdr_filechooser;
 static GtkFileChooser* ldpchelper_filechooser;
 static GtkFileChooser* leandvb_filechooser;
+static GtkEntry* rtlsdr_entry;
 static GtkEntry* viewer_entry;     
 static GtkEntry* test_entry;
 
@@ -94,9 +94,9 @@ static void expose_widgets (void)
     ppm_spinbutton       = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ppm_spinbutton"));
 
     /* settings/files */
-    rtlsdr_filechooser     = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "rtlsdr_filechooser"));
     ldpchelper_filechooser = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "ldpchelper_filechooser"));
     leandvb_filechooser    = GTK_FILE_CHOOSER (gtk_builder_get_object (builder, "leandvb_filechooser"));
+    rtlsdr_entry           = GTK_ENTRY        (gtk_builder_get_object (builder, "rtlsdr_entry"));
     viewer_entry           = GTK_ENTRY        (gtk_builder_get_object (builder, "viewer_entry"));
     test_entry             = GTK_ENTRY        (gtk_builder_get_object (builder, "test_entry"));
 
@@ -179,6 +179,12 @@ static void parameters_to_gui (void)
 
     parameters_get_string ("viewer_file", &s);
     gtk_entry_set_text ((GtkEntry*) viewer_entry, s);
+
+    parameters_get_string ("rtlsdr_path", &s);
+    gtk_widget_set_tooltip_text ((GtkWidget*)rtlsdr_entry, s);
+
+    parameters_get_string ("rtlsdr_file", &s);
+    gtk_entry_set_text ((GtkEntry*) rtlsdr_entry, s);
 
 }
 
@@ -323,15 +329,6 @@ gboolean leandvb_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint 
 }
 
 gboolean ldpchelper_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
-{
-    gchar* filename;
-
-    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
-    gtk_tooltip_set_text (tooltip, filename);
-    return TRUE;
-}
-
-gboolean rtlsdr_filechooser_query_tooltip_cb (GtkWidget* widget, gint x,  gint y, gboolean keyboard_mode, GtkTooltip* tooltip, gpointer user_data)
 {
     gchar* filename;
 
