@@ -34,7 +34,10 @@ static GtkEntry*  frequency_entry;
 /*-- settings dialog --*/
 static GtkDialog* settings_dialog;
 
-/* settings/rtl_dongle */
+/* settings/leandvb */
+static GtkSpinButton* inpipe_spinbutton;
+
+/* settings/rtl_sdr */
 static GtkSpinButton* rtldongle_spinbutton;
 static GtkSpinButton* gain_spinbutton;
 static GtkSpinButton* ppm_spinbutton;
@@ -87,6 +90,9 @@ static void expose_widgets (void)
     /* settings dialog */
     settings_dialog = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
 
+    /* settings/leandvb */
+    inpipe_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "inpipe_spinbutton"));
+
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
     gain_spinbutton      = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "gain_spinbutton"));
@@ -129,9 +135,6 @@ static void parameters_to_gui (void)
     int         i;
     float       f;
     char      buf[20];
-
-    /* load settings/leandvb parameters */
-    printf("TODO: %s - load settings/leandvb parameters\n", __FUNCTION__);
 
     /* load main window parameters */
 
@@ -195,6 +198,12 @@ static void parameters_to_gui (void)
 
     parameters_get_string ("leandvb_file", &s);
     gtk_entry_set_text (GTK_ENTRY(leandvb_entry), s);
+
+    /* load settings/leandvb parameters */
+    printf("TODO: %s - load settings/leandvb parameters\n", __FUNCTION__);
+
+    parameters_get_int ("inpipe", &i);
+    gtk_spin_button_set_value (inpipe_spinbutton, (float)i);
 }
 
 /*===== callback functions ==================================================*/
