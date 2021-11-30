@@ -854,11 +854,10 @@
                       <object class="GtkComboBoxText" id="sampler_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="active">2</property>
                         <items>
-                          <item translatable="yes">nearest</item>
-                          <item translatable="yes">linear</item>
-                          <item translatable="yes">rrc</item>
+                          <item id="nearest" translatable="yes">nearest</item>
+                          <item id="linear" translatable="yes">linear</item>
+                          <item id="rrc" translatable="yes">rrc</item>
                         </items>
                       </object>
                       <packing>
