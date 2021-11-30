@@ -273,7 +273,6 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     parameters_set_int ("ppm", i);
 
     /* store settings/files parameters */
-    printf("TODO: %s - store settings/files parameters\n", __FUNCTION__);
 
     s = gtk_widget_get_tooltip_text (GTK_WIDGET(viewer_entry));
     parameters_set_string ("viewer_path", s);
@@ -289,6 +288,11 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     parameters_set_string ("ldpchelper_path", s);
     s = gtk_entry_get_text (GTK_ENTRY(ldpchelper_entry));
     parameters_set_string ("ldpchelper_file", s);
+
+    s = gtk_widget_get_tooltip_text (GTK_WIDGET(leandvb_entry));
+    parameters_set_string ("leandvb_path", s);
+    s = gtk_entry_get_text (GTK_ENTRY(leandvb_entry));
+    parameters_set_string ("leandvb_file", s);
 
     /* store settings/leandvb parameters */
     printf("TODO: %s - store settings/leandvb parameters\n", __FUNCTION__);
