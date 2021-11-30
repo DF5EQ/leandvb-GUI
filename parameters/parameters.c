@@ -344,6 +344,7 @@ int parameters_set_string (const char* key, const char* val)
     jtyp = json_object_get_type(jobj);
     if (jtyp != json_type_string) return -2;
 
+    if(val==NULL) val="";
     ret = json_object_set_string(jobj, val);
     if (ret == false) return -3;
 

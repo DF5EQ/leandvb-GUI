@@ -272,8 +272,16 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     i = gtk_spin_button_get_value_as_int (ppm_spinbutton);
     parameters_set_int ("ppm", i);
 
-    printf("TODO: %s - store settings/leandvb parameters\n", __FUNCTION__);
+    /* store settings/files parameters */
     printf("TODO: %s - store settings/files parameters\n", __FUNCTION__);
+
+    s = gtk_widget_get_tooltip_text (GTK_WIDGET(viewer_entry));
+    parameters_set_string ("viewer_path", s);
+    s = gtk_entry_get_text (GTK_ENTRY(viewer_entry));
+    parameters_set_string ("viewer_file", s);
+
+    /* store ettings/leandvb parameters */
+    printf("TODO: %s - store settings/leandvb parameters\n", __FUNCTION__);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
