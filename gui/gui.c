@@ -39,6 +39,7 @@ static GtkSpinButton* inpipe_spinbutton;
 static GtkComboBox*   sampler_combobox;
 static GtkSpinButton* rolloff_spinbutton;
 static GtkSpinButton* rrcrej_spinbutton;
+static GtkSwitch*     fastlock_switch;
 
 /* settings/rtl_sdr */
 static GtkSpinButton* rtldongle_spinbutton;
@@ -98,6 +99,7 @@ static void expose_widgets (void)
     sampler_combobox   = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "sampler_combobox"));
     rolloff_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rolloff_spinbutton"));
     rrcrej_spinbutton  = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rrcrej_spinbutton"));
+    fastlock_switch    = GTK_SWITCH      (gtk_builder_get_object (builder, "fastlock_switch"));
 
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
@@ -140,6 +142,7 @@ static void parameters_to_gui (void)
     const char* s;
     int         i;
     float       f;
+    bool        b;
     char      buf[20];
 
     /* load main window parameters */
@@ -219,6 +222,9 @@ static void parameters_to_gui (void)
 
     parameters_get_float ("rrcrej", &f);
     gtk_spin_button_set_value (rrcrej_spinbutton, f);
+
+    parameters_get_bool ("fastlock", &b);
+    gtk_switch_set_state (fastlock_switch, b);
 }
 
 /*===== callback functions ==================================================*/
