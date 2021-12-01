@@ -32,11 +32,12 @@ static GtkEntry*  symbolrate_entry;
 static GtkEntry*  frequency_entry;
 
 /*-- settings dialog --*/
-static GtkDialog*   settings_dialog;
-static GtkComboBox* sampler_combobox;
+static GtkDialog* settings_dialog;
 
 /* settings/leandvb */
 static GtkSpinButton* inpipe_spinbutton;
+static GtkComboBox*   sampler_combobox;
+static GtkSpinButton* rolloff_spinbutton;
 
 /* settings/rtl_sdr */
 static GtkSpinButton* rtldongle_spinbutton;
@@ -92,8 +93,9 @@ static void expose_widgets (void)
     settings_dialog = GTK_DIALOG (gtk_builder_get_object (builder, "settings_dialog"));
 
     /* settings/leandvb */
-    inpipe_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "inpipe_spinbutton"));
-    sampler_combobox  = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "sampler_combobox"));
+    inpipe_spinbutton  = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "inpipe_spinbutton"));
+    sampler_combobox   = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "sampler_combobox"));
+    rolloff_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rolloff_spinbutton"));
 
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
@@ -209,6 +211,9 @@ static void parameters_to_gui (void)
 
     parameters_get_string ("sampler", &s);
     gtk_combo_box_set_active_id (sampler_combobox, s);
+
+    parameters_get_float ("rolloff", &f);
+    gtk_spin_button_set_value (rolloff_spinbutton, f);
 }
 
 /*===== callback functions ==================================================*/
