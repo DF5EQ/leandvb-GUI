@@ -258,6 +258,26 @@ static void parameters_to_gui (void)
 
     parameters_get_bool ("hardmetric", &b);
     gtk_switch_set_state (hardmetric_switch, b);
+
+    /* load settings/leandvb/DVB-S2 parameters */
+
+    parameters_get_bool ("strongpls", &b);
+    gtk_switch_set_state (strongpls_switch, b);
+
+    parameters_get_string ("modcods", &s);
+    gtk_entry_set_text (GTK_ENTRY(modcods_entry), s);
+
+    parameters_get_string ("framesizes", &s);
+    gtk_entry_set_text (GTK_ENTRY(framesizes_entry), s);
+
+    parameters_get_bool ("fastdrift", &b);
+    gtk_switch_set_state (fastdrift_switch, b);
+
+    parameters_get_int ("ldpcbf", &i);
+    gtk_spin_button_set_value (ldpcbf_spinbutton, (float)i);
+
+    parameters_get_int ("nhelpers", &i);
+    gtk_spin_button_set_value (nhelpers_spinbutton, (float)i);
 }
 
 /*===== callback functions ==================================================*/

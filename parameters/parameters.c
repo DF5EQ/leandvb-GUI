@@ -124,7 +124,7 @@ void parameters_default(void)
     parameters_add_bool   ("gui", true);
     parameters_add_bool   ("hardmetric", false);
     parameters_add_int    ("inpipe", 32000000);
-    parameters_add_int    ("ldpc_bf", 0);
+    parameters_add_int    ("ldpcbf", 0);
     parameters_add_string ("ldpchelper_file", "ldpc_tool");
     parameters_add_string ("ldpchelper_path", "./");
     parameters_add_string ("leandvb_file", "leandvb");
@@ -168,7 +168,7 @@ void parameters_print (void)
     parameters_print_bool   ("gui");
     parameters_print_bool   ("hardmetric");
     parameters_print_int    ("inpipe");
-    parameters_print_int    ("ldpc_bf");
+    parameters_print_int    ("ldpcbf");
     parameters_print_string ("ldpchelper_file");
     parameters_print_string ("ldpchelper_path");
     parameters_print_string ("leandvb_file");

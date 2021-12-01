@@ -521,7 +521,6 @@
   </object>
   <object class="GtkAdjustment" id="nhelpers_adjustment">
     <property name="upper">30</property>
-    <property name="value">6</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -799,7 +798,6 @@
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">empty entry omits parameter</property>
                         <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">0x01</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -898,7 +896,6 @@
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">empty entry omits parameter</property>
                         <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">0x0040</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
