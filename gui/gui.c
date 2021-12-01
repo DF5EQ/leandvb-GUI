@@ -38,6 +38,7 @@ static GtkDialog* settings_dialog;
 static GtkSpinButton* inpipe_spinbutton;
 static GtkComboBox*   sampler_combobox;
 static GtkSpinButton* rolloff_spinbutton;
+static GtkSpinButton* rrcrej_spinbutton;
 
 /* settings/rtl_sdr */
 static GtkSpinButton* rtldongle_spinbutton;
@@ -96,6 +97,7 @@ static void expose_widgets (void)
     inpipe_spinbutton  = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "inpipe_spinbutton"));
     sampler_combobox   = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "sampler_combobox"));
     rolloff_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rolloff_spinbutton"));
+    rrcrej_spinbutton  = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rrcrej_spinbutton"));
 
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
@@ -214,6 +216,9 @@ static void parameters_to_gui (void)
 
     parameters_get_float ("rolloff", &f);
     gtk_spin_button_set_value (rolloff_spinbutton, f);
+
+    parameters_get_float ("rrcrej", &f);
+    gtk_spin_button_set_value (rrcrej_spinbutton, f);
 }
 
 /*===== callback functions ==================================================*/
