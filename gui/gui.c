@@ -43,6 +43,7 @@ static GtkSwitch*     fastlock_switch;
 static GtkSwitch*     maxsens_switch;
 static GtkComboBox*   debug_combobox;
 static GtkSwitch*     gui_switch;
+static GtkComboBox*   standard_combobox;
 
 /* settings/rtl_sdr */
 static GtkSpinButton* rtldongle_spinbutton;
@@ -56,14 +57,14 @@ static GtkEntry* rtlsdr_entry;
 static GtkEntry* viewer_entry;     
 
 /* settings DVB-S */
-static GtkLabel*        constellation_label;
-static GtkComboBoxText* constellation_combobox;
-static GtkLabel*        coderate_label;
-static GtkComboBoxText* coderate_combobox;
-static GtkLabel*        viterbi_label;
-static GtkSwitch*       viterbi_switch;
-static GtkLabel*        hardmetric_label;
-static GtkSwitch*       hardmetric_switch;
+static GtkLabel*    constellation_label;
+static GtkComboBox* constellation_combobox;
+static GtkLabel*    coderate_label;
+static GtkComboBox* coderate_combobox;
+static GtkLabel*    viterbi_label;
+static GtkSwitch*   viterbi_switch;
+static GtkLabel*    hardmetric_label;
+static GtkSwitch*   hardmetric_switch;
 
 /* settings DVB-S2 */
 static GtkLabel*      strongpls_label;
@@ -106,6 +107,7 @@ static void expose_widgets (void)
     maxsens_switch     = GTK_SWITCH      (gtk_builder_get_object (builder, "maxsens_switch"));
     debug_combobox     = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "debug_combobox"));
     gui_switch         = GTK_SWITCH      (gtk_builder_get_object (builder, "gui_switch"));
+    standard_combobox  = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "standard_combobox"));
 
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
@@ -119,14 +121,14 @@ static void expose_widgets (void)
     viewer_entry     = GTK_ENTRY (gtk_builder_get_object (builder, "viewer_entry"));
 
     /* settings DVB-S */
-    constellation_label    = GTK_LABEL          (gtk_builder_get_object (builder, "constellation_label"));
-    constellation_combobox = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "constellation_combobox"));
-    coderate_label         = GTK_LABEL          (gtk_builder_get_object (builder, "coderate_label"));
-    coderate_combobox      = GTK_COMBO_BOX_TEXT (gtk_builder_get_object (builder, "coderate_combobox"));
-    viterbi_label          = GTK_LABEL          (gtk_builder_get_object (builder, "viterbi_label"));
-    viterbi_switch         = GTK_SWITCH         (gtk_builder_get_object (builder, "viterbi_switch"));
-    hardmetric_label       = GTK_LABEL          (gtk_builder_get_object (builder, "hardmetric_label"));
-    hardmetric_switch      = GTK_SWITCH         (gtk_builder_get_object (builder, "hardmetric_switch"));
+    constellation_label    = GTK_LABEL     (gtk_builder_get_object (builder, "constellation_label"));
+    constellation_combobox = GTK_COMBO_BOX (gtk_builder_get_object (builder, "constellation_combobox"));
+    coderate_label         = GTK_LABEL     (gtk_builder_get_object (builder, "coderate_label"));
+    coderate_combobox      = GTK_COMBO_BOX (gtk_builder_get_object (builder, "coderate_combobox"));
+    viterbi_label          = GTK_LABEL     (gtk_builder_get_object (builder, "viterbi_label"));
+    viterbi_switch         = GTK_SWITCH    (gtk_builder_get_object (builder, "viterbi_switch"));
+    hardmetric_label       = GTK_LABEL     (gtk_builder_get_object (builder, "hardmetric_label"));
+    hardmetric_switch      = GTK_SWITCH    (gtk_builder_get_object (builder, "hardmetric_switch"));
 
     /* settings DVB-S2 */
     strongpls_label     = GTK_LABEL       (gtk_builder_get_object (builder, "strongpls_label"));
@@ -215,7 +217,6 @@ static void parameters_to_gui (void)
     gtk_entry_set_text (GTK_ENTRY(leandvb_entry), s);
 
     /* load settings/leandvb parameters */
-    printf("TODO: %s - load settings/leandvb parameters\n", __FUNCTION__);
 
     parameters_get_int ("inpipe", &i);
     gtk_spin_button_set_value (inpipe_spinbutton, (float)i);
@@ -240,6 +241,23 @@ static void parameters_to_gui (void)
 
     parameters_get_bool ("gui", &b);
     gtk_switch_set_state (gui_switch, b);
+
+    parameters_get_string ("standard", &s);
+    gtk_combo_box_set_active_id (standard_combobox, s);
+
+    /* load settings/leandvb/DVB-S parameters */
+
+    parameters_get_string ("constellation", &s);
+    gtk_combo_box_set_active_id (constellation_combobox, s);
+
+    parameters_get_string ("coderate", &s);
+    gtk_combo_box_set_active_id (coderate_combobox, s);
+
+    parameters_get_bool ("viterbi", &b);
+    gtk_switch_set_state (viterbi_switch, b);
+
+    parameters_get_bool ("hardmetric", &b);
+    gtk_switch_set_state (hardmetric_switch, b);
 }
 
 /*===== callback functions ==================================================*/

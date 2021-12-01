@@ -112,6 +112,7 @@ void parameters_default(void)
     printf("load parameters with defaults\n");
 
     parameters_add_int    ("bandwidth", 2400);
+    parameters_add_string ("coderate", "4/5");
     parameters_add_string ("constellation", "QPSK");
     parameters_add_string ("debug", "all");
     parameters_add_bool   ("fastdrift", false);
@@ -155,6 +156,7 @@ void parameters_print (void)
     printf("print parameters\n");
 
     parameters_print_int    ("bandwidth");
+    parameters_print_string ("coderate");
     parameters_print_string ("constellation");
     parameters_print_string ("debug");
     parameters_print_bool   ("fastdrift");

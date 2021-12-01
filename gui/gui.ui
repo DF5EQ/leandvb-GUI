@@ -886,7 +886,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="active">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -976,10 +975,9 @@
                       <object class="GtkComboBoxText" id="standard_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="active">1</property>
                         <items>
-                          <item translatable="yes">DVB-S</item>
-                          <item translatable="yes">DVB-S2</item>
+                          <item id="DVB-S" translatable="yes">DVB-S</item>
+                          <item id="DVB-S2" translatable="yes">DVB-S2</item>
                         </items>
                         <signal name="changed" handler="standard_combobox_changed_cb" swapped="no"/>
                       </object>
@@ -1054,10 +1052,9 @@
                     <child>
                       <object class="GtkComboBoxText" id="constellation_combobox">
                         <property name="can_focus">False</property>
-                        <property name="active">0</property>
                         <items>
-                          <item translatable="yes">QPSK</item>
-                          <item translatable="yes">BPSK</item>
+                          <item id="QPSK" translatable="yes">QPSK</item>
+                          <item id="BPSK" translatable="yes">BPSK</item>
                         </items>
                       </object>
                       <packing>
@@ -1080,15 +1077,14 @@
                     <child>
                       <object class="GtkComboBoxText" id="coderate_combobox">
                         <property name="can_focus">False</property>
-                        <property name="active">3</property>
                         <items>
-                          <item translatable="yes">1/2</item>
-                          <item translatable="yes">2/3</item>
-                          <item translatable="yes">3/4</item>
-                          <item translatable="yes">4/5</item>
-                          <item translatable="yes">5/6</item>
-                          <item translatable="yes">6/7</item>
-                          <item translatable="yes">7/8</item>
+                          <item id="1/2" translatable="yes">1/2</item>
+                          <item id="2/3" translatable="yes">2/3</item>
+                          <item id="3/4" translatable="yes">3/4</item>
+                          <item id="4/5" translatable="yes">4/5</item>
+                          <item id="5/6" translatable="yes">5/6</item>
+                          <item id="6/7" translatable="yes">6/7</item>
+                          <item id="7/8" translatable="yes">7/8</item>
                         </items>
                       </object>
                       <packing>
