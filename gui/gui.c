@@ -40,6 +40,7 @@ static GtkComboBox*   sampler_combobox;
 static GtkSpinButton* rolloff_spinbutton;
 static GtkSpinButton* rrcrej_spinbutton;
 static GtkSwitch*     fastlock_switch;
+static GtkSwitch*     maxsens_switch;
 
 /* settings/rtl_sdr */
 static GtkSpinButton* rtldongle_spinbutton;
@@ -100,6 +101,7 @@ static void expose_widgets (void)
     rolloff_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rolloff_spinbutton"));
     rrcrej_spinbutton  = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rrcrej_spinbutton"));
     fastlock_switch    = GTK_SWITCH      (gtk_builder_get_object (builder, "fastlock_switch"));
+    maxsens_switch     = GTK_SWITCH      (gtk_builder_get_object (builder, "maxsens_switch"));
 
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
@@ -225,6 +227,9 @@ static void parameters_to_gui (void)
 
     parameters_get_bool ("fastlock", &b);
     gtk_switch_set_state (fastlock_switch, b);
+
+    parameters_get_bool ("maxsens", &b);
+    gtk_switch_set_state (maxsens_switch, b);
 }
 
 /*===== callback functions ==================================================*/
