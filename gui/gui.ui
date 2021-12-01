@@ -869,12 +869,11 @@
                       <object class="GtkComboBoxText" id="debug_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="active">0</property>
                         <items>
-                          <item translatable="yes">all</item>
-                          <item translatable="yes">operation</item>
-                          <item translatable="yes">startup</item>
-                          <item translatable="yes">none</item>
+                          <item id="all" translatable="yes">all</item>
+                          <item id="operation" translatable="yes">operation</item>
+                          <item id="startup" translatable="yes">startup</item>
+                          <item id="none" translatable="yes">none</item>
                         </items>
                       </object>
                       <packing>
