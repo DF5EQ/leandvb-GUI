@@ -157,27 +157,27 @@ static void parameters_to_gui (void)
 
     parameters_get_string ("fec", &s);
     snprintf (buf,sizeof(buf), "%s", s);
-    gtk_entry_set_text (GTK_ENTRY(fec_entry), buf);
+    gtk_entry_set_text (fec_entry, buf);
 
     parameters_get_float ("lnb_lo", &f);
     snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (GTK_ENTRY(lnblo_entry), buf);
+    gtk_entry_set_text (lnblo_entry, buf);
 
     parameters_get_int ("tune", &i);
     snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (GTK_ENTRY(tune_entry), buf);
+    gtk_entry_set_text (tune_entry, buf);
 
     parameters_get_int ("bandwidth", &i);
     snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (GTK_ENTRY(bandwidth_entry), buf);
+    gtk_entry_set_text (bandwidth_entry, buf);
 
     parameters_get_int ("symbolrate", &i);
     snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (GTK_ENTRY(symbolrate_entry), buf);
+    gtk_entry_set_text (symbolrate_entry, buf);
 
     parameters_get_float ("frequency", &f);
     snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (GTK_ENTRY(frequency_entry), buf);
+    gtk_entry_set_text (frequency_entry, buf);
 
     /* load settings/rtl_dongle parameters */
 
@@ -196,25 +196,25 @@ static void parameters_to_gui (void)
     gtk_widget_set_tooltip_text (GTK_WIDGET(viewer_entry), s);
 
     parameters_get_string ("viewer_file", &s);
-    gtk_entry_set_text (GTK_ENTRY(viewer_entry), s);
+    gtk_entry_set_text (viewer_entry, s);
 
     parameters_get_string ("rtlsdr_path", &s);
     gtk_widget_set_tooltip_text (GTK_WIDGET(rtlsdr_entry), s);
 
     parameters_get_string ("rtlsdr_file", &s);
-    gtk_entry_set_text (GTK_ENTRY(rtlsdr_entry), s);
+    gtk_entry_set_text (rtlsdr_entry, s);
 
     parameters_get_string ("ldpchelper_path", &s);
     gtk_widget_set_tooltip_text (GTK_WIDGET(ldpchelper_entry), s);
 
     parameters_get_string ("ldpchelper_file", &s);
-    gtk_entry_set_text (GTK_ENTRY(ldpchelper_entry), s);
+    gtk_entry_set_text (ldpchelper_entry, s);
 
     parameters_get_string ("leandvb_path", &s);
     gtk_widget_set_tooltip_text (GTK_WIDGET(leandvb_entry), s);
 
     parameters_get_string ("leandvb_file", &s);
-    gtk_entry_set_text (GTK_ENTRY(leandvb_entry), s);
+    gtk_entry_set_text (leandvb_entry, s);
 
     /* load settings/leandvb parameters */
 
@@ -265,10 +265,10 @@ static void parameters_to_gui (void)
     gtk_switch_set_state (strongpls_switch, b);
 
     parameters_get_string ("modcods", &s);
-    gtk_entry_set_text (GTK_ENTRY(modcods_entry), s);
+    gtk_entry_set_text (modcods_entry, s);
 
     parameters_get_string ("framesizes", &s);
-    gtk_entry_set_text (GTK_ENTRY(framesizes_entry), s);
+    gtk_entry_set_text (framesizes_entry, s);
 
     parameters_get_bool ("fastdrift", &b);
     gtk_switch_set_state (fastdrift_switch, b);
@@ -292,26 +292,26 @@ void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 
     /* store main window parameters */
 
-    s = gtk_entry_get_text (GTK_ENTRY(fec_entry));
+    s = gtk_entry_get_text (fec_entry);
     parameters_set_string ("fec", s);
 
-    s = gtk_entry_get_text (GTK_ENTRY(lnblo_entry));
+    s = gtk_entry_get_text (lnblo_entry);
     f = atof(s);
     parameters_set_float ("lnb_lo", f, "%.3f");
 
-    s = gtk_entry_get_text (GTK_ENTRY(tune_entry));
+    s = gtk_entry_get_text (tune_entry);
     i = atoi(s);
     parameters_set_int ("tune", i);
 
-    s = gtk_entry_get_text (GTK_ENTRY(bandwidth_entry));
+    s = gtk_entry_get_text (bandwidth_entry);
     i = atoi(s);
     parameters_set_int ("bandwidth", i);
 
-    s = gtk_entry_get_text (GTK_ENTRY(symbolrate_entry));
+    s = gtk_entry_get_text (symbolrate_entry);
     i = atoi(s);
     parameters_set_int ("symbolrate", i);
 
-    s = gtk_entry_get_text (GTK_ENTRY(frequency_entry));
+    s = gtk_entry_get_text (frequency_entry);
     f = atof(s);
     parameters_set_float ("frequency", f, "%.3f");
 
@@ -359,22 +359,22 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     s = gtk_widget_get_tooltip_text (GTK_WIDGET(viewer_entry));
     parameters_set_string ("viewer_path", s);
-    s = gtk_entry_get_text (GTK_ENTRY(viewer_entry));
+    s = gtk_entry_get_text (viewer_entry);
     parameters_set_string ("viewer_file", s);
 
     s = gtk_widget_get_tooltip_text (GTK_WIDGET(rtlsdr_entry));
     parameters_set_string ("rtlsdr_path", s);
-    s = gtk_entry_get_text (GTK_ENTRY(rtlsdr_entry));
+    s = gtk_entry_get_text (rtlsdr_entry);
     parameters_set_string ("rtlsdr_file", s);
 
     s = gtk_widget_get_tooltip_text (GTK_WIDGET(ldpchelper_entry));
     parameters_set_string ("ldpchelper_path", s);
-    s = gtk_entry_get_text (GTK_ENTRY(ldpchelper_entry));
+    s = gtk_entry_get_text (ldpchelper_entry);
     parameters_set_string ("ldpchelper_file", s);
 
     s = gtk_widget_get_tooltip_text (GTK_WIDGET(leandvb_entry));
     parameters_set_string ("leandvb_path", s);
-    s = gtk_entry_get_text (GTK_ENTRY(leandvb_entry));
+    s = gtk_entry_get_text (leandvb_entry);
     parameters_set_string ("leandvb_file", s);
 
     /* store settings/leandvb parameters */
