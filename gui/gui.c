@@ -383,6 +383,8 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     i = gtk_spin_button_get_value_as_int (inpipe_spinbutton);
     parameters_set_int ("inpipe", i);
 
+    s = gtk_combo_box_get_active_id (sampler_combobox);
+    parameters_set_string ("sampler", s);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
