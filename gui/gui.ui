@@ -20,6 +20,8 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkSizeGroup" id="leandvb_data_sizegroup"/>
+  <object class="GtkSizeGroup" id="leandvb_label_sizegroup"/>
   <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
@@ -1035,31 +1037,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="constellation_label">
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">20</property>
-                        <property name="label" translatable="yes">constellation</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="constellation_combobox">
-                        <property name="can_focus">False</property>
-                        <items>
-                          <item id="QPSK" translatable="yes">QPSK</item>
-                          <item id="BPSK" translatable="yes">BPSK</item>
-                        </items>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="coderate_label">
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -1134,20 +1111,22 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkStack" id="stack1">
+                      <object class="GtkStack" id="standard_stack">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
                           <object class="GtkGrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">7</property>
+                            <property name="row_spacing">5</property>
                             <property name="column_spacing">5</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="constellation_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_11</property>
+                                <property name="margin_left">20</property>
+                                <property name="label" translatable="yes">constellation</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1155,77 +1134,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkComboBoxText" id="constellation_combobox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_12</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_13</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_14</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_15</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_16</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">5</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_17</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">6</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_11</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
+                                <items>
+                                  <item id="QPSK" translatable="yes">QPSK</item>
+                                  <item id="BPSK" translatable="yes">BPSK</item>
+                                </items>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1233,81 +1148,44 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_12</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_13</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_14</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_15</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_16</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">5</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_17</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">6</property>
-                              </packing>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>
-                            <property name="name">page0</property>
-                            <property name="title" translatable="yes">page0</property>
+                            <property name="name">DVB-S_page</property>
                           </packing>
                         </child>
                         <child>
@@ -1462,8 +1340,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="name">page1</property>
-                            <property name="title" translatable="yes">page1</property>
+                            <property name="name">DVB-S2_page</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -1473,6 +1350,12 @@
                         <property name="top_attach">1</property>
                         <property name="height">7</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
@@ -1847,43 +1730,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkSizeGroup" id="leandvb_data_sizegroup">
-    <widgets>
-      <widget name="framesizes_entry"/>
-      <widget name="sampler_combobox"/>
-      <widget name="debug_combobox"/>
-      <widget name="modcods_entry"/>
-      <widget name="rolloff_spinbutton"/>
-      <widget name="rrcrej_spinbutton"/>
-      <widget name="ldpcbf_spinbutton"/>
-      <widget name="nhelpers_spinbutton"/>
-      <widget name="standard_combobox"/>
-      <widget name="inpipe_spinbutton"/>
-      <widget name="constellation_combobox"/>
-      <widget name="coderate_combobox"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="leandvb_label_sizegroup">
-    <widgets>
-      <widget name="rolloff_label"/>
-      <widget name="rrcrej_label"/>
-      <widget name="fastlock_label"/>
-      <widget name="maxsens_label"/>
-      <widget name="debug_label"/>
-      <widget name="strongpls_label"/>
-      <widget name="modcods_label"/>
-      <widget name="framesizes_label"/>
-      <widget name="fastdrift_label"/>
-      <widget name="ldpcbf_label"/>
-      <widget name="nhelpers_label"/>
-      <widget name="gui_label"/>
-      <widget name="inpipe_label"/>
-      <widget name="sampler_label"/>
-      <widget name="constellation_label"/>
-      <widget name="coderate_label"/>
-      <widget name="viterbi_label"/>
-      <widget name="hardmetric_label"/>
-    </widgets>
   </object>
 </interface>

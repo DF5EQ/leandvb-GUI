@@ -44,7 +44,7 @@ static GtkSwitch*     maxsens_switch;
 static GtkComboBox*   debug_combobox;
 static GtkSwitch*     gui_switch;
 static GtkComboBox*   standard_combobox;
-static GtkStack*      test_stack;
+static GtkStack*      standard_stack;
 
 /* settings/rtl_sdr */
 static GtkSpinButton* rtldongle_spinbutton;
@@ -109,7 +109,7 @@ static void expose_widgets (void)
     debug_combobox     = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "debug_combobox"));
     gui_switch         = GTK_SWITCH      (gtk_builder_get_object (builder, "gui_switch"));
     standard_combobox  = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "standard_combobox"));
-    test_stack         = GTK_STACK       (gtk_builder_get_object (builder, "stack1"));
+    standard_stack     = GTK_STACK       (gtk_builder_get_object (builder, "standard_stack"));
 
     /* settings/rtl_sdr */
     rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
@@ -458,8 +458,8 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
         gtk_widget_hide (GTK_WIDGET(nhelpers_label));
         gtk_widget_hide (GTK_WIDGET(nhelpers_spinbutton));
 
-        gtk_widget_show (GTK_WIDGET(constellation_label));
-        gtk_widget_show (GTK_WIDGET(constellation_combobox));
+//        gtk_widget_show (GTK_WIDGET(constellation_label));
+//        gtk_widget_show (GTK_WIDGET(constellation_combobox));
         gtk_widget_show (GTK_WIDGET(coderate_label));
         gtk_widget_show (GTK_WIDGET(coderate_combobox));
         gtk_widget_show (GTK_WIDGET(viterbi_label));
@@ -467,13 +467,13 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
         gtk_widget_show (GTK_WIDGET(hardmetric_label));
         gtk_widget_show (GTK_WIDGET(hardmetric_switch));
 
-        gtk_stack_set_visible_child_name (test_stack, "page0");
+        gtk_stack_set_visible_child_name (standard_stack, "DVB-S_page");
     }
 
     if (strcmp(text,"DVB-S2")==0)
     {
-        gtk_widget_hide (GTK_WIDGET(constellation_label));
-        gtk_widget_hide (GTK_WIDGET(constellation_combobox));
+//        gtk_widget_hide (GTK_WIDGET(constellation_label));
+//        gtk_widget_hide (GTK_WIDGET(constellation_combobox));
         gtk_widget_hide (GTK_WIDGET(coderate_label));
         gtk_widget_hide (GTK_WIDGET(coderate_combobox));
         gtk_widget_hide (GTK_WIDGET(viterbi_label));
@@ -494,7 +494,7 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
         gtk_widget_show (GTK_WIDGET(nhelpers_label));
         gtk_widget_show (GTK_WIDGET(nhelpers_spinbutton));
 
-        gtk_stack_set_visible_child_name (test_stack, "page1");
+        gtk_stack_set_visible_child_name (standard_stack, "DVB-S2_page");
     }
 }
 
