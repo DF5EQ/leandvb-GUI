@@ -379,6 +379,10 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     /* store settings/leandvb parameters */
     printf("TODO: %s - store settings/leandvb parameters\n", __FUNCTION__);
+
+    i = gtk_spin_button_get_value_as_int (inpipe_spinbutton);
+    parameters_set_int ("inpipe", i);
+
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
