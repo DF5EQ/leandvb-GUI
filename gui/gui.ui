@@ -900,6 +900,7 @@
                               <object class="GtkLabel" id="constellation_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">constellation</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -926,6 +927,7 @@
                               <object class="GtkLabel" id="coderate_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">code rate</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -957,6 +959,7 @@
                               <object class="GtkLabel" id="viterbi_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">viterbi</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -979,6 +982,7 @@
                             <child>
                               <object class="GtkLabel" id="hardmetric_label">
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">hard-metric</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1030,6 +1034,7 @@
                               <object class="GtkLabel" id="strongpls_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">strongpls</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1053,6 +1058,7 @@
                               <object class="GtkLabel" id="modcods_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">modcods</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1077,6 +1083,7 @@
                               <object class="GtkLabel" id="framesizes_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">framesizes</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1101,6 +1108,7 @@
                               <object class="GtkLabel" id="fastdrift_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">fastdrift</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1124,6 +1132,7 @@
                               <object class="GtkLabel" id="ldpcbf_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">max LDPC bitflips</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1150,6 +1159,7 @@
                               <object class="GtkLabel" id="nhelpers_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">number of decoders</property>
                                 <property name="xalign">0</property>
                               </object>
