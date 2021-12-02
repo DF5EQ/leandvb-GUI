@@ -445,55 +445,11 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
 
     if (strcmp(text,"DVB-S")==0)
     {
-        gtk_widget_hide (GTK_WIDGET(strongpls_label));
-        gtk_widget_hide (GTK_WIDGET(strongpls_switch));
-        gtk_widget_hide (GTK_WIDGET(modcods_label));
-        gtk_widget_hide (GTK_WIDGET(modcods_entry));
-        gtk_widget_hide (GTK_WIDGET(framesizes_label));
-        gtk_widget_hide (GTK_WIDGET(framesizes_entry));
-        gtk_widget_hide (GTK_WIDGET(fastdrift_label));
-        gtk_widget_hide (GTK_WIDGET(fastdrift_switch));
-        gtk_widget_hide (GTK_WIDGET(ldpcbf_label));
-        gtk_widget_hide (GTK_WIDGET(ldpcbf_spinbutton));
-        gtk_widget_hide (GTK_WIDGET(nhelpers_label));
-        gtk_widget_hide (GTK_WIDGET(nhelpers_spinbutton));
-
-//        gtk_widget_show (GTK_WIDGET(constellation_label));
-//        gtk_widget_show (GTK_WIDGET(constellation_combobox));
-        gtk_widget_show (GTK_WIDGET(coderate_label));
-        gtk_widget_show (GTK_WIDGET(coderate_combobox));
-        gtk_widget_show (GTK_WIDGET(viterbi_label));
-        gtk_widget_show (GTK_WIDGET(viterbi_switch));
-        gtk_widget_show (GTK_WIDGET(hardmetric_label));
-        gtk_widget_show (GTK_WIDGET(hardmetric_switch));
-
         gtk_stack_set_visible_child_name (standard_stack, "DVB-S_page");
     }
 
     if (strcmp(text,"DVB-S2")==0)
     {
-//        gtk_widget_hide (GTK_WIDGET(constellation_label));
-//        gtk_widget_hide (GTK_WIDGET(constellation_combobox));
-        gtk_widget_hide (GTK_WIDGET(coderate_label));
-        gtk_widget_hide (GTK_WIDGET(coderate_combobox));
-        gtk_widget_hide (GTK_WIDGET(viterbi_label));
-        gtk_widget_hide (GTK_WIDGET(viterbi_switch));
-        gtk_widget_hide (GTK_WIDGET(hardmetric_label));
-        gtk_widget_hide (GTK_WIDGET(hardmetric_switch));
-
-        gtk_widget_show (GTK_WIDGET(strongpls_label));
-        gtk_widget_show (GTK_WIDGET(strongpls_switch));
-        gtk_widget_show (GTK_WIDGET(modcods_label));
-        gtk_widget_show (GTK_WIDGET(modcods_entry));
-        gtk_widget_show (GTK_WIDGET(framesizes_label));
-        gtk_widget_show (GTK_WIDGET(framesizes_entry));
-        gtk_widget_show (GTK_WIDGET(fastdrift_label));
-        gtk_widget_show (GTK_WIDGET(fastdrift_switch));
-        gtk_widget_show (GTK_WIDGET(ldpcbf_label));
-        gtk_widget_show (GTK_WIDGET(ldpcbf_spinbutton));
-        gtk_widget_show (GTK_WIDGET(nhelpers_label));
-        gtk_widget_show (GTK_WIDGET(nhelpers_spinbutton));
-
         gtk_stack_set_visible_child_name (standard_stack, "DVB-S2_page");
     }
 }
