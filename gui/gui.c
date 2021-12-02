@@ -385,6 +385,9 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     s = gtk_combo_box_get_active_id (sampler_combobox);
     parameters_set_string ("sampler", s);
+
+    f = gtk_spin_button_get_value (rolloff_spinbutton);
+    parameters_set_float ("rolloff", f, "%.2f");
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
