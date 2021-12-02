@@ -426,6 +426,12 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     b = gtk_switch_get_state (strongpls_switch);
     parameters_set_bool ("strongpls", b);
 
+    s = gtk_entry_get_text (modcods_entry);
+    parameters_set_string ("modcods", s);
+
+    s = gtk_entry_get_text (framesizes_entry);
+    parameters_set_string ("framesizes", s);
+
     b = gtk_switch_get_state (fastdrift_switch);
     parameters_set_bool ("fastdrift", b);
 }
