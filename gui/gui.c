@@ -379,7 +379,6 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     parameters_set_string ("leandvb_file", s);
 
     /* store settings/leandvb parameters */
-    printf("TODO: %s - store settings/leandvb parameters\n", __FUNCTION__);
 
     i = gtk_spin_button_get_value_as_int (inpipe_spinbutton);
     parameters_set_int ("inpipe", i);
@@ -398,6 +397,17 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     b = gtk_switch_get_state (maxsens_switch);
     parameters_set_bool ("maxsens", b);
+
+    s = gtk_combo_box_get_active_id (debug_combobox);
+    parameters_set_string ("debug", s);
+
+    b = gtk_switch_get_state (gui_switch);
+    parameters_set_bool ("gui", b);
+ 
+    s = gtk_combo_box_get_active_id (standard_combobox);
+    parameters_set_string ("standard", s);
+
+   /* store settings/leandvb/DVB-S parameters */
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
@@ -452,13 +462,13 @@ void filechooser_button_clicked_cb (GtkWidget* widget, gpointer data)
     gtk_widget_destroy (dialog);
 }
 
-/*----- settings leandvb -----*/
+/*----- settings/leandvb -----*/
 
 void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
 {
-    gchar* text;
+    const char* text;
 
-    text = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT(widget));
+    text = gtk_combo_box_get_active_id (GTK_COMBO_BOX(widget));
 
     if (strcmp(text,"DVB-S")==0)
     {
@@ -536,6 +546,9 @@ void gui_init (void)
  
     /* builder not longer needed */ 
     g_object_unref(builder);
+
+    /* synchronize visibility */
+    g_signal_emit_by_name (standard_combobox, "changed");
  
     /* start the gui */
     gtk_widget_show(window);                
