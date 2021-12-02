@@ -420,6 +420,14 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     b = gtk_switch_get_state (hardmetric_switch);
     parameters_set_bool ("hardmetric", b);
+
+   /* store settings/leandvb/DVB-S2 parameters */
+
+    b = gtk_switch_get_state (strongpls_switch);
+    parameters_set_bool ("strongpls", b);
+
+    b = gtk_switch_get_state (fastdrift_switch);
+    parameters_set_bool ("fastdrift", b);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
