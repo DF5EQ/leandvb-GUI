@@ -414,6 +414,12 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
  
     s = gtk_combo_box_get_active_id (coderate_combobox);
     parameters_set_string ("coderate", s);
+
+    b = gtk_switch_get_state (viterbi_switch);
+    parameters_set_bool ("viterbi", b);
+
+    b = gtk_switch_get_state (hardmetric_switch);
+    parameters_set_bool ("hardmetric", b);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
