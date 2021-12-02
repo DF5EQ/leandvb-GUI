@@ -408,6 +408,9 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     parameters_set_string ("standard", s);
 
    /* store settings/leandvb/DVB-S parameters */
+ 
+    s = gtk_combo_box_get_active_id (constellation_combobox);
+    parameters_set_string ("constellation", s);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
