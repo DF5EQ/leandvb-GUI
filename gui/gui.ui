@@ -1037,36 +1037,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="coderate_label">
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">20</property>
-                        <property name="label" translatable="yes">code rate</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="coderate_combobox">
-                        <property name="can_focus">False</property>
-                        <items>
-                          <item id="1/2" translatable="yes">1/2</item>
-                          <item id="2/3" translatable="yes">2/3</item>
-                          <item id="3/4" translatable="yes">3/4</item>
-                          <item id="4/5" translatable="yes">4/5</item>
-                          <item id="5/6" translatable="yes">5/6</item>
-                          <item id="6/7" translatable="yes">6/7</item>
-                          <item id="7/8" translatable="yes">7/8</item>
-                        </items>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="viterbi_label">
                         <property name="can_focus">False</property>
                         <property name="margin_left">20</property>
@@ -1148,10 +1118,36 @@
                               </packing>
                             </child>
                             <child>
-                              <placeholder/>
+                              <object class="GtkLabel" id="coderate_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="margin_left">20</property>
+                                <property name="label" translatable="yes">code rate</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
                             </child>
                             <child>
-                              <placeholder/>
+                              <object class="GtkComboBoxText" id="coderate_combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <items>
+                                  <item id="1/2" translatable="yes">1/2</item>
+                                  <item id="2/3" translatable="yes">2/3</item>
+                                  <item id="3/4" translatable="yes">3/4</item>
+                                  <item id="4/5" translatable="yes">4/5</item>
+                                  <item id="5/6" translatable="yes">5/6</item>
+                                  <item id="6/7" translatable="yes">6/7</item>
+                                  <item id="7/8" translatable="yes">7/8</item>
+                                </items>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
                             </child>
                             <child>
                               <placeholder/>
@@ -1350,6 +1346,12 @@
                         <property name="top_attach">1</property>
                         <property name="height">7</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
