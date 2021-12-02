@@ -343,6 +343,7 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     const char* s;
     int         i;
     float       f;
+    bool        b;
 
     /* store settings/rtl_dongle parameters */
 
@@ -391,6 +392,9 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     f = gtk_spin_button_get_value (rrcrej_spinbutton);
     parameters_set_float ("rrcrej", f, "%.1f");
+
+    b = gtk_switch_get_state (fastlock_switch);
+    parameters_set_bool ("fastlock", b);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
