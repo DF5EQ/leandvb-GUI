@@ -395,6 +395,9 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     b = gtk_switch_get_state (fastlock_switch);
     parameters_set_bool ("fastlock", b);
+
+    b = gtk_switch_get_state (maxsens_switch);
+    parameters_set_bool ("maxsens", b);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
