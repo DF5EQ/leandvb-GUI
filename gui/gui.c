@@ -388,6 +388,9 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     f = gtk_spin_button_get_value (rolloff_spinbutton);
     parameters_set_float ("rolloff", f, "%.2f");
+
+    f = gtk_spin_button_get_value (rrcrej_spinbutton);
+    parameters_set_float ("rrcrej", f, "%.1f");
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
