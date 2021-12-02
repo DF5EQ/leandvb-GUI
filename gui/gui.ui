@@ -900,7 +900,6 @@
                               <object class="GtkLabel" id="constellation_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">constellation</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -927,7 +926,6 @@
                               <object class="GtkLabel" id="coderate_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">code rate</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -959,7 +957,6 @@
                               <object class="GtkLabel" id="viterbi_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">viterbi</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -982,7 +979,6 @@
                             <child>
                               <object class="GtkLabel" id="hardmetric_label">
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">hard-metric</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1128,7 +1124,6 @@
                               <object class="GtkLabel" id="ldpcbf_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">max LDPC bitflips</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1141,6 +1136,7 @@
                               <object class="GtkSpinButton" id="ldpcbf_spinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="text" translatable="yes">0</property>
                                 <property name="adjustment">ldpcbf_adjustment</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
@@ -1154,7 +1150,6 @@
                               <object class="GtkLabel" id="nhelpers_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_left">20</property>
                                 <property name="label" translatable="yes">number of decoders</property>
                                 <property name="xalign">0</property>
                               </object>
@@ -1167,6 +1162,7 @@
                               <object class="GtkSpinButton" id="nhelpers_spinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="text" translatable="yes">0</property>
                                 <property name="adjustment">nhelpers_adjustment</property>
                                 <property name="snap_to_ticks">True</property>
                                 <property name="numeric">True</property>
@@ -1190,79 +1186,11 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">4</property>
+                        <property name="left_attach">2</property>
                         <property name="top_attach">1</property>
+                        <property name="width">2</property>
                         <property name="height">7</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
