@@ -411,6 +411,9 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
  
     s = gtk_combo_box_get_active_id (constellation_combobox);
     parameters_set_string ("constellation", s);
+ 
+    s = gtk_combo_box_get_active_id (coderate_combobox);
+    parameters_set_string ("coderate", s);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
