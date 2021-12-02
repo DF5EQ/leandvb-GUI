@@ -717,19 +717,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="strongpls_label">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">20</property>
-                        <property name="label" translatable="yes">strongpls</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="modcods_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -804,17 +791,6 @@
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSwitch" id="strongpls_switch">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="halign">start</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -1181,10 +1157,11 @@
                             <property name="row_spacing">7</property>
                             <property name="column_spacing">5</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkLabel" id="strongpls_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_21</property>
+                                <property name="label" translatable="yes">strongpls</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -1192,66 +1169,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_22</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_23</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_24</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_25</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">label_26</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">5</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_21</property>
+                              <object class="GtkSwitch" id="strongpls_switch">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
+                                <property name="halign">start</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1259,64 +1180,34 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_22</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_23</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_24</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_25</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
-                              <object class="GtkButton">
-                                <property name="label" translatable="yes">button_26</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">5</property>
-                              </packing>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
@@ -1336,6 +1227,12 @@
                         <property name="top_attach">1</property>
                         <property name="height">7</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
