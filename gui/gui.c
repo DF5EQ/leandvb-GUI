@@ -434,6 +434,12 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     b = gtk_switch_get_state (fastdrift_switch);
     parameters_set_bool ("fastdrift", b);
+
+    i = gtk_spin_button_get_value_as_int (ldpcbf_spinbutton);
+    parameters_set_int ("ldpcbf", i);
+
+    i = gtk_spin_button_get_value_as_int (nhelpers_spinbutton);
+    parameters_set_int ("nhelpers", i);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
