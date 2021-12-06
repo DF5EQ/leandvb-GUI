@@ -977,6 +977,7 @@
                           <item id="DVB-S2" translatable="yes">DVB-S2</item>
                         </items>
                         <signal name="changed" handler="standard_combobox_changed_cb" swapped="no"/>
+                        <signal name="map" handler="standard_combobox_changed_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -1534,6 +1535,7 @@
       <widget name="ldpcbf_label"/>
       <widget name="nhelpers_label"/>
       <widget name="gui_label"/>
+      <widget name="standard_label"/>
       <widget name="inpipe_label"/>
       <widget name="sampler_label"/>
       <widget name="constellation_label"/>

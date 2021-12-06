@@ -147,11 +147,14 @@ static void expose_widgets (void)
 
 static void parameters_to_gui (void)
 {
+
     const char* s;
     int         i;
     float       f;
     bool        b;
     char      buf[20];
+
+    printf("TODO: %s - load parameters when showing the window/dialog, use the show signals\n", __FUNCTION__);
 
     /* load main window parameters */
 
@@ -500,7 +503,7 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
 {
     const char* text;
 
-    text = gtk_combo_box_get_active_id (GTK_COMBO_BOX(widget));
+    text = gtk_combo_box_get_active_id (standard_combobox);
 
     if (strcmp(text,"DVB-S")==0)
     {
@@ -579,9 +582,6 @@ void gui_init (void)
     /* builder not longer needed */ 
     g_object_unref(builder);
 
-    /* synchronize visibility */
-    g_signal_emit_by_name (standard_combobox, "changed");
- 
     /* start the gui */
     gtk_widget_show(window);                
  }
