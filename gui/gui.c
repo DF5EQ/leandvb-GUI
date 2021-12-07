@@ -145,15 +145,106 @@ static void expose_widgets (void)
     nhelpers_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "nhelpers_spinbutton"));
 }
 
-static void parameters_to_gui (void)
+/*===== callback functions ==================================================*/
+
+/*----- main window ---------------------------------------------------------*/
+
+void main_window_show_cb (GtkWidget* widget, gpointer data)
+{
+    const char* s;
+    float       f;
+    int         i;
+    char  buf[20];
+
+    /* load main window parameters */
+
+    parameters_get_string ("fec", &s);
+    snprintf (buf,sizeof(buf), "%s", s);
+    gtk_entry_set_text (fec_entry, buf);
+
+    parameters_get_float ("lnb_lo", &f);
+    snprintf (buf,sizeof(buf), "%.3f", f);
+    gtk_entry_set_text (lnblo_entry, buf);
+
+    parameters_get_int ("tune", &i);
+    snprintf (buf,sizeof(buf), "%d", i);
+    gtk_entry_set_text (tune_entry, buf);
+
+    parameters_get_int ("bandwidth", &i);
+    snprintf (buf,sizeof(buf), "%d", i);
+    gtk_entry_set_text (bandwidth_entry, buf);
+
+    parameters_get_int ("symbolrate", &i);
+    snprintf (buf,sizeof(buf), "%d", i);
+    gtk_entry_set_text (symbolrate_entry, buf);
+
+    parameters_get_float ("frequency", &f);
+    snprintf (buf,sizeof(buf), "%.3f", f);
+    gtk_entry_set_text (frequency_entry, buf);
+}
+
+void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 {
     const char* s;
     int         i;
     float       f;
-    bool        b;
-    char      buf[20];
 
-    printf("TODO: %s - load parameters when showing the window/dialog, use the show signals\n", __FUNCTION__);
+    /* store main window parameters */
+
+    s = gtk_entry_get_text (fec_entry);
+    parameters_set_string ("fec", s);
+
+    s = gtk_entry_get_text (lnblo_entry);
+    f = atof(s);
+    parameters_set_float ("lnb_lo", f, "%.3f");
+
+    s = gtk_entry_get_text (tune_entry);
+    i = atoi(s);
+    parameters_set_int ("tune", i);
+
+    s = gtk_entry_get_text (bandwidth_entry);
+    i = atoi(s);
+    parameters_set_int ("bandwidth", i);
+
+    s = gtk_entry_get_text (symbolrate_entry);
+    i = atoi(s);
+    parameters_set_int ("symbolrate", i);
+
+    s = gtk_entry_get_text (frequency_entry);
+    f = atof(s);
+    parameters_set_float ("frequency", f, "%.3f");
+
+    /* stop the gui */
+	gtk_main_quit();
+}
+
+void start_button_clicked_cb (GtkWidget* widget, gpointer data)
+{
+    printf("TODO: %s\n", __FUNCTION__);
+}
+
+void stop_button_clicked_cb (GtkWidget* widget, gpointer data)
+{
+    printf("TODO: %s\n", __FUNCTION__);
+}
+
+void settings_button_clicked_cb (GtkWidget* widget, gpointer data)
+{
+	/* show the settings dialog and wait for closing */
+    gtk_dialog_run (settings_dialog);
+
+    /* hide the settingsdialog after it's closing */
+    gtk_widget_hide (GTK_WIDGET(settings_dialog));
+}
+
+/*----- settings dialog -----------------------------------------------------*/
+
+void settings_dialog_show_cb (GtkWidget* widget, gpointer data)
+{
+    const char* s;
+    float       f;
+    int         i;
+    bool        b;
 
     /* load settings/rtl_dongle parameters */
 
@@ -254,107 +345,6 @@ static void parameters_to_gui (void)
 
     parameters_get_int ("nhelpers", &i);
     gtk_spin_button_set_value (nhelpers_spinbutton, (float)i);
-}
-
-/*===== callback functions ==================================================*/
-
-/*----- main window -----*/
-
-void main_window_show_cb (GtkWidget* widget, gpointer data)
-{
-    const char* s;
-    float       f;
-    int         i;
-    char  buf[20];
-
-    printf("TODO: %s - load widget data with parameters\n", __FUNCTION__);
-
-    /* load main window parameters */
-
-    parameters_get_string ("fec", &s);
-    snprintf (buf,sizeof(buf), "%s", s);
-    gtk_entry_set_text (fec_entry, buf);
-
-    parameters_get_float ("lnb_lo", &f);
-    snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (lnblo_entry, buf);
-
-    parameters_get_int ("tune", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (tune_entry, buf);
-
-    parameters_get_int ("bandwidth", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (bandwidth_entry, buf);
-
-    parameters_get_int ("symbolrate", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (symbolrate_entry, buf);
-
-    parameters_get_float ("frequency", &f);
-    snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (frequency_entry, buf);
-}
-
-void main_window_destroy_cb (GtkWidget* widget, gpointer data)
-{
-    const char* s;
-    int         i;
-    float       f;
-
-    /* store main window parameters */
-
-    s = gtk_entry_get_text (fec_entry);
-    parameters_set_string ("fec", s);
-
-    s = gtk_entry_get_text (lnblo_entry);
-    f = atof(s);
-    parameters_set_float ("lnb_lo", f, "%.3f");
-
-    s = gtk_entry_get_text (tune_entry);
-    i = atoi(s);
-    parameters_set_int ("tune", i);
-
-    s = gtk_entry_get_text (bandwidth_entry);
-    i = atoi(s);
-    parameters_set_int ("bandwidth", i);
-
-    s = gtk_entry_get_text (symbolrate_entry);
-    i = atoi(s);
-    parameters_set_int ("symbolrate", i);
-
-    s = gtk_entry_get_text (frequency_entry);
-    f = atof(s);
-    parameters_set_float ("frequency", f, "%.3f");
-
-    /* stop the gui */
-	gtk_main_quit();
-}
-
-void start_button_clicked_cb (GtkWidget* widget, gpointer data)
-{
-    printf("TODO: %s\n", __FUNCTION__);
-}
-
-void stop_button_clicked_cb (GtkWidget* widget, gpointer data)
-{
-    printf("TODO: %s\n", __FUNCTION__);
-}
-
-void settings_button_clicked_cb (GtkWidget* widget, gpointer data)
-{
-	/* show the settings dialog and wait for closing */
-    gtk_dialog_run (settings_dialog);
-
-    /* hide the settingsdialog after it's closing */
-    gtk_widget_hide (GTK_WIDGET(settings_dialog));
-}
-
-/*----- settings dialog -----*/
-
-void settings_dialog_show_cb (GtkWidget* widget, gpointer data)
-{
-    printf("TODO: %s - load widget data with parameters\n", __FUNCTION__);
 }
 
 void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
@@ -519,7 +509,7 @@ void standard_combobox_changed_cb (GtkComboBox *widget, gpointer user_data)
 {
     const char* text;
 
-    text = gtk_combo_box_get_active_id (standard_combobox);
+    text = gtk_combo_box_get_active_id (widget);
 
     if (strcmp(text,"DVB-S")==0)
     {
@@ -588,9 +578,6 @@ void gui_init (void)
 
     /* expose needed widgets */
     expose_widgets();
-
-    /* load parameters */
-    parameters_to_gui();
 
     /* connect the signals */
     gtk_builder_connect_signals(builder, NULL);

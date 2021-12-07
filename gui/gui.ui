@@ -979,7 +979,6 @@
                           <item id="DVB-S2" translatable="yes">DVB-S2</item>
                         </items>
                         <signal name="changed" handler="standard_combobox_changed_cb" swapped="no"/>
-                        <signal name="map" handler="standard_combobox_changed_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
