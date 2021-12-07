@@ -24,6 +24,7 @@
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <signal name="destroy" handler="main_window_destroy_cb" swapped="no"/>
+    <signal name="show" handler="main_window_show_cb" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -551,6 +552,7 @@
     <property name="modal">True</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <signal name="show" handler="settings_dialog_show_cb" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>

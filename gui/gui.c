@@ -147,7 +147,6 @@ static void expose_widgets (void)
 
 static void parameters_to_gui (void)
 {
-
     const char* s;
     int         i;
     float       f;
@@ -155,32 +154,6 @@ static void parameters_to_gui (void)
     char      buf[20];
 
     printf("TODO: %s - load parameters when showing the window/dialog, use the show signals\n", __FUNCTION__);
-
-    /* load main window parameters */
-
-    parameters_get_string ("fec", &s);
-    snprintf (buf,sizeof(buf), "%s", s);
-    gtk_entry_set_text (fec_entry, buf);
-
-    parameters_get_float ("lnb_lo", &f);
-    snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (lnblo_entry, buf);
-
-    parameters_get_int ("tune", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (tune_entry, buf);
-
-    parameters_get_int ("bandwidth", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (bandwidth_entry, buf);
-
-    parameters_get_int ("symbolrate", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (symbolrate_entry, buf);
-
-    parameters_get_float ("frequency", &f);
-    snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (frequency_entry, buf);
 
     /* load settings/rtl_dongle parameters */
 
@@ -287,6 +260,42 @@ static void parameters_to_gui (void)
 
 /*----- main window -----*/
 
+void main_window_show_cb (GtkWidget* widget, gpointer data)
+{
+    const char* s;
+    float       f;
+    int         i;
+    char  buf[20];
+
+    printf("TODO: %s - load widget data with parameters\n", __FUNCTION__);
+
+    /* load main window parameters */
+
+    parameters_get_string ("fec", &s);
+    snprintf (buf,sizeof(buf), "%s", s);
+    gtk_entry_set_text (fec_entry, buf);
+
+    parameters_get_float ("lnb_lo", &f);
+    snprintf (buf,sizeof(buf), "%.3f", f);
+    gtk_entry_set_text (lnblo_entry, buf);
+
+    parameters_get_int ("tune", &i);
+    snprintf (buf,sizeof(buf), "%d", i);
+    gtk_entry_set_text (tune_entry, buf);
+
+    parameters_get_int ("bandwidth", &i);
+    snprintf (buf,sizeof(buf), "%d", i);
+    gtk_entry_set_text (bandwidth_entry, buf);
+
+    parameters_get_int ("symbolrate", &i);
+    snprintf (buf,sizeof(buf), "%d", i);
+    gtk_entry_set_text (symbolrate_entry, buf);
+
+    parameters_get_float ("frequency", &f);
+    snprintf (buf,sizeof(buf), "%.3f", f);
+    gtk_entry_set_text (frequency_entry, buf);
+}
+
 void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 {
     const char* s;
@@ -339,6 +348,13 @@ void settings_button_clicked_cb (GtkWidget* widget, gpointer data)
 
     /* hide the settingsdialog after it's closing */
     gtk_widget_hide (GTK_WIDGET(settings_dialog));
+}
+
+/*----- settings dialog -----*/
+
+void settings_dialog_show_cb (GtkWidget* widget, gpointer data)
+{
+    printf("TODO: %s - load widget data with parameters\n", __FUNCTION__);
 }
 
 void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
