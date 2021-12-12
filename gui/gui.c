@@ -185,37 +185,62 @@ void main_window_show_cb (GtkWidget* widget, gpointer data)
 
 void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 {
-    const char* s;
-    int         i;
-    float       f;
-
-    /* store main window parameters */
-
-    s = gtk_entry_get_text (fec_entry);
-    parameters_set_string ("fec", s);
-
-    s = gtk_entry_get_text (lnblo_entry);
-    f = atof(s);
-    parameters_set_float ("lnb_lo", f, "%.3f");
-
-    s = gtk_entry_get_text (tune_entry);
-    i = atoi(s);
-    parameters_set_int ("tune", i);
-
-    s = gtk_entry_get_text (bandwidth_entry);
-    i = atoi(s);
-    parameters_set_int ("bandwidth", i);
-
-    s = gtk_entry_get_text (symbolrate_entry);
-    i = atoi(s);
-    parameters_set_int ("symbolrate", i);
-
-    s = gtk_entry_get_text (frequency_entry);
-    f = atof(s);
-    parameters_set_float ("frequency", f, "%.3f");
-
     /* stop the gui */
-	gtk_main_quit();
+    gtk_main_quit();
+}
+
+gboolean main_window_entry_focus_out_event_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+    const char* s;
+    float       f;
+    int         i;
+
+    /* store main window parameter as requested */
+
+    s = gtk_entry_get_text (GTK_ENTRY(widget));
+    f = atof(s);
+    i = atoi(s);
+
+    if (GTK_ENTRY(widget) == frequency_entry)
+    {
+        parameters_set_float ("frequency", f, "%.3f");
+    }
+    else if (GTK_ENTRY(widget) == symbolrate_entry)
+    {
+        parameters_set_int ("symbolrate", i);
+    }
+    else if (GTK_ENTRY(widget) == bandwidth_entry)
+    {
+        parameters_set_int ("bandwidth", i);
+    }
+    else if (GTK_ENTRY(widget) == tune_entry)
+    {
+        parameters_set_int ("tune", i);
+    }
+    else if (GTK_ENTRY(widget) == lnblo_entry)
+    {
+        parameters_set_float ("lnb_lo", f, "%.3f");
+    }
+    else if (GTK_ENTRY(widget) == fec_entry)
+    {
+        parameters_set_string ("fec", s);
+    }
+    else
+    {
+        printf("%s: unknown parameter\n", __FUNCTION__);
+    }
+
+    return GDK_EVENT_PROPAGATE;
+}
+
+void main_window_combobox_changed_cb (GtkWidget* widget, gpointer data)
+{
+    /* when change was caused by selection from list */
+    if ( gtk_combo_box_get_active (GTK_COMBO_BOX(widget)) != -1)
+    {
+        /* data must point to the entry of the combobox */
+        main_window_entry_focus_out_event_cb (GTK_WIDGET(data), NULL, NULL);
+    }
 }
 
 void start_button_clicked_cb (GtkWidget* widget, gpointer data)

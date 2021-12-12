@@ -304,6 +304,7 @@
                     <property name="valign">center</property>
                     <property name="width_chars">10</property>
                     <property name="xalign">1</property>
+                    <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -352,7 +353,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">0</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">10491.500</item>
@@ -362,6 +362,7 @@
                       <item translatable="yes">10493.500</item>
                       <item translatable="yes">10494.000</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="frequency_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="frequency_entry">
                         <property name="can_focus">True</property>
@@ -369,6 +370,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -383,7 +385,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">1</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">2000</item>
@@ -394,6 +395,7 @@
                       <item translatable="yes">333</item>
                       <item translatable="yes">125</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="symbolrate_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="symbolrate_entry">
                         <property name="can_focus">True</property>
@@ -401,6 +403,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -415,7 +418,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">0</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">2400</item>
@@ -423,6 +425,7 @@
                       <item translatable="yes">1000</item>
                       <item translatable="yes">500</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="bandwidth_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="bandwidth_entry">
                         <property name="can_focus">True</property>
@@ -430,6 +433,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -444,7 +448,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">6</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">10000</item>
@@ -461,6 +464,7 @@
                       <item translatable="yes">-5000</item>
                       <item translatable="yes">-10000</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="tune_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="tune_entry">
                         <property name="can_focus">True</property>
@@ -468,6 +472,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -490,11 +495,13 @@
                       <item translatable="yes">6/7</item>
                       <item translatable="yes">7/8</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="fec_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="fec_entry">
                         <property name="can_focus">False</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
