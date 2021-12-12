@@ -483,7 +483,45 @@ void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
 
 void settings_defaults_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
-    printf("TODO: %s\n", __FUNCTION__);
+    /* load settings/rtl_dongle parameters */
+    gtk_spin_button_set_value (rtldongle_spinbutton, 0);
+    gtk_spin_button_set_value (gain_spinbutton,      36);
+    gtk_spin_button_set_value (ppm_spinbutton,       0);
+
+    /* load  settings/files parameters */
+    gtk_widget_set_tooltip_text (GTK_WIDGET(viewer_entry),     "/usr/bin");
+    gtk_entry_set_text          (viewer_entry,                 "ffplay -v 0");
+    gtk_widget_set_tooltip_text (GTK_WIDGET(rtlsdr_entry),     "/usr/bin");
+    gtk_entry_set_text          (rtlsdr_entry,                 "rtl_sdr");
+    gtk_widget_set_tooltip_text (GTK_WIDGET(ldpchelper_entry), "./");
+    gtk_entry_set_text          (ldpchelper_entry,             "ldpc_tool");
+    gtk_widget_set_tooltip_text (GTK_WIDGET(leandvb_entry),    "./");
+    gtk_entry_set_text (leandvb_entry,                         "leandvb");
+
+    /* load settings/leandvb parameters */
+    gtk_spin_button_set_value   (inpipe_spinbutton,  32000000);
+    gtk_combo_box_set_active_id (sampler_combobox,   "rrc");
+    gtk_spin_button_set_value   (rolloff_spinbutton, 0.35);
+    gtk_spin_button_set_value   (rrcrej_spinbutton,  30.0);
+    gtk_switch_set_state        (fastlock_switch,    false);
+    gtk_switch_set_state        (maxsens_switch,     false);
+    gtk_combo_box_set_active_id (debug_combobox,     "all");
+    gtk_switch_set_state        (gui_switch,         true);
+    gtk_combo_box_set_active_id (standard_combobox,  "DVB-S2");
+
+    /* load settings/leandvb/DVB-S parameters */
+    gtk_combo_box_set_active_id (constellation_combobox, "QPSK");
+    gtk_combo_box_set_active_id (coderate_combobox,      "4/5");
+    gtk_switch_set_state        (viterbi_switch,         false);
+    gtk_switch_set_state        (hardmetric_switch,      false);
+
+    /* load settings/leandvb/DVB-S2 parameters */
+    gtk_switch_set_state      (strongpls_switch,    false);
+    gtk_entry_set_text        (modcods_entry,       "0x0040");
+    gtk_entry_set_text        (framesizes_entry,    "0x01");
+    gtk_switch_set_state      (fastdrift_switch,    false);
+    gtk_spin_button_set_value (ldpcbf_spinbutton,   0);
+    gtk_spin_button_set_value (nhelpers_spinbutton, 6);
 }
 
 /*----- settings/files -----*/
