@@ -31,7 +31,7 @@ int parameters_get_bool   (const char* key, bool*  const  val);
 int parameters_get_string (const char* key, const  char** val);
 
 int parameters_set_int    (const char* key, const int   val);
-int parameters_set_float  (const char* key, const float val);
+int parameters_set_float  (const char* key, const float val, char* format);
 int parameters_set_bool   (const char* key, const bool  val);
 int parameters_set_string (const char* key, const char* val);
 

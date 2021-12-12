@@ -24,6 +24,7 @@
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <signal name="destroy" handler="main_window_destroy_cb" swapped="no"/>
+    <signal name="show" handler="main_window_show_cb" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -142,7 +143,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="button_start_clicked_cb" swapped="no"/>
+                        <signal name="clicked" handler="start_button_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -156,7 +157,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="button_stop_clicked_cb" swapped="no"/>
+                        <signal name="clicked" handler="stop_button_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -179,7 +180,7 @@
                     <property name="receives_default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <signal name="clicked" handler="button_settings_clicked_cb" swapped="no"/>
+                    <signal name="clicked" handler="settings_button_clicked_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
@@ -302,8 +303,8 @@
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="width_chars">10</property>
-                    <property name="text" translatable="yes">9750.000</property>
                     <property name="xalign">1</property>
+                    <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -352,7 +353,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">0</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">10491.500</item>
@@ -362,6 +362,7 @@
                       <item translatable="yes">10493.500</item>
                       <item translatable="yes">10494.000</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="frequency_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="frequency_entry">
                         <property name="can_focus">True</property>
@@ -369,6 +370,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -383,7 +385,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">1</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">2000</item>
@@ -394,6 +395,7 @@
                       <item translatable="yes">333</item>
                       <item translatable="yes">125</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="symbolrate_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="symbolrate_entry">
                         <property name="can_focus">True</property>
@@ -401,6 +403,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -415,7 +418,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">0</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">2400</item>
@@ -423,6 +425,7 @@
                       <item translatable="yes">1000</item>
                       <item translatable="yes">500</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="bandwidth_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="bandwidth_entry">
                         <property name="can_focus">True</property>
@@ -430,6 +433,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -444,7 +448,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="active">6</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">10000</item>
@@ -461,6 +464,7 @@
                       <item translatable="yes">-5000</item>
                       <item translatable="yes">-10000</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="tune_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="tune_entry">
                         <property name="can_focus">True</property>
@@ -468,6 +472,7 @@
                         <property name="valign">center</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -480,7 +485,6 @@
                   <object class="GtkComboBoxText" id="fec_combobox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="active">3</property>
                     <property name="has_entry">True</property>
                     <items>
                       <item translatable="yes">1/2</item>
@@ -491,11 +495,13 @@
                       <item translatable="yes">6/7</item>
                       <item translatable="yes">7/8</item>
                     </items>
+                    <signal name="changed" handler="main_window_combobox_changed_cb" object="fec_entry" swapped="no"/>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="fec_entry">
                         <property name="can_focus">False</property>
                         <property name="width_chars">10</property>
                         <property name="xalign">1</property>
+                        <signal name="focus-out-event" handler="main_window_entry_focus_out_event_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -523,7 +529,6 @@
   </object>
   <object class="GtkAdjustment" id="nhelpers_adjustment">
     <property name="upper">30</property>
-    <property name="value">6</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -554,6 +559,7 @@
     <property name="modal">True</property>
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
+    <signal name="show" handler="settings_dialog_show_cb" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
     </child>
@@ -568,11 +574,12 @@
             <property name="homogeneous">True</property>
             <property name="layout_style">spread</property>
             <child>
-              <object class="GtkButton" id="save_button">
+              <object class="GtkButton" id="settings_save_button">
                 <property name="label" translatable="yes">save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="settings_save_button_clicked_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -581,11 +588,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel_button">
+              <object class="GtkButton" id="settings_cancel_button">
                 <property name="label" translatable="yes">cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="settings_cancel_button_clicked_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -594,11 +602,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="default_button">
+              <object class="GtkButton" id="settings_defaults_button">
                 <property name="label" translatable="yes">defaults</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="settings_defaults_button_clicked_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -798,7 +807,6 @@
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">empty entry omits parameter</property>
                         <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">0x01</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -853,11 +861,10 @@
                       <object class="GtkComboBoxText" id="sampler_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="active">2</property>
                         <items>
-                          <item translatable="yes">nearest</item>
-                          <item translatable="yes">linear</item>
-                          <item translatable="yes">rrc</item>
+                          <item id="nearest" translatable="yes">nearest</item>
+                          <item id="linear" translatable="yes">linear</item>
+                          <item id="rrc" translatable="yes">rrc</item>
                         </items>
                       </object>
                       <packing>
@@ -869,12 +876,11 @@
                       <object class="GtkComboBoxText" id="debug_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="active">0</property>
                         <items>
-                          <item translatable="yes">all</item>
-                          <item translatable="yes">operation</item>
-                          <item translatable="yes">startup</item>
-                          <item translatable="yes">none</item>
+                          <item id="all" translatable="yes">all</item>
+                          <item id="operation" translatable="yes">operation</item>
+                          <item id="startup" translatable="yes">startup</item>
+                          <item id="none" translatable="yes">none</item>
                         </items>
                       </object>
                       <packing>
@@ -887,7 +893,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
-                        <property name="active">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -900,7 +905,6 @@
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">empty entry omits parameter</property>
                         <property name="width_chars">10</property>
-                        <property name="text" translatable="yes">0x0040</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -977,10 +981,9 @@
                       <object class="GtkComboBoxText" id="standard_combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="active">1</property>
                         <items>
-                          <item translatable="yes">DVB-S</item>
-                          <item translatable="yes">DVB-S2</item>
+                          <item id="DVB-S" translatable="yes">DVB-S</item>
+                          <item id="DVB-S2" translatable="yes">DVB-S2</item>
                         </items>
                         <signal name="changed" handler="standard_combobox_changed_cb" swapped="no"/>
                       </object>
@@ -1055,10 +1058,9 @@
                     <child>
                       <object class="GtkComboBoxText" id="constellation_combobox">
                         <property name="can_focus">False</property>
-                        <property name="active">0</property>
                         <items>
-                          <item translatable="yes">QPSK</item>
-                          <item translatable="yes">BPSK</item>
+                          <item id="QPSK" translatable="yes">QPSK</item>
+                          <item id="BPSK" translatable="yes">BPSK</item>
                         </items>
                       </object>
                       <packing>
@@ -1081,15 +1083,14 @@
                     <child>
                       <object class="GtkComboBoxText" id="coderate_combobox">
                         <property name="can_focus">False</property>
-                        <property name="active">3</property>
                         <items>
-                          <item translatable="yes">1/2</item>
-                          <item translatable="yes">2/3</item>
-                          <item translatable="yes">3/4</item>
-                          <item translatable="yes">4/5</item>
-                          <item translatable="yes">5/6</item>
-                          <item translatable="yes">6/7</item>
-                          <item translatable="yes">7/8</item>
+                          <item id="1/2" translatable="yes">1/2</item>
+                          <item id="2/3" translatable="yes">2/3</item>
+                          <item id="3/4" translatable="yes">3/4</item>
+                          <item id="4/5" translatable="yes">4/5</item>
+                          <item id="5/6" translatable="yes">5/6</item>
+                          <item id="6/7" translatable="yes">6/7</item>
+                          <item id="7/8" translatable="yes">7/8</item>
                         </items>
                       </object>
                       <packing>
@@ -1360,20 +1361,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFileChooserButton" id="ldpchelper_filechooser">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="title" translatable="yes">ldpchelper_filechooser</property>
-                        <signal name="query-tooltip" handler="ldpchelper_filechooser_query_tooltip_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="rltsdr_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1398,27 +1385,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFileChooserButton" id="rtlsdr_filechooser">
+                      <object class="GtkEntry" id="viewer_entry">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="title" translatable="yes">rtlsdr_filechooser</property>
-                        <signal name="query-tooltip" handler="rtlsdr_filechooser_query_tooltip_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkFileChooserButton" id="viewer_filechooser">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="title" translatable="yes">viewer_filechooser</property>
-                        <signal name="query-tooltip" handler="viewer_filechooser_query_tooltip_cb" swapped="no"/>
+                        <property name="can_focus">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1426,16 +1395,88 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFileChooserButton" id="leandvb_filechooser">
+                      <object class="GtkButton" id="viewer_button">
+                        <property name="label" translatable="yes">...</property>
+                        <property name="name">filechooser_button</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="has_tooltip">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="title" translatable="yes"/>
-                        <signal name="query-tooltip" handler="leandvb_filechooser_query_tooltip_cb" swapped="no"/>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="filechooser_button_clicked_cb" object="viewer_entry" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="rtlsdr_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="rtlsdr_button">
+                        <property name="label" translatable="yes">...</property>
+                        <property name="name">filechooser_button</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="filechooser_button_clicked_cb" object="rtlsdr_entry" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="ldpchelper_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="ldpchelper_button">
+                        <property name="label" translatable="yes">...</property>
+                        <property name="name">filechooser_button</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="filechooser_button_clicked_cb" object="ldpchelper_entry" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="leandvb_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="leandvb_button">
+                        <property name="label" translatable="yes">...</property>
+                        <property name="name">filechooser_button</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <signal name="clicked" handler="filechooser_button_clicked_cb" object="leandvb_entry" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
@@ -1502,6 +1543,7 @@
       <widget name="ldpcbf_label"/>
       <widget name="nhelpers_label"/>
       <widget name="gui_label"/>
+      <widget name="standard_label"/>
       <widget name="inpipe_label"/>
       <widget name="sampler_label"/>
       <widget name="constellation_label"/>

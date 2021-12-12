@@ -112,6 +112,7 @@ void parameters_default(void)
     printf("load parameters with defaults\n");
 
     parameters_add_int    ("bandwidth", 2400);
+    parameters_add_string ("coderate", "4/5");
     parameters_add_string ("constellation", "QPSK");
     parameters_add_string ("debug", "all");
     parameters_add_bool   ("fastdrift", false);
@@ -123,7 +124,7 @@ void parameters_default(void)
     parameters_add_bool   ("gui", true);
     parameters_add_bool   ("hardmetric", false);
     parameters_add_int    ("inpipe", 32000000);
-    parameters_add_int    ("ldpc_bf", 0);
+    parameters_add_int    ("ldpcbf", 0);
     parameters_add_string ("ldpchelper_file", "ldpc_tool");
     parameters_add_string ("ldpchelper_path", "./");
     parameters_add_string ("leandvb_file", "leandvb");
@@ -155,6 +156,7 @@ void parameters_print (void)
     printf("print parameters\n");
 
     parameters_print_int    ("bandwidth");
+    parameters_print_string ("coderate");
     parameters_print_string ("constellation");
     parameters_print_string ("debug");
     parameters_print_bool   ("fastdrift");
@@ -166,7 +168,7 @@ void parameters_print (void)
     parameters_print_bool   ("gui");
     parameters_print_bool   ("hardmetric");
     parameters_print_int    ("inpipe");
-    parameters_print_int    ("ldpc_bf");
+    parameters_print_int    ("ldpcbf");
     parameters_print_string ("ldpchelper_file");
     parameters_print_string ("ldpchelper_path");
     parameters_print_string ("leandvb_file");
@@ -196,6 +198,7 @@ void parameters_save (void)
     /* save parameters to file */
 
     printf("save parameters to file %s\n", parameters_file_name);
+
     json_object_to_file_ext(parameters_file_name, parameters_json_object, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_NOSLASHESCAPE);
 }
 
@@ -293,7 +296,7 @@ int parameters_set_int (const char* key, const int val)
     return 0;
 }
 
-int parameters_set_float (const char* key, const float val)
+int parameters_set_float (const char* key, const float val, char* format)
 {
     struct json_object* jobj;
     enum   json_type    jtyp;
@@ -304,6 +307,8 @@ int parameters_set_float (const char* key, const float val)
 
     jtyp = json_object_get_type(jobj);
     if (jtyp != json_type_double) return -2;
+
+    json_object_set_serializer(jobj, serializer_double, format, NULL);
 
     ret = json_object_set_double(jobj, val);
     if (ret == false) return -3;
@@ -341,6 +346,7 @@ int parameters_set_string (const char* key, const char* val)
     jtyp = json_object_get_type(jobj);
     if (jtyp != json_type_string) return -2;
 
+    if(val==NULL) val="";
     ret = json_object_set_string(jobj, val);
     if (ret == false) return -3;
 
