@@ -138,14 +138,14 @@ void parameters_default(void)
     parameters_add_float  ("rrcrej", 30.0, "%.1f");
     parameters_add_int    ("rtldongle", 0);
     parameters_add_string ("rtlsdr_file", "rtl_sdr");
-    parameters_add_string ("rtlsdr_path", "");
+    parameters_add_string ("rtlsdr_path", "/usr/bin");
     parameters_add_string ("sampler", "rrc");
     parameters_add_string ("standard", "DVB-S2");
     parameters_add_bool   ("strongpls", false);
     parameters_add_int    ("symbolrate", 1500);
     parameters_add_int    ("tune", 0);
     parameters_add_string ("viewer_file", "ffplay -v 0");
-    parameters_add_string ("viewer_path", "");
+    parameters_add_string ("viewer_path", "/usr/bin");
     parameters_add_bool   ("viterbi", false);
 }
 
