@@ -243,17 +243,17 @@ void main_window_combobox_changed_cb (GtkWidget* widget, gpointer data)
     }
 }
 
-void start_button_clicked_cb (GtkWidget* widget, gpointer data)
+void main_window_start_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
     printf("TODO: %s\n", __FUNCTION__);
 }
 
-void stop_button_clicked_cb (GtkWidget* widget, gpointer data)
+void main_window_stop_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
     printf("TODO: %s\n", __FUNCTION__);
 }
 
-void settings_button_clicked_cb (GtkWidget* widget, gpointer data)
+void main_window_settings_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
 	/* show the settings dialog and wait for closing */
     gtk_dialog_run (settings_dialog);

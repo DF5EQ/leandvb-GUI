@@ -138,12 +138,12 @@
                     <property name="baseline_position">bottom</property>
                     <property name="layout_style">spread</property>
                     <child>
-                      <object class="GtkButton" id="start_button">
+                      <object class="GtkButton" id="main_window_start_button">
                         <property name="label" translatable="yes">START</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="start_button_clicked_cb" swapped="no"/>
+                        <signal name="clicked" handler="main_window_start_button_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -152,12 +152,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="stop_button">
+                      <object class="GtkButton" id="main_window_stop_button">
                         <property name="label" translatable="yes">STOP</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
-                        <signal name="clicked" handler="stop_button_clicked_cb" swapped="no"/>
+                        <signal name="clicked" handler="main_window_stop_button_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -173,14 +173,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="settings_button">
+                  <object class="GtkButton" id="main_window_settings_button">
                     <property name="label" translatable="yes">Settings</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <signal name="clicked" handler="settings_button_clicked_cb" swapped="no"/>
+                    <signal name="clicked" handler="main_window_settings_button_clicked_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
