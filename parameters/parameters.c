@@ -96,6 +96,8 @@ static const char* viewer_file;
 static const char* viewer_path;
 static       bool  viterbi;
 
+static const char* param_file;
+
 /*===== public variables ====================================================*/
 
 /*===== private functions ===================================================*/
@@ -313,10 +315,12 @@ static void param_to_file (const char* file)
 
 /*===== public functions ====================================================*/
 
-void param_init (void)
+void param_init (const char* file)
 {
+    param_file = file;
+
     /* load parameters from file or defaults */
-    if( param_from_file("parameters.json") < 0)
+    if( param_from_file(param_file) < 0)
     {
         /* file loading faild */
         printf("failure loading from file\n");
@@ -328,7 +332,7 @@ void param_deinit (void)
 {
     /* save parameters to file */
 
-    param_to_file("parameters.json");
+    param_to_file(param_file);
 }
 
 void param_default_get (const char* key, void* val)

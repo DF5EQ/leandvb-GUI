@@ -18,7 +18,7 @@
 
 /*===== public functions ====================================================*/
 
-void param_init        (void);
+void param_init        (const char* file);
 void param_deinit      (void);
 void param_default_get (const char* key, void* val);
 void param_get         (const char* key, void* val);

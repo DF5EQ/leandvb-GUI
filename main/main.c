@@ -29,7 +29,7 @@ int main (int argc, char *argv[])
 {
     gtk_init (&argc, &argv);
     setlocale(LC_ALL, "en_US.UTF-8");
-    param_init();
+    param_init("parameters.json");
     gui_init ();
     gtk_main ();
     param_deinit();
