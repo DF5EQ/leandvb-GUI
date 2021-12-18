@@ -45,18 +45,7 @@ static GtkComboBox*   debug_combobox;
 static GtkSwitch*     gui_switch;
 static GtkComboBox*   standard_combobox;
 
-/* settings/rtl_sdr */
-static GtkSpinButton* rtldongle_spinbutton;
-static GtkSpinButton* gain_spinbutton;
-static GtkSpinButton* ppm_spinbutton;
-
-/* settings/files */
-static GtkEntry* leandvb_entry;
-static GtkEntry* ldpchelper_entry;
-static GtkEntry* rtlsdr_entry;
-static GtkEntry* viewer_entry;     
-
-/* settings DVB-S */
+/* settings/leandvc/DVB-S */
 static GtkLabel*    constellation_label;
 static GtkComboBox* constellation_combobox;
 static GtkLabel*    coderate_label;
@@ -66,7 +55,7 @@ static GtkSwitch*   viterbi_switch;
 static GtkLabel*    hardmetric_label;
 static GtkSwitch*   hardmetric_switch;
 
-/* settings DVB-S2 */
+/* settings/leandvb/DVB-S2 */
 static GtkLabel*      strongpls_label;
 static GtkSwitch*     strongpls_switch;
 static GtkLabel*      modcods_label;
@@ -79,6 +68,17 @@ static GtkLabel*      ldpcbf_label;
 static GtkSpinButton* ldpcbf_spinbutton;
 static GtkLabel*      nhelpers_label;
 static GtkSpinButton* nhelpers_spinbutton;
+
+/* settings/rtl_sdr */
+static GtkSpinButton* rtldongle_spinbutton;
+static GtkSpinButton* gain_spinbutton;
+static GtkSpinButton* ppm_spinbutton;
+
+/* settings/files */
+static GtkEntry* leandvb_entry;
+static GtkEntry* ldpchelper_entry;
+static GtkEntry* rtlsdr_entry;
+static GtkEntry* viewer_entry;     
 
 /*===== public variables ====================================================*/
 
@@ -109,18 +109,7 @@ static void expose_widgets (void)
     gui_switch         = GTK_SWITCH      (gtk_builder_get_object (builder, "gui_switch"));
     standard_combobox  = GTK_COMBO_BOX   (gtk_builder_get_object (builder, "standard_combobox"));
 
-    /* settings/rtl_sdr */
-    rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
-    gain_spinbutton      = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "gain_spinbutton"));
-    ppm_spinbutton       = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ppm_spinbutton"));
-
-    /* settings/files */
-    leandvb_entry    = GTK_ENTRY (gtk_builder_get_object (builder, "leandvb_entry"));
-    ldpchelper_entry = GTK_ENTRY (gtk_builder_get_object (builder, "ldpchelper_entry"));
-    rtlsdr_entry     = GTK_ENTRY (gtk_builder_get_object (builder, "rtlsdr_entry"));
-    viewer_entry     = GTK_ENTRY (gtk_builder_get_object (builder, "viewer_entry"));
-
-    /* settings DVB-S */
+    /* settings/leandvb/DVB-S */
     constellation_label    = GTK_LABEL     (gtk_builder_get_object (builder, "constellation_label"));
     constellation_combobox = GTK_COMBO_BOX (gtk_builder_get_object (builder, "constellation_combobox"));
     coderate_label         = GTK_LABEL     (gtk_builder_get_object (builder, "coderate_label"));
@@ -130,7 +119,7 @@ static void expose_widgets (void)
     hardmetric_label       = GTK_LABEL     (gtk_builder_get_object (builder, "hardmetric_label"));
     hardmetric_switch      = GTK_SWITCH    (gtk_builder_get_object (builder, "hardmetric_switch"));
 
-    /* settings DVB-S2 */
+    /* settings/leandvb/DVB-S2 */
     strongpls_label     = GTK_LABEL       (gtk_builder_get_object (builder, "strongpls_label"));
     strongpls_switch    = GTK_SWITCH      (gtk_builder_get_object (builder, "strongpls_switch"));
     modcods_label       = GTK_LABEL       (gtk_builder_get_object (builder, "modcods_label"));
@@ -143,6 +132,17 @@ static void expose_widgets (void)
     ldpcbf_spinbutton   = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ldpcbf_spinbutton"));
     nhelpers_label      = GTK_LABEL       (gtk_builder_get_object (builder, "nhelpers_label"));
     nhelpers_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "nhelpers_spinbutton"));
+
+    /* settings/rtl_sdr */
+    rtldongle_spinbutton = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "rtldongle_spinbutton"));
+    gain_spinbutton      = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "gain_spinbutton"));
+    ppm_spinbutton       = GTK_SPIN_BUTTON (gtk_builder_get_object (builder, "ppm_spinbutton"));
+
+    /* settings/files */
+    leandvb_entry    = GTK_ENTRY (gtk_builder_get_object (builder, "leandvb_entry"));
+    ldpchelper_entry = GTK_ENTRY (gtk_builder_get_object (builder, "ldpchelper_entry"));
+    rtlsdr_entry     = GTK_ENTRY (gtk_builder_get_object (builder, "rtlsdr_entry"));
+    viewer_entry     = GTK_ENTRY (gtk_builder_get_object (builder, "viewer_entry"));
 }
 
 /*===== callback functions ==================================================*/
@@ -158,29 +158,29 @@ void main_window_show_cb (GtkWidget* widget, gpointer data)
 
     /* load main window parameters */
 
-    parameters_get_string ("fec", &s);
-    snprintf (buf,sizeof(buf), "%s", s);
-    gtk_entry_set_text (fec_entry, buf);
+    param_get ("frequency", &f);
+    snprintf (buf, sizeof(buf), "%.3f", f);
+    gtk_entry_set_text (frequency_entry, buf);
 
-    parameters_get_float ("lnb_lo", &f);
-    snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (lnblo_entry, buf);
-
-    parameters_get_int ("tune", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (tune_entry, buf);
-
-    parameters_get_int ("bandwidth", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
-    gtk_entry_set_text (bandwidth_entry, buf);
-
-    parameters_get_int ("symbolrate", &i);
-    snprintf (buf,sizeof(buf), "%d", i);
+    param_get ("symbolrate", &i);
+    snprintf (buf, sizeof(buf), "%d", i);
     gtk_entry_set_text (symbolrate_entry, buf);
 
-    parameters_get_float ("frequency", &f);
-    snprintf (buf,sizeof(buf), "%.3f", f);
-    gtk_entry_set_text (frequency_entry, buf);
+    param_get ("bandwidth", &i);
+    snprintf (buf, sizeof(buf), "%d", i);
+    gtk_entry_set_text (bandwidth_entry, buf);
+
+    param_get ("tune", &i);
+    snprintf (buf, sizeof(buf), "%d", i);
+    gtk_entry_set_text (tune_entry, buf);
+
+    param_get ("lnb_lo", &f);
+    snprintf (buf, sizeof(buf), "%.3f", f);
+    gtk_entry_set_text (lnblo_entry, buf);
+
+    param_get ("fec", &s);
+    snprintf (buf, sizeof(buf), "%s", s);
+    gtk_entry_set_text (fec_entry, buf);
 }
 
 void main_window_destroy_cb (GtkWidget* widget, gpointer data)
@@ -191,44 +191,28 @@ void main_window_destroy_cb (GtkWidget* widget, gpointer data)
 
 gboolean main_window_entry_focus_out_event_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
+    /* store main window parameter as requested */
+
     const char* s;
     float       f;
     int         i;
-
-    /* store main window parameter as requested */
 
     s = gtk_entry_get_text (GTK_ENTRY(widget));
     f = atof(s);
     i = atoi(s);
 
     if (GTK_ENTRY(widget) == frequency_entry)
-    {
-        parameters_set_float ("frequency", f, "%.3f");
-    }
+        param_set ("frequency", &f);
     else if (GTK_ENTRY(widget) == symbolrate_entry)
-    {
-        parameters_set_int ("symbolrate", i);
-    }
+        param_set ("symbolrate", &i);
     else if (GTK_ENTRY(widget) == bandwidth_entry)
-    {
-        parameters_set_int ("bandwidth", i);
-    }
+        param_set ("bandwidth", &i);
     else if (GTK_ENTRY(widget) == tune_entry)
-    {
-        parameters_set_int ("tune", i);
-    }
+        param_set ("tune", &i);
     else if (GTK_ENTRY(widget) == lnblo_entry)
-    {
-        parameters_set_float ("lnb_lo", f, "%.3f");
-    }
+        param_set ("lnb_lo", &f);
     else if (GTK_ENTRY(widget) == fec_entry)
-    {
-        parameters_set_string ("fec", s);
-    }
-    else
-    {
-        printf("%s: unknown parameter\n", __FUNCTION__);
-    }
+        param_set ("fec", &s);
 
     return GDK_EVENT_PROPAGATE;
 }
@@ -271,105 +255,105 @@ void settings_dialog_show_cb (GtkWidget* widget, gpointer data)
     int         i;
     bool        b;
 
-    /* load settings/rtl_dongle parameters */
-
-    parameters_get_int ("rtldongle", &i);
-    gtk_spin_button_set_value (rtldongle_spinbutton, (float)i);
-
-    parameters_get_int ("gain", &i);
-    gtk_spin_button_set_value (gain_spinbutton, (float)i);
-
-    parameters_get_int ("ppm", &i);
-    gtk_spin_button_set_value (ppm_spinbutton, (float)i);
-
-    /* load  settings/files parameters */
-
-    parameters_get_string ("viewer_path", &s);
-    gtk_widget_set_tooltip_text (GTK_WIDGET(viewer_entry), s);
-
-    parameters_get_string ("viewer_file", &s);
-    gtk_entry_set_text (viewer_entry, s);
-
-    parameters_get_string ("rtlsdr_path", &s);
-    gtk_widget_set_tooltip_text (GTK_WIDGET(rtlsdr_entry), s);
-
-    parameters_get_string ("rtlsdr_file", &s);
-    gtk_entry_set_text (rtlsdr_entry, s);
-
-    parameters_get_string ("ldpchelper_path", &s);
-    gtk_widget_set_tooltip_text (GTK_WIDGET(ldpchelper_entry), s);
-
-    parameters_get_string ("ldpchelper_file", &s);
-    gtk_entry_set_text (ldpchelper_entry, s);
-
-    parameters_get_string ("leandvb_path", &s);
-    gtk_widget_set_tooltip_text (GTK_WIDGET(leandvb_entry), s);
-
-    parameters_get_string ("leandvb_file", &s);
-    gtk_entry_set_text (leandvb_entry, s);
-
     /* load settings/leandvb parameters */
 
-    parameters_get_int ("inpipe", &i);
+    param_get ("inpipe", &i);
     gtk_spin_button_set_value (inpipe_spinbutton, (float)i);
 
-    parameters_get_string ("sampler", &s);
+    param_get ("sampler", &s);
     gtk_combo_box_set_active_id (sampler_combobox, s);
 
-    parameters_get_float ("rolloff", &f);
+    param_get ("rolloff", &f);
     gtk_spin_button_set_value (rolloff_spinbutton, f);
 
-    parameters_get_float ("rrcrej", &f);
+    param_get ("rrcrej", &f);
     gtk_spin_button_set_value (rrcrej_spinbutton, f);
 
-    parameters_get_bool ("fastlock", &b);
+    param_get ("fastlock", &b);
     gtk_switch_set_state (fastlock_switch, b);
 
-    parameters_get_bool ("maxsens", &b);
+    param_get ("maxsens", &b);
     gtk_switch_set_state (maxsens_switch, b);
 
-    parameters_get_string ("debug", &s);
+    param_get ("debug", &s);
     gtk_combo_box_set_active_id (debug_combobox, s);
 
-    parameters_get_bool ("gui", &b);
+    param_get ("gui", &b);
     gtk_switch_set_state (gui_switch, b);
 
-    parameters_get_string ("standard", &s);
+    param_get ("standard", &s);
     gtk_combo_box_set_active_id (standard_combobox, s);
 
     /* load settings/leandvb/DVB-S parameters */
 
-    parameters_get_string ("constellation", &s);
+    param_get ("constellation", &s);
     gtk_combo_box_set_active_id (constellation_combobox, s);
 
-    parameters_get_string ("coderate", &s);
+    param_get ("coderate", &s);
     gtk_combo_box_set_active_id (coderate_combobox, s);
 
-    parameters_get_bool ("viterbi", &b);
+    param_get ("viterbi", &b);
     gtk_switch_set_state (viterbi_switch, b);
 
-    parameters_get_bool ("hardmetric", &b);
+    param_get ("hardmetric", &b);
     gtk_switch_set_state (hardmetric_switch, b);
 
     /* load settings/leandvb/DVB-S2 parameters */
 
-    parameters_get_bool ("strongpls", &b);
+    param_get ("strongpls", &b);
     gtk_switch_set_state (strongpls_switch, b);
 
-    parameters_get_string ("modcods", &s);
+    param_get ("modcods", &s);
     gtk_entry_set_text (modcods_entry, s);
 
-    parameters_get_string ("framesizes", &s);
+    param_get ("framesizes", &s);
     gtk_entry_set_text (framesizes_entry, s);
 
-    parameters_get_bool ("fastdrift", &b);
+    param_get ("fastdrift", &b);
     gtk_switch_set_state (fastdrift_switch, b);
 
-    parameters_get_int ("ldpcbf", &i);
+    param_get ("ldpcbf", &i);
     gtk_spin_button_set_value (ldpcbf_spinbutton, (float)i);
 
-    parameters_get_int ("nhelpers", &i);
+    param_get ("nhelpers", &i);
     gtk_spin_button_set_value (nhelpers_spinbutton, (float)i);
+
+    /* load settings/rtl_dongle parameters */
+
+    param_get ("ppm", &i);
+    gtk_spin_button_set_value (ppm_spinbutton, (float)i);
+
+    param_get ("gain", &i);
+    gtk_spin_button_set_value (gain_spinbutton, (float)i);
+
+    param_get ("rtldongle", &i);
+    gtk_spin_button_set_value (rtldongle_spinbutton, (float)i);
+
+    /* load  settings/files parameters */
+
+    param_get ("leandvb_path", &s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(leandvb_entry), s);
+
+    param_get ("leandvb_file", &s);
+    gtk_entry_set_text (leandvb_entry, s);
+
+    param_get ("ldpchelper_path", &s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(ldpchelper_entry), s);
+
+    param_get ("ldpchelper_file", &s);
+    gtk_entry_set_text (ldpchelper_entry, s);
+
+    param_get ("rtlsdr_path", &s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(rtlsdr_entry), s);
+
+    param_get ("rtlsdr_file", &s);
+    gtk_entry_set_text (rtlsdr_entry, s);
+
+    param_get ("viewer_path", &s);
+    gtk_widget_set_tooltip_text (GTK_WIDGET(viewer_entry), s);
+
+    param_get ("viewer_file", &s);
+    gtk_entry_set_text (viewer_entry, s);
 }
 
 void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
@@ -379,101 +363,105 @@ void settings_save_button_clicked_cb (GtkWidget* widget, gpointer data)
     float       f;
     bool        b;
 
-    /* store settings/rtl_dongle parameters */
-
-    i = gtk_spin_button_get_value_as_int (rtldongle_spinbutton);
-    parameters_set_int ("rtldongle", i);
-
-    i = gtk_spin_button_get_value_as_int (gain_spinbutton);
-    parameters_set_int ("gain", i);
-
-    i = gtk_spin_button_get_value_as_int (ppm_spinbutton);
-    parameters_set_int ("ppm", i);
-
-    /* store settings/files parameters */
-
-    s = gtk_widget_get_tooltip_text (GTK_WIDGET(viewer_entry));
-    parameters_set_string ("viewer_path", s);
-    s = gtk_entry_get_text (viewer_entry);
-    parameters_set_string ("viewer_file", s);
-
-    s = gtk_widget_get_tooltip_text (GTK_WIDGET(rtlsdr_entry));
-    parameters_set_string ("rtlsdr_path", s);
-    s = gtk_entry_get_text (rtlsdr_entry);
-    parameters_set_string ("rtlsdr_file", s);
-
-    s = gtk_widget_get_tooltip_text (GTK_WIDGET(ldpchelper_entry));
-    parameters_set_string ("ldpchelper_path", s);
-    s = gtk_entry_get_text (ldpchelper_entry);
-    parameters_set_string ("ldpchelper_file", s);
-
-    s = gtk_widget_get_tooltip_text (GTK_WIDGET(leandvb_entry));
-    parameters_set_string ("leandvb_path", s);
-    s = gtk_entry_get_text (leandvb_entry);
-    parameters_set_string ("leandvb_file", s);
-
     /* store settings/leandvb parameters */
 
     i = gtk_spin_button_get_value_as_int (inpipe_spinbutton);
-    parameters_set_int ("inpipe", i);
+    param_set ("inpipe", &i);
 
     s = gtk_combo_box_get_active_id (sampler_combobox);
-    parameters_set_string ("sampler", s);
+    param_set ("sampler", &s);
 
     f = gtk_spin_button_get_value (rolloff_spinbutton);
-    parameters_set_float ("rolloff", f, "%.2f");
+    param_set ("rolloff", &f);
 
     f = gtk_spin_button_get_value (rrcrej_spinbutton);
-    parameters_set_float ("rrcrej", f, "%.1f");
+    param_set ("rrcrej", &f);
 
     b = gtk_switch_get_state (fastlock_switch);
-    parameters_set_bool ("fastlock", b);
+    param_set ("fastlock", &b);
 
     b = gtk_switch_get_state (maxsens_switch);
-    parameters_set_bool ("maxsens", b);
+    param_set ("maxsens", &b);
 
     s = gtk_combo_box_get_active_id (debug_combobox);
-    parameters_set_string ("debug", s);
+    param_set ("debug", &s);
 
     b = gtk_switch_get_state (gui_switch);
-    parameters_set_bool ("gui", b);
+    param_set ("gui", &b);
  
     s = gtk_combo_box_get_active_id (standard_combobox);
-    parameters_set_string ("standard", s);
+    param_set ("standard", &s);
 
    /* store settings/leandvb/DVB-S parameters */
  
     s = gtk_combo_box_get_active_id (constellation_combobox);
-    parameters_set_string ("constellation", s);
+    param_set ("constellation", &s);
  
     s = gtk_combo_box_get_active_id (coderate_combobox);
-    parameters_set_string ("coderate", s);
+    param_set ("coderate", &s);
 
     b = gtk_switch_get_state (viterbi_switch);
-    parameters_set_bool ("viterbi", b);
+    param_set ("viterbi", &b);
 
     b = gtk_switch_get_state (hardmetric_switch);
-    parameters_set_bool ("hardmetric", b);
+    param_set ("hardmetric", &b);
 
    /* store settings/leandvb/DVB-S2 parameters */
 
     b = gtk_switch_get_state (strongpls_switch);
-    parameters_set_bool ("strongpls", b);
+    param_set ("strongpls", &b);
 
     s = gtk_entry_get_text (modcods_entry);
-    parameters_set_string ("modcods", s);
+    param_set ("modcods", &s);
 
     s = gtk_entry_get_text (framesizes_entry);
-    parameters_set_string ("framesizes", s);
+    param_set ("framesizes", &s);
 
     b = gtk_switch_get_state (fastdrift_switch);
-    parameters_set_bool ("fastdrift", b);
+    param_set ("fastdrift", &b);
 
     i = gtk_spin_button_get_value_as_int (ldpcbf_spinbutton);
-    parameters_set_int ("ldpcbf", i);
+    param_set ("ldpcbf", &i);
 
     i = gtk_spin_button_get_value_as_int (nhelpers_spinbutton);
-    parameters_set_int ("nhelpers", i);
+    param_set ("nhelpers", &i);
+
+    /* store settings/rtl_dongle parameters */
+
+    i = gtk_spin_button_get_value_as_int (ppm_spinbutton);
+    param_set ("ppm", &i);
+
+    i = gtk_spin_button_get_value_as_int (gain_spinbutton);
+    param_set ("gain", &i);
+
+    i = gtk_spin_button_get_value_as_int (rtldongle_spinbutton);
+    param_set ("rtldongle", &i);
+
+    /* store settings/files parameters */
+
+    s = gtk_widget_get_tooltip_text (GTK_WIDGET(leandvb_entry));
+    param_set ("leandvb_path", &s);
+
+    s = gtk_entry_get_text (leandvb_entry);
+    param_set ("leandvb_file", &s);
+
+    s = gtk_widget_get_tooltip_text (GTK_WIDGET(ldpchelper_entry));
+    param_set ("ldpchelper_path", &s);
+
+    s = gtk_entry_get_text (ldpchelper_entry);
+    param_set ("ldpchelper_file", &s);
+
+    s = gtk_widget_get_tooltip_text (GTK_WIDGET(rtlsdr_entry));
+    param_set ("rtlsdr_path", &s);
+
+    s = gtk_entry_get_text (rtlsdr_entry);
+    param_set ("rtlsdr_file", &s);
+
+    s = gtk_widget_get_tooltip_text (GTK_WIDGET(viewer_entry));
+    param_set ("viewer_path", &s);
+
+    s = gtk_entry_get_text (viewer_entry);
+    param_set ("viewer_file", &s);
 }
 
 void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
@@ -483,45 +471,125 @@ void settings_cancel_button_clicked_cb (GtkWidget* widget, gpointer data)
 
 void settings_defaults_button_clicked_cb (GtkWidget* widget, gpointer data)
 {
-    /* load settings/rtl_dongle parameters */
-    gtk_spin_button_set_value (rtldongle_spinbutton, 0);
-    gtk_spin_button_set_value (gain_spinbutton,      36);
-    gtk_spin_button_set_value (ppm_spinbutton,       0);
+          float f;
+          int   i;
+    const char* s;
+          bool  b;
+    const char* tab_text;
 
-    /* load  settings/files parameters */
-    gtk_widget_set_tooltip_text (GTK_WIDGET(viewer_entry),     "/usr/bin");
-    gtk_entry_set_text          (viewer_entry,                 "ffplay -v 0");
-    gtk_widget_set_tooltip_text (GTK_WIDGET(rtlsdr_entry),     "/usr/bin");
-    gtk_entry_set_text          (rtlsdr_entry,                 "rtl_sdr");
-    gtk_widget_set_tooltip_text (GTK_WIDGET(ldpchelper_entry), "./");
-    gtk_entry_set_text          (ldpchelper_entry,             "ldpc_tool");
-    gtk_widget_set_tooltip_text (GTK_WIDGET(leandvb_entry),    "./");
-    gtk_entry_set_text (leandvb_entry,                         "leandvb");
+    tab_text = gtk_notebook_get_tab_label_text(
+                   GTK_NOTEBOOK(data),
+                   gtk_notebook_get_nth_page(
+                       GTK_NOTEBOOK(data),
+                       gtk_notebook_get_current_page(
+                           GTK_NOTEBOOK(data) ) ) );
 
-    /* load settings/leandvb parameters */
-    gtk_spin_button_set_value   (inpipe_spinbutton,  32000000);
-    gtk_combo_box_set_active_id (sampler_combobox,   "rrc");
-    gtk_spin_button_set_value   (rolloff_spinbutton, 0.35);
-    gtk_spin_button_set_value   (rrcrej_spinbutton,  30.0);
-    gtk_switch_set_state        (fastlock_switch,    false);
-    gtk_switch_set_state        (maxsens_switch,     false);
-    gtk_combo_box_set_active_id (debug_combobox,     "all");
-    gtk_switch_set_state        (gui_switch,         true);
-    gtk_combo_box_set_active_id (standard_combobox,  "DVB-S2");
+    if (strcmp("leandvb", tab_text) == 0)
+    {
+        /* load settings/leandvb parameters */
 
-    /* load settings/leandvb/DVB-S parameters */
-    gtk_combo_box_set_active_id (constellation_combobox, "QPSK");
-    gtk_combo_box_set_active_id (coderate_combobox,      "4/5");
-    gtk_switch_set_state        (viterbi_switch,         false);
-    gtk_switch_set_state        (hardmetric_switch,      false);
+        param_default_get ("inpipe", &i);
+        gtk_spin_button_set_value (inpipe_spinbutton, i);
 
-    /* load settings/leandvb/DVB-S2 parameters */
-    gtk_switch_set_state      (strongpls_switch,    false);
-    gtk_entry_set_text        (modcods_entry,       "0x0040");
-    gtk_entry_set_text        (framesizes_entry,    "0x01");
-    gtk_switch_set_state      (fastdrift_switch,    false);
-    gtk_spin_button_set_value (ldpcbf_spinbutton,   0);
-    gtk_spin_button_set_value (nhelpers_spinbutton, 6);
+        param_default_get ("sampler", &s);
+        gtk_combo_box_set_active_id (sampler_combobox, s);
+
+        param_default_get ("rolloff", &f);
+        gtk_spin_button_set_value (rolloff_spinbutton, f);
+
+        param_default_get ("rrcrej", &f);
+        gtk_spin_button_set_value (rrcrej_spinbutton, f);
+
+        param_default_get ("fastlock", &b);
+        gtk_switch_set_state (fastlock_switch, b);
+
+        param_default_get ("maxsens", &b);
+        gtk_switch_set_state (maxsens_switch, b);
+
+        param_default_get ("debug", &s);
+        gtk_combo_box_set_active_id (debug_combobox, s);
+
+        param_default_get ("gui", &b);
+        gtk_switch_set_state (gui_switch, b);
+
+        param_default_get ("standard", &s);
+        gtk_combo_box_set_active_id (standard_combobox, s);
+
+        /* load settings/leandvb/DVB-S parameters */
+
+        param_default_get ("constellation", &s);
+        gtk_combo_box_set_active_id (constellation_combobox, s);
+
+        param_default_get ("coderate", &s);
+        gtk_combo_box_set_active_id (coderate_combobox, s);
+
+        param_default_get ("viterbi", &b);
+        gtk_switch_set_state (viterbi_switch, b);
+
+        param_default_get ("hardmetric", &b);
+        gtk_switch_set_state (hardmetric_switch, b);
+
+        /* load settings/leandvb/DVB-S2 parameters */
+
+        param_default_get ("strongpls", &b);
+        gtk_switch_set_state (strongpls_switch, b);
+
+        param_default_get ("modcods", &s);
+        gtk_entry_set_text (modcods_entry, s);
+
+        param_default_get ("framesizes", &s);
+        gtk_entry_set_text (framesizes_entry, s);
+
+        param_default_get ("fastdrift", &b);
+        gtk_switch_set_state (fastdrift_switch, b);
+
+        param_default_get ("ldpcbf", &i);
+        gtk_spin_button_set_value (ldpcbf_spinbutton, i);
+
+        param_default_get ("nhelpers", &i);
+        gtk_spin_button_set_value (nhelpers_spinbutton, i);
+    }
+    else if (strcmp("rtl_sdr", tab_text) == 0)
+    {
+        /* load settings/rtl_dongle parameters */
+
+        param_default_get ("ppm", &i);
+        gtk_spin_button_set_value (ppm_spinbutton, i);
+
+        param_default_get ("gain", &i);
+        gtk_spin_button_set_value (gain_spinbutton, i);
+
+        param_default_get ("rtldongle", &i);
+        gtk_spin_button_set_value (rtldongle_spinbutton, i);
+    }
+    else if (strcmp("files", tab_text) == 0)
+    {
+        /* load  settings/files parameters */
+
+        param_default_get ("leandvb_path", &s);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(leandvb_entry), s);
+
+        param_default_get ("leandvb_file", &s);
+        gtk_entry_set_text (leandvb_entry, s);
+
+        param_default_get ("ldpchelper_path", &s);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(ldpchelper_entry), s);
+
+        param_default_get ("ldpchelper_file", &s);
+        gtk_entry_set_text (ldpchelper_entry, s);
+
+        param_default_get ("rtlsdr_path", &s);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(rtlsdr_entry), s);
+
+        param_default_get ("rtlsdr_file", &s);
+        gtk_entry_set_text (rtlsdr_entry, s);
+
+        param_default_get ("viewer_path", &s);
+        gtk_widget_set_tooltip_text (GTK_WIDGET(viewer_entry), s);
+
+        param_default_get ("viewer_file", &s);
+        gtk_entry_set_text (viewer_entry, s);
+    }
 }
 
 /*----- settings/files -----*/
