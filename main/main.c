@@ -29,10 +29,10 @@ int main (int argc, char *argv[])
 {
     gtk_init (&argc, &argv);
     setlocale(LC_ALL, "en_US.UTF-8");
-    parameters_init();
+    param_init();
     gui_init ();
     gtk_main ();
-    parameters_deinit();
+    param_deinit();
 
   return 0;
 }
